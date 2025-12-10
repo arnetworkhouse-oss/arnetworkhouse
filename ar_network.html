@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="https://raw.githubusercontent.com/arnetworkhouse-oss/ar-network-house/main/ar%20logo.jpg"
+        type="image/png">
+    <title>AR Network House</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --light: #f8f9fa;
+            --dark: #111827;
+            --gray: #6b7280;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        header {
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .logo-circle {
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Mobile Menu */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            background: var(--dark);
+            height: 3px;
+            width: 25px;
+            margin: 4px 0;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                background: white;
+                position: absolute;
+                top: 70px;
+                right: 0;
+                width: 200px;
+                padding: 15px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #eef2ff, #ffffff);
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+
+        .hero p {
+            margin-top: 15px;
+            color: var(--gray);
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 25px;
+            background: var(--primary);
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        section {
+            padding: 70px 0;
+        }
+
+        section h2 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        /* About Section */
+        .about p {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            color: var(--gray);
+        }
+
+        /* Services Section */
+        .services .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .service-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.3, 1);
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .service-card p {
+            color: var(--gray);
+        }
+
+        .service-card ul {
+            list-style: disc;
+            text-align: left;
+            margin-top: 15px;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.25, 1, 0.3, 1);
+            color: var(--gray);
+            padding-left: 25px;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .service-card:hover ul {
+            opacity: 1;
+            max-height: 250px;
+            transform: translateY(0);
+        }
+
+        /* Projects Section */
+        .projects .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+            transition: 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .project-card h3 {
+            color: var(--primary);
+        }
+
+        /* Contact Section */
+        .contact .contact-box {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+            max-width: 600px;
+            margin: 0 auto;
+            transition: 0.3s;
+        }
+
+        .contact input,
+        .contact textarea {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .contact-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .btn-contact {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #fff;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            transition: 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-contact img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .btn-contact.mail {
+            background: #e63946;
+        }
+
+        .btn-contact.whatsapp {
+            background: #25d366;
+        }
+
+        .btn-contact.linkedin {
+            background: #0a66c2;
+        }
+
+        .btn-contact.facebook {
+            background: #1877f2;
+        }
+
+        .btn-contact.instagram {
+            background: linear-gradient(45deg, #fd1d1d, #e1306c, #c13584, #833ab4);
+        }
+
+        .btn-contact.threads {
+            background: black;
+        }
+
+        .btn-contact:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 600px) {
+            .btn-contact {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        footer {
+            background: #f1f3f8;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        img.logo {
+            height: 50px;
+            width: 50px;
+        }
+
+        div.notice {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+            transition: 0.3s;
+        }
+
+        div.notice:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Floating Home Button */
+        #homeBtn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #4f46e5;
+            color: white;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 26px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Visible state */
+        #homeBtn.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<div id="homeBtn">
+    ⌂
+</div>
+
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <div class="logo-circle"><img class="logo"
+                            src="https://raw.githubusercontent.com/arnetworkhouse-oss/ar-network-house/main/ar%20logo.jpg">
+                    </div>
+                    <span>AR Network House</span>
+                </div>
+                <div class="menu-toggle" id="menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="nav-links" id="nav-links">
+                    <a href="#home">Home</a>
+                    <a href="#about">About</a>
+                    <a href="#services">Services</a>
+                    <a href="#projects">Projects</a>
+                    <a href="#work-form">Work Form</a>
+                    <a href="#contact">Contact</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>Welcome to AR Network House</h1>
+            <p>Your trusted partner for educational excellence and modern learning solutions.</p>
+            <a href="#services" class="btn">Explore Services</a>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <h2>About Us</h2>
+            <p><strong>AR Network House</strong> delivers end-to-end creative and digital solutions including
+                <strong>project development, poster
+                    design, professional web design, and official document services</strong>. We combine innovation with
+                precision to
+                ensure every deliverable reflects quality, professionalism, and measurable impact.
+            </p>
+        </div>
+    </section>
+
+    <section id="services" class="services">
+        <div class="container">
+            <h2>Our Services</h2>
+
+            <div class="grid" id="services-grid">
+                <!-- Dynamic cards will load here -->
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2>Our Projects</h2>
+            <div class="grid">
+                <div class="project-card">
+                    <h3>
+                        <font color="green">দুয়ারে Physics</font>
+                    </h3>
+                    <p><a href="https://duyare-physics.github.io/turbo/home.html">Tap to see !</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="notice" id="work-form">
+        <div class="notice" id="work-form">
+            <h2 style="text-align:center; color:#3a3af5; font-size: 28px; margin-bottom: 20px;"><i> Work Submission
+                    Form</i>
+            </h2>
+            <center>Tap the button to give your work to us!
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSc823X7If-DehxrBNTZwGcRIXyhcVKIHD8YVGCnO7Ts63ysTw/viewform"
+                    class="btn">Click Here</a>
+            </center>
+        </div>
+    </section>
+
+    <section id="contact" style="background-color: #f9f9ff; padding: 60px 0;">
+        <div
+            style="max-width: 600px; margin: auto; background: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); padding: 30px;">
+            <h2 style="text-align:center; color:#3a3af5; font-size: 28px; margin-bottom: 20px;">Contact Us</h2>
+
+            <p style="text-align:center; margin-top:10px; color:#555;">
+                Get in touch with us for project work, web design, or official document services.
+            </p>
+
+            <div class="contact-buttons">
+                <!-- Mail Button -->
+                <a href="mailto:arnetworkhouse@gmail.com" class="btn-contact mail">
+                    <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Mail">
+                    Email Us
+                </a>
+
+                <!-- WhatsApp Button -->
+                <a href=" https://wa.me/919477440204 " class="btn-contact whatsapp">
+                    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
+                    WhatsApp
+                </a>
+
+                <!-- LinkedIn Button -->
+                <a href="https://www.linkedin.com/in/ar-network-house-635784395/" class="btn-contact linkedin">
+                    <img src="https://cdn-icons-png.flaticon.com/512/733/733561.png" alt="LinkedIn">
+                    LinkedIn
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- New Social Section -->
+    <section id="social" style="background-color: #ffffff; padding: 50px 0;">
+        <div
+            style="max-width: 600px; margin: auto; background: #fefefe; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); padding: 30px;">
+            <h2 style="text-align:center; color:#3a3af5; font-size: 26px; margin-bottom: 15px;">Follow Us</h2>
+
+            <p style="text-align:center; color:#555; margin-bottom:25px;">
+                Stay connected with AR Network House on our social media platforms.
+            </p>
+
+            <div class="contact-buttons">
+                <!-- Facebook Button -->
+                <a href="https://www.facebook.com/share/17om73cZ5X/" class="btn-contact facebook">
+                    <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook">
+                    Facebook
+                </a>
+
+                <!-- Instagram Button -->
+                <a href="https://www.instagram.com/ar_network_house?igsh=MWY0bDdiaXI2bjRvMQ=="
+                    class="btn-contact instagram">
+                    <img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" alt="Instagram">
+                    Instagram
+                </a>
+
+                <!-- Threads Button -->
+                <a href="https://www.threads.com/@ar_network_house" class="btn-contact threads">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/db/Threads_%28app%29.png" alt="Threads">
+                    Threads
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+
+    <footer>
+        © <span id="year"></span> AR Network House | All rights reserved. | <a
+            href="https://arnetworkhouse-oss.github.io/ar-network-house/privacy_ar.html"><strong>
+                <font align="left">Privacy Policy</font>
+            </strong></a>
+    </footer>
+
+    <script>
+        document.getElementById("year").textContent = new Date().getFullYear();
+        const toggle = document.getElementById("menu-toggle");
+        const links = document.getElementById("nav-links");
+        toggle.addEventListener("click", () => {
+            links.classList.toggle("active");
+        });
+
+        // GOOGLE WEBAPP URL
+        const WEBAPP_URL =
+            "https://script.google.com/macros/s/AKfycbzcxPIZ7wZWaewCMKmDsLiIYVOHTG0KzcvO32LzyxLmkhZrESS2qWPjdNtynie7j9PBvA/exec";
+
+        // SERVICE TITLES + DESCRIPTION
+        const SERVICE_INFO = [
+            { title: "Projects & Posters", desc: "All types of school/college projects & creative poster solutions.", c1: 0, c2: 1 },
+            { title: "Cards Design", desc: "Custom-designed digital cards.", c1: 3, c2: 4 },
+            { title: "Corporate Creation", desc: "Professional corporate assets for branding & identity.", c1: 6, c2: 7 },
+            { title: "Website Create & Design", desc: "Modern responsive websites with continuous support.", c1: 9, c2: 10 },
+            { title: "Official Documents", desc: "Various types of government and academic document services.", c1: 12, c2: 13 },
+            { title: "Data Recovery", desc: "Recovery services for lost files, photos & essential data.", c1: 15, c2: 16 }
+        ];
+
+        const grid = document.getElementById("services-grid");
+
+        // Create service card
+        function makeServiceCard(serviceTitle, desc, items) {
+            const card = document.createElement("div");
+            card.className = "service-card";
+
+            let html = `
+        <h3>${serviceTitle}</h3>
+        <p style="color:#6b7280; margin-top:5px;">${desc}</p>
+        <ul>
+    `;
+
+            items.forEach(item => {
+                html += `<li>${item}</li>`;
+            });
+
+            html += `</ul>`;
+            card.innerHTML = html;
+            return card;
+        }
+
+        // Fetch data
+        async function loadServices() {
+            try {
+                const res = await fetch(WEBAPP_URL, { cache: "no-store" });
+                const json = await res.json();
+
+                if (!json.table || !Array.isArray(json.table)) return;
+
+                const rows = json.table.slice(1); // skip header row
+                grid.innerHTML = "";
+
+                SERVICE_INFO.forEach(service => {
+                    const list = [];
+
+                    rows.forEach(r => {
+                        let a = r[service.c1] ?? "";
+                        let b = r[service.c2] ?? "";
+
+                        // --- FILTER OUT AR13, AR14, AR15 etc ---
+                        const skipCode = str => /^AR\d+/i.test(str.trim());
+
+                        if (a && !skipCode(a)) list.push(a);
+                        if (b && !skipCode(b)) list.push(b);
+                    });
+
+                    const card = makeServiceCard(service.title, service.desc, list);
+                    grid.appendChild(card);
+                });
+
+            } catch (err) {
+                console.error("Error fetching services:", err);
+            }
+        }
+
+        loadServices();
+
+        // --- Floating Home Button Logic ---
+        const homeBtn = document.getElementById("homeBtn");
+
+        window.addEventListener("scroll", () => {
+            const scrollTop = window.scrollY;
+            const heroHeight = document.getElementById("home").offsetHeight;
+
+            if (scrollTop > heroHeight * 0.5) {
+                // show button when scrolled below hero section
+                homeBtn.classList.add("visible");
+            } else {
+                // hide button when user is back in home section
+                homeBtn.classList.remove("visible");
+            }
+        });
+
+        // Smooth scroll to top
+        homeBtn.addEventListener("click", () => {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        });
+    </script>
+</body>
+
+</html>
