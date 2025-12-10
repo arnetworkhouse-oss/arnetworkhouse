@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>AR Network House — Project Payment & Work Policy</title>
+    <style>
+        :root {
+            --bg-light: #f6f8fb;
+            --card-light: #ffffff;
+            --accent-light: #0f172a;
+            --muted-light: #6b7280;
+            --bg-dark: #0f172a;
+            --card-dark: #1e293b;
+            --accent-dark: #f8fafc;
+            --muted-dark: #9ca3af;
+        }
+
+        [data-theme="light"] {
+            --bg: var(--bg-light);
+            --card: var(--card-light);
+            --accent: var(--accent-light);
+            --muted: var(--muted-light);
+        }
+
+        [data-theme="dark"] {
+            --bg: var(--bg-dark);
+            --card: var(--card-dark);
+            --accent: var(--accent-dark);
+            --muted: var(--muted-dark);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            margin: 0;
+            background: var(--bg);
+            color: var(--accent);
+            -webkit-font-smoothing: antialiased;
+            transition: background .3s, color .3s;
+        }
+
+        .wrapper {
+            max-width: 980px;
+            margin: 40px auto;
+            padding: 28px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-placeholder {
+            width: 64px;
+            height: 64px;
+            border-radius: 12px;
+            background: rgba(100, 116, 139, 0.1);
+            border: 2px dashed var(--muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .title-block h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .meta {
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: 1px solid var(--muted);
+            border-radius: 8px;
+            padding: 6px 10px;
+            color: var(--accent);
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 6px 18px rgba(12, 15, 20, 0.06);
+            transition: background .3s, color .3s;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .badge {
+            font-size: 12px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: #eef2ff;
+            color: #3730a3;
+        }
+
+        dl {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 12px 20px;
+            margin: 18px 0;
+        }
+
+        dt {
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        dd {
+            margin: 0;
+            color: var(--muted);
+            padding-bottom: 10px;
+        }
+
+        .note {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 12px;
+            border-radius: 8px;
+            color: #92400e;
+            margin-top: 16px;
+        }
+
+        footer {
+            margin-top: 30px;
+            color: var(--muted);
+            font-size: 13px;
+            text-align: center;
+        }
+
+        @media (max-width:640px) {
+            dl {
+                grid-template-columns: 1fr
+            }
+        }
+
+        img.logo {
+            height: 50px;
+            width: 50px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body data-theme="light">
+    <div class="wrapper">
+        <header>
+            <div class="title-block">
+                <h1>AR Network House — Project Payment &amp; Work Policy</h1>
+                <div class="meta">Effective Date: <strong>12/10/2025</strong> &nbsp;|&nbsp; Version:
+                    <strong>1.0.0</strong>
+                </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+                <button class="toggle-btn" id="themeToggle">🌙 Toggle Mode</button>
+                <div class="logo-placeholder"><img class="logo"
+                        src="https://raw.githubusercontent.com/arnetworkhouse-oss/ar-network-house/main/ar%20logo.jpg">
+                </div>
+            </div>
+        </header>
+
+        <div class="card">
+            <div class="section-title">
+                <div>
+                    <strong>Policy Overview</strong>
+                    <div style="color:var(--muted);font-size:13px;margin-top:6px">Purpose: Standardize payment
+                        milestones, cancellation terms, and delivery commitments.</div>
+                </div>
+                <div class="badge">Corporate Policy</div>
+            </div>
+
+            <dl>
+                <dt>Advance Payment Requirement</dt>
+                <dd>
+                    Prior to project initiation, the client will remit <strong>50% of the total project fee</strong> as
+                    an advance. Work scope activation and resource onboarding commence only after confirmation of the
+                    advance payment.
+                </dd>
+
+                <dt>Final Payment &amp; Project Handover</dt>
+                <dd>
+                    The remaining <strong>50%</strong> is due upon project completion. Final deliverables — including
+                    source files, credentials, and deployed assets — will be transferred once clearance of the final
+                    payment is confirmed.
+                </dd>
+
+                <dt>Client-Initiated Cancellation</dt>
+                <dd>
+                    If the client cancels after placing an order, <strong>50% of the advance</strong> will be retained
+                    to cover processing and allocated resources. Any refundable balance, if applicable, will be returned
+                    to the client within the agreed refund window.
+                </dd>
+
+                <dt>Delay or Incomplete Delivery</dt>
+                <dd>
+                    If AR Network House fails to deliver by the agreed deadline, the client may opt for a full refund of
+                    the advance. Alternatively, with client concurrence, AR Network House may complete the first phase
+                    of work and the client will not be obligated to pay the remaining balance.
+                </dd>
+
+                <dt>Communication of Updates</dt>
+                <dd>
+                    Any project-related updates — including timeline adjustments, delivery notifications, or financial
+                    updates — will be communicated to the client via <strong>Email or WhatsApp</strong>.
+                </dd>
+
+                <dt>Complimentary Correction Support Policy
+                </dt>
+                <dd>
+                    <strong>Clause:</strong>
+                    If a project fault arises due to misinformation provided by the client but it is technically
+                    feasible for AR Network House to correct or modify the faulty content, the organization will provide
+                    the necessary corrections free of charge, as part of its commitment to client satisfaction and
+                    service integrity.
+                </dd>
+
+                <dt> Fault Liability and Cost Recovery Policy
+                </dt>
+                <dd>
+                    <strong>Clause:</strong>
+                    In the event a project fault arises due to inaccurate or misleading information provided by the
+                    client, the client shall bear the entire project cost. The payable amount will include the advance
+                    already paid and the remaining cost balance, ensuring full cost recovery for operational resources
+                    and associated expenditures.
+                    <br>
+                    <strong>Example:</strong>
+                    If the total project value is ₹10 and the actual cost is ₹7, then in case of a fault caused by
+                    incorrect client information, the client will be liable to pay the advance already paid plus the
+                    remaining ₹2 balance, thereby covering the complete project cost
+                </dd>
+            </dl>
+
+            <div class="note">
+                <strong>Operational note:</strong> All timelines, refund windows, and dispute resolutions will be
+                documented in the project statement of work (SOW). This policy supplements the SOW but does not replace
+                contract-specific clauses.
+            </div>
+        </div>
+
+        <footer>
+            Authorized by <strong>AR Network House</strong><br>
+            &copy; <span id="year"></span> All Rights Reserved.
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('year').innerText = new Date().getFullYear();
+        const toggle = document.getElementById('themeToggle');
+        toggle.addEventListener('click', () => {
+            const body = document.body;
+            const isLight = body.getAttribute('data-theme') === 'light';
+            body.setAttribute('data-theme', isLight ? 'dark' : 'light');
+            toggle.textContent = isLight ? '☀ Light Mode' : '🌙 Dark Mode';
+        });
+    </script>
+</body>
+
+</html>
