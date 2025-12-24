@@ -220,27 +220,96 @@
             transform: translateY(0);
         }
 
-        /* Projects Section */
-        .projects .grid {
+        /* --- PROJECTS SECTION STYLES --- */
+        .project-category {
+            margin-bottom: 50px;
+        }
+
+        .category-title {
+            /* Semi-transparent grey background */
+            background: rgba(128, 128, 128, 0.15);
+
+            /* The "Glass" effect - blurs the background behind the card */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            /* For Safari support */
+
+            /* Optional: A light border makes the edges pop */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 25px;
+            padding-left: 15px;
+            border-left: 5px solid var(--primary);
+            text-align: left;
+
+        }
+
+        .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
         }
 
         .project-card {
             background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-            transition: 0.3s;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid #eee;
         }
 
         .project-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-10px);
+            box-shadow: 0 12px 30px rgba(79, 70, 229, 0.15);
+            border-color: var(--primary);
         }
 
         .project-card h3 {
             color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+        }
+
+        .project-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        .project-link-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .project-link-btn:hover {
+            transform: scale(1.1);
+            background: #3730a3;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .project-link-btn span {
+            margin-left: 8px;
         }
 
         /* Contact Section */
@@ -376,19 +445,86 @@
             opacity: 1;
             pointer-events: auto;
         }
+
+
+         /*REMOVE IT */
+         #offerBadge {
+    position: fixed;
+    top: 90px; /* Placed below the header */
+    right: 20px;
+    background: linear-gradient(135deg, #e5464e, #a33030);
+    color: yellow;
+    padding: 12px 18px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+    text-align: center;
+    font-family: sans-serif;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    animation: pulse 2s infinite;
+}
+
+.offer-title {
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+}
+
+.offer-timer {
+    font-family: monospace;
+    font-size: 0.9rem;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 2px 5px;
+    border-radius: 4px;
+    margin: 5px 0;
+}
+
+.offer-date {
+    font-style:unset;
+    font-size: 0.7rem;
+    opacity: 0.9;
+    text-transform: uppercase;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Ensure it doesn't overlap too much on small screens */
+@media (max-width: 600px) {
+    #offerBadge {
+        top: 80px;
+        right: 10px;
+        padding: 8px 12px;
+    }
+}
     </style>
 </head>
-<div id="homeBtn">
-    ⌂
-</div>
 
 <body>
+     <!-- *REMOVE IT -->
+
+    <div id="offerBadge">
+    <div class="offer-title">Merry Christmas 🎁🌲⛄<br>20% OFF</div>
+    <div class="offer-timer">
+        <span id="off-days">00</span>d : <span id="off-hours">00</span>h
+    </div>
+    <div class="offer-date">Until Jan  2 !</div>
+</div>
+
+    <div id="homeBtn">
+        ⌂
+    </div>
+
     <header>
         <div class="container">
             <nav>
                 <div class="logo">
                     <div class="logo-circle"><img class="logo"
-                            src="https://raw.githubusercontent.com/arnetworkhouse-oss/ar-network-house/main/ar%20logo.jpg">
+                            src="https://raw.githubusercontent.com/arnetworkhouse-oss/ar-network-house/main/ar%20logo.jpg"
+                            alt="Logo">
                     </div>
                     <span>AR Network House</span>
                 </div>
@@ -414,6 +550,7 @@
             <h1>Welcome to AR Network House</h1>
             <p>Your trusted partner for educational excellence and modern learning solutions.</p>
             <a href="#services" class="btn">Explore Services</a>
+            <a href="#projects" class="btn">Explore Projects</a>
         </div>
     </section>
 
@@ -432,9 +569,7 @@
     <section id="services" class="services">
         <div class="container">
             <h2>Our Services</h2>
-
             <div class="grid" id="services-grid">
-                <!-- Dynamic cards will load here -->
             </div>
         </div>
     </section>
@@ -442,26 +577,72 @@
     <section id="projects" class="projects">
         <div class="container">
             <h2>Our Projects</h2>
-            <div class="grid">
-                <div class="project-card">
-                    <h3>
-                        <font color="green">দুয়ারে Physics</font>
-                    </h3>
-                    <p><a href="https://duyare-physics.github.io/turbo/home.html">Tap to see !</a></p>
-                </div>
 
-                 <div class="project-card">
-                    <h3>
-                        <font color="blue">AURA</font>
-                    </h3>
-                    <p><a href="https://arnetworkhouse-oss.github.io/aura/">Tap to play !</a></p>
+            <div class="project-category">
+                <h3 class="category-title">Educational</h3>
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div>
+                            <h3>
+                                <font color="green">দুয়ারে Physics</font>
+                            </h3>
+                            <p>An interactive platform designed to make physics learning accessible and engaging for
+                                everyone.</p>
+                        </div>
+                        <a href="https://duyare-physics.github.io/turbo/home.html" class="project-link-btn"
+                            target="_blank">
+                            View Project <span>➔</span>
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
+
+            <div class="project-category">
+                <h3 class="category-title">Games</h3>
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div>
+                            <h3> <font color="purple">AURA</font></h3>
+                            <p>Aura : A Particle Engine developed with modern web technologies.</p>
+                        </div>
+                        <a href="https://arnetworkhouse-oss.github.io/aura/" class="project-link-btn" target="_blank">
+                            Play Now <span>🎮</span>
+                        </a>
+
+                    </div>
+                    <div class="project-card">
+                        <div>
+                            <h3> <font color="dark yellow">Solar System</font></h3>
+                            <p>Solar System : A clean 3D solar system where the sun leads, planets follow, and space keeps it simple.</p>
+                        </div>
+                        <a href="https://arnetworkhouse-oss.github.io/Solar-System/" class="project-link-btn" target="_blank">
+                            Play Now <span>🎮</span>
+                        </a>
+                    </div>
+                    <div class="project-card">
+                        <div>
+                            <h3> <font color="teal">Snake Game</font></h3>
+                            <p>Snake Game : A classic web snake game where the snake grows, the brain relaxes, and time quietly resigns.</p>
+                        </div>
+                        <a href="https://arnetworkhouse-oss.github.io/snake-game/" class="project-link-btn" target="_blank">
+                            Play Now <span>🎮</span>
+                        </a>
+                    </div>
+                     <!-- <div class="project-card">
+                        <div>
+                            <h3> <font color="orange">Call break </font></h3>
+                            <p>Call break :A call break game where confidence is high, logic is optional, and results are non-negotiable.</p>
+                        </div>
+                        <a href="https://arnetworkhouse-oss.github.io/Callbreak-Pro/" class="project-link-btn" target="_blank">
+                            Play Now <span>🎮</span>
+                        </a>
+                    </div> -->
+                </div>
+            </div>
     </section>
 
     <section class="notice" id="work-form">
-        <div class="notice" id="work-form">
+        <div class="notice">
             <h2 style="text-align:center; color:#3a3af5; font-size: 28px; margin-bottom: 20px;"><i> Work Submission
                     Form</i>
             </h2>
@@ -482,19 +663,16 @@
             </p>
 
             <div class="contact-buttons">
-                <!-- Mail Button -->
                 <a href="mailto:arnetworkhouse@gmail.com" class="btn-contact mail">
                     <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Mail">
                     Email Us
                 </a>
 
-                <!-- WhatsApp Button -->
-                <a href=" https://wa.me/919477440204 " class="btn-contact whatsapp">
+                <a href="https://wa.me/919477440204" class="btn-contact whatsapp">
                     <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
                     WhatsApp
                 </a>
 
-                <!-- LinkedIn Button -->
                 <a href="https://www.linkedin.com/in/ar-network-house-635784395/" class="btn-contact linkedin">
                     <img src="https://cdn-icons-png.flaticon.com/512/733/733561.png" alt="LinkedIn">
                     LinkedIn
@@ -503,7 +681,6 @@
         </div>
     </section>
 
-    <!-- New Social Section -->
     <section id="social" style="background-color: #ffffff; padding: 50px 0;">
         <div
             style="max-width: 600px; margin: auto; background: #fefefe; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); padding: 30px;">
@@ -514,34 +691,29 @@
             </p>
 
             <div class="contact-buttons">
-                <!-- Facebook Button -->
                 <a href="https://www.facebook.com/share/17om73cZ5X/" class="btn-contact facebook">
                     <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook">
                     Facebook
                 </a>
 
-                <!-- Instagram Button -->
                 <a href="https://www.instagram.com/ar_network_house?igsh=MWY0bDdiaXI2bjRvMQ=="
                     class="btn-contact instagram">
                     <img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" alt="Instagram">
                     Instagram
                 </a>
 
-                <!-- Threads Button -->
                 <a href="https://www.threads.com/@ar_network_house" class="btn-contact threads">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/d/db/Threads_%28app%29.png" alt="Threads">
                     Threads
                 </a>
-
             </div>
         </div>
     </section>
 
-
     <footer>
         © <span id="year"></span> AR Network House | All rights reserved. | <a
             href="https://arnetworkhouse-oss.github.io/ar-network-house/privacy_ar.html"><strong>
-                <font align="left">Privacy Policy</font>
+                Privacy Policy
             </strong></a>
     </footer>
 
@@ -553,11 +725,9 @@
             links.classList.toggle("active");
         });
 
-        // GOOGLE WEBAPP URL
         const WEBAPP_URL =
             "https://script.google.com/macros/s/AKfycbzcxPIZ7wZWaewCMKmDsLiIYVOHTG0KzcvO32LzyxLmkhZrESS2qWPjdNtynie7j9PBvA/exec";
 
-        // SERVICE TITLES + DESCRIPTION
         const SERVICE_INFO = [
             { title: "Projects & Posters", desc: "All types of school/college projects & creative poster solutions.", c1: 0, c2: 1 },
             { title: "Cards Design", desc: "Custom-designed digital cards.", c1: 3, c2: 4 },
@@ -569,85 +739,70 @@
 
         const grid = document.getElementById("services-grid");
 
-        // Create service card
         function makeServiceCard(serviceTitle, desc, items) {
             const card = document.createElement("div");
             card.className = "service-card";
-
-            let html = `
-        <h3>${serviceTitle}</h3>
-        <p style="color:#6b7280; margin-top:5px;">${desc}</p>
-        <ul>
-    `;
-
-            items.forEach(item => {
-                html += `<li>${item}</li>`;
-            });
-
+            let html = `<h3>${serviceTitle}</h3><p style="color:#6b7280; margin-top:5px;">${desc}</p><ul>`;
+            items.forEach(item => { html += `<li>${item}</li>`; });
             html += `</ul>`;
             card.innerHTML = html;
             return card;
         }
 
-        // Fetch data
         async function loadServices() {
             try {
                 const res = await fetch(WEBAPP_URL, { cache: "no-store" });
                 const json = await res.json();
-
                 if (!json.table || !Array.isArray(json.table)) return;
-
-                const rows = json.table.slice(1); // skip header row
+                const rows = json.table.slice(1);
                 grid.innerHTML = "";
-
                 SERVICE_INFO.forEach(service => {
                     const list = [];
-
                     rows.forEach(r => {
                         let a = r[service.c1] ?? "";
                         let b = r[service.c2] ?? "";
-
-                        // --- FILTER OUT AR13, AR14, AR15 etc ---
                         const skipCode = str => /^AR\d+/i.test(str.trim());
-
                         if (a && !skipCode(a)) list.push(a);
                         if (b && !skipCode(b)) list.push(b);
                     });
-
                     const card = makeServiceCard(service.title, service.desc, list);
                     grid.appendChild(card);
                 });
-
-            } catch (err) {
-                console.error("Error fetching services:", err);
-            }
+            } catch (err) { console.error("Error fetching services:", err); }
         }
-
         loadServices();
 
-        // --- Floating Home Button Logic ---
         const homeBtn = document.getElementById("homeBtn");
-
         window.addEventListener("scroll", () => {
-            const scrollTop = window.scrollY;
             const heroHeight = document.getElementById("home").offsetHeight;
-
-            if (scrollTop > heroHeight * 0.5) {
-                // show button when scrolled below hero section
-                homeBtn.classList.add("visible");
-            } else {
-                // hide button when user is back in home section
-                homeBtn.classList.remove("visible");
-            }
+            if (window.scrollY > heroHeight * 0.5) { homeBtn.classList.add("visible"); }
+            else { homeBtn.classList.remove("visible"); }
         });
+        homeBtn.addEventListener("click", () => { window.scrollTo({ top: 0, behavior: "smooth" }); });
 
-        // Smooth scroll to top
-        homeBtn.addEventListener("click", () => {
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-        });
+
+        // remove IT
+
+        function updateOfferCountdown() {
+    const target = new Date("January 2, 2026 00:00:00").getTime();
+    const now = new Date().getTime();
+    const diff = target - now;
+
+    if (diff <= 0) {
+        document.getElementById("offerBadge").style.display = "none";
+        return;
+    }
+
+    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+    document.getElementById("off-days").innerText = d < 10 ? "0" + d : d;
+    document.getElementById("off-hours").innerText = h < 10 ? "0" + h : h;
+}
+
+// Update every minute is enough for this compact view
+setInterval(updateOfferCountdown, 60000);
+updateOfferCountdown();
     </script>
 </body>
 
