@@ -445,74 +445,12 @@
             opacity: 1;
             pointer-events: auto;
         }
-
-
-         /*REMOVE IT */
-         #offerBadge {
-    position: fixed;
-    top: 90px; /* Placed below the header */
-    right: 20px;
-    background: linear-gradient(135deg, #e5464e, #a33030);
-    color: yellow;
-    padding: 12px 18px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    z-index: 999;
-    text-align: center;
-    font-family: sans-serif;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    animation: pulse 2s infinite;
-}
-
-.offer-title {
-    font-weight: 800;
-    font-size: 1.1rem;
-    letter-spacing: 0.5px;
-}
-
-.offer-timer {
-    font-family: monospace;
-    font-size: 0.9rem;
-    background: rgba(0, 0, 0, 0.2);
-    padding: 2px 5px;
-    border-radius: 4px;
-    margin: 5px 0;
-}
-
-.offer-date {
-    font-style:unset;
-    font-size: 0.7rem;
-    opacity: 0.9;
-    text-transform: uppercase;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
-
-/* Ensure it doesn't overlap too much on small screens */
-@media (max-width: 600px) {
-    #offerBadge {
-        top: 80px;
-        right: 10px;
-        padding: 8px 12px;
-    }
-}
     </style>
 </head>
 
 <body>
-     <!-- *REMOVE IT -->
 
-    <div id="offerBadge">
-    <div class="offer-title">Merry Christmas 🎁🌲⛄<br>20% OFF</div>
-    <div class="offer-timer">
-        <span id="off-days">00</span>d : <span id="off-hours">00</span>h
-    </div>
-    <div class="offer-date">Until Jan  2 !</div>
-</div>
+
 
     <div id="homeBtn">
         ⌂
@@ -594,6 +532,19 @@
                             View Project <span>➔</span>
                         </a>
                     </div>
+                     <div class="project-card">
+                        <div>
+                            <h3>
+                                <font color="dark yellow">Solar System</font>
+                            </h3>
+                            <p>Solar System : A clean 3D solar system where the sun leads, planets follow, and space
+                                keeps it simple.</p>
+                        </div>
+                        <a href="https://arnetworkhouse-oss.github.io/Solar-System/" class="project-link-btn"
+                            target="_blank">
+                            Play Now <span>🎮</span>
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -602,7 +553,9 @@
                 <div class="projects-grid">
                     <div class="project-card">
                         <div>
-                            <h3> <font color="purple">AURA</font></h3>
+                            <h3>
+                                <font color="purple">AURA</font>
+                            </h3>
                             <p>Aura : A Particle Engine developed with modern web technologies.</p>
                         </div>
                         <a href="https://arnetworkhouse-oss.github.io/aura/" class="project-link-btn" target="_blank">
@@ -610,33 +563,38 @@
                         </a>
 
                     </div>
+                   
                     <div class="project-card">
                         <div>
-                            <h3> <font color="dark yellow">Solar System</font></h3>
-                            <p>Solar System : A clean 3D solar system where the sun leads, planets follow, and space keeps it simple.</p>
+                            <h3>
+                                <font color="teal">Snake Game</font>
+                            </h3>
+                            <p>Snake Game : A classic web snake game where the snake grows, the brain relaxes, and time
+                                quietly resigns.</p>
                         </div>
-                        <a href="https://arnetworkhouse-oss.github.io/Solar-System/" class="project-link-btn" target="_blank">
+                        <a href="https://arnetworkhouse-oss.github.io/snake-game/" class="project-link-btn"
+                            target="_blank">
                             Play Now <span>🎮</span>
                         </a>
                     </div>
                     <div class="project-card">
                         <div>
-                            <h3> <font color="teal">Snake Game</font></h3>
-                            <p>Snake Game : A classic web snake game where the snake grows, the brain relaxes, and time quietly resigns.</p>
-                        </div>
-                        <a href="https://arnetworkhouse-oss.github.io/snake-game/" class="project-link-btn" target="_blank">
-                            Play Now <span>🎮</span>
-                        </a>
-                    </div>
-                     <!-- <div class="project-card">
-                        <div>
-                            <h3> <font color="orange">Call break </font></h3>
-                            <p>Call break :A call break game where confidence is high, logic is optional, and results are non-negotiable.</p>
+                            <h3> <font color="orange">Callbreak Pro </font></h3>
+                            <p>Callbreak Pro :A call break game where confidence is high, logic is optional, and results are non-negotiable.</p>
                         </div>
                         <a href="https://arnetworkhouse-oss.github.io/Callbreak-Pro/" class="project-link-btn" target="_blank">
                             Play Now <span>🎮</span>
                         </a>
-                    </div> -->
+                    </div>
+                     <div class="project-card">
+                        <div>
+                            <h3> <font color="blueviolet">Tic Tac Toe </font></h3>
+                            <p>Tic Tac Toe : A 3 x 3  grid game where two players, X and O, race to align three symbols.</p>
+                        </div>
+                        <a href="https://arnetworkhouse-oss.github.io/tic_tac_toe/" class="project-link-btn" target="_blank">
+                            Play Now <span>🎮</span>
+                        </a>
+                    </div>
                 </div>
             </div>
     </section>
@@ -783,26 +741,7 @@
 
         // remove IT
 
-        function updateOfferCountdown() {
-    const target = new Date("January 2, 2026 00:00:00").getTime();
-    const now = new Date().getTime();
-    const diff = target - now;
-
-    if (diff <= 0) {
-        document.getElementById("offerBadge").style.display = "none";
-        return;
-    }
-
-    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-
-    document.getElementById("off-days").innerText = d < 10 ? "0" + d : d;
-    document.getElementById("off-hours").innerText = h < 10 ? "0" + h : h;
-}
-
-// Update every minute is enough for this compact view
-setInterval(updateOfferCountdown, 60000);
-updateOfferCountdown();
+      
     </script>
 </body>
 
