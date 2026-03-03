@@ -1,202 +1,255 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AR NETWORK HOUSE | ALL PROJECTS</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://raw.githubusercontent.com/arnetworkhouse-oss/ar-network-house/main/ar%20logo.jpg"
+        type="image/png">
+    <title>AR NETWORK HOUSE | ALL PROJECTS</title>
 
-<style>
-:root{
-    --primary:#2563eb;
-    --dark:#0f172a;
-    --light:#f1f5f9;
-    --card:#ffffff;
-    --radius:14px;
-    --transition:0.3s ease;
-}
+    <style>
+        :root {
+            --primary: #2563eb;
+            --dark: #0f172a;
+            --light: #f1f5f9;
+            --card: #ffffff;
+            --radius: 14px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI',sans-serif;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
 
-body{
-    display:flex;
-    background:linear-gradient(135deg,#e0f2fe,#f8fafc);
-    min-height:100vh;
-}
+        body {
+            background: linear-gradient(135deg, #e0f2fe, #f8fafc);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
-/* SIDEBAR */
-.sidebar{
-    width:240px;
-    background:var(--dark);
-    color:white;
-    padding:2rem 1rem;
-    position:fixed;
-    height:100%;
-}
+        /* --- HAMBURGER MENU --- */
+        .hamburger {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            cursor: pointer;
+            background: var(--dark);
+            padding: 12px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
 
-.sidebar h2{
-    text-align:center;
-    margin-bottom:2rem;
-    font-size:1.2rem;
-    letter-spacing:2px;
-}
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background: white;
+            transition: var(--transition);
+        }
 
-.sidebar a{
-    display:block;
-    color:#cbd5e1;
-    text-decoration:none;
-    padding:12px;
-    border-radius:8px;
-    margin-bottom:10px;
-    transition:var(--transition);
-}
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 280px;
+            background: var(--dark);
+            color: white;
+            padding: 2rem 1.5rem;
+            position: fixed;
+            height: 100%;
+            left: -280px; /* Hidden by default */
+            top: 0;
+            z-index: 1000;
+            transition: var(--transition);
+            box-shadow: 10px 0 30px rgba(0,0,0,0.1);
+        }
 
-.sidebar a:hover{
-    background:var(--primary);
-    color:white;
-    transform:translateX(5px);
-}
+        .sidebar.active {
+            left: 0;
+        }
 
-/* STATIC HOME BUTTON */
-.home-btn{
-    position:fixed;
-    bottom:20px;
-    left:20px;
-    background:var(--primary);
-    color:white;
-    padding:12px 20px;
-    border-radius:50px;
-    text-decoration:none;
-    font-weight:bold;
-    box-shadow:0 8px 20px rgba(0,0,0,0.2);
-    transition:var(--transition);
-}
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            color: var(--primary);
+        }
 
-.home-btn:hover{
-    background:#1d4ed8;
-    transform:scale(1.05);
-}
+        /* --- SEARCH BAR --- */
+        .search-container {
+            margin-bottom: 2rem;
+        }
 
-/* MAIN CONTENT */
-.main{
-    margin-left:260px;
-    padding:2rem;
-    width:100%;
-}
+        #projectSearch {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background: #1e293b;
+            color: white;
+            outline: none;
+            font-size: 0.9rem;
+        }
 
-header{
-    text-align:center;
-    margin-bottom:2rem;
-}
+        #projectSearch::placeholder {
+            color: #94a3b8;
+        }
 
-header img{
-    max-height:90px;
-    border-radius:10px;
-    margin-bottom:1rem;
-}
+        .sidebar a {
+            display: block;
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            transition: var(--transition);
+        }
 
-header h1{
-    font-size:2rem;
-    color:#1e293b;
-}
+        .sidebar a:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateX(5px);
+        }
 
-/* SECTION */
-section{
-    margin-bottom:3rem;
-}
+        /* BACK BUTTON STYLE */
+        .back-link {
+            margin-top: 2rem;
+            border: 1px solid var(--primary) !important;
+            text-align: center;
+            font-weight: bold;
+        }
 
-section h3{
-    margin-bottom:1rem;
-    border-left:5px solid var(--primary);
-    padding-left:10px;
-    color:#334155;
-    text-transform:uppercase;
-    letter-spacing:1px;
-}
+        /* --- MAIN CONTENT --- */
+        .main {
+            padding: 2rem;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            transition: var(--transition);
+            padding-top: 80px;
+        }
 
-/* GRID */
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-    gap:1.5rem;
-}
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+        }
 
-/* CARD */
-.card{
-    background:var(--card);
-    padding:1.5rem;
-    border-radius:var(--radius);
-    text-align:center;
-    font-weight:bold;
-    text-decoration:none;
-    color:#1e293b;
-    box-shadow:0 6px 15px rgba(0,0,0,0.08);
-    transition:var(--transition);
-}
+        .overlay.active {
+            display: block;
+        }
 
-.card:hover{
-    transform:translateY(-6px);
-    box-shadow:0 15px 25px rgba(0,0,0,0.15);
-    color:var(--primary);
-}
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
 
-footer{
-    text-align:center;
-    margin-top:3rem;
-    padding-top:2rem;
-    border-top:1px solid #cbd5e1;
-    color:#64748b;
-}
+        header img {
+            max-height: 90px;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
 
-/* RESPONSIVE */
-@media(max-width:768px){
-    .sidebar{
-        width:180px;
-    }
-    .main{
-        margin-left:190px;
-    }
-}
+        header h1 {
+            font-size: 2.2rem;
+            color: #1e293b;
+        }
 
-@media(max-width:600px){
-    .sidebar{
-        position:relative;
-        width:100%;
-        height:auto;
-    }
-    .main{
-        margin-left:0;
-    }
-    .home-btn{
-        left:auto;
-        right:20px;
-    }
-}
-</style>
+        /* --- SECTION & GRIDS --- */
+        section {
+            margin-bottom: 3rem;
+        }
+
+        section h3 {
+            margin-bottom: 1.5rem;
+            border-left: 5px solid var(--primary);
+            padding-left: 15px;
+            color: #334155;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--card);
+            padding: 1.8rem;
+            border-radius: var(--radius);
+            text-align: center;
+            font-weight: bold;
+            text-decoration: none;
+            color: #1e293b;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            color: var(--primary);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem 0;
+            border-top: 1px solid #cbd5e1;
+            color: #64748b;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+    </style>
 </head>
 
 <body>
 
-<!-- SIDEBAR -->
-<div class="sidebar">
-    <h2>LIBRARY</h2>
-    <a href="#education">Education Sector</a>
-    <a href="#games">Games Sector</a>
-    <a href="#tools">Tools Sector</a>
+<div class="hamburger" onclick="toggleMenu()">
+    <div></div>
+    <div></div>
+    <div></div>
 </div>
 
-<!-- HOME BUTTON -->
-<!-- <a href="home.html" class="home-btn">🏠 Home</a> -->
+<div class="sidebar" id="sidebar">
+    <h2>LIBRARY</h2>
+    
+    <div class="search-container">
+        <input type="text" id="projectSearch" placeholder="Search projects..." onkeyup="filterProjects()">
+    </div>
 
-<!-- MAIN -->
+    <a href="#education" onclick="toggleMenu()">Education Sector</a>
+    <a href="#games" onclick="toggleMenu()">Games Sector</a>
+    <a href="#tools" onclick="toggleMenu()">Tools Sector</a>
+    
+    <a href="javascript:history.back()" class="back-link">← Go Back</a>
+</div>
+
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
 <div class="main">
 
 <header>
-    <img src="https://github.com/arnetworkhouse-oss/ar-network-house/blob/main/ar%20logo.jpg?raw=true">
+    <img src="https://github.com/arnetworkhouse-oss/ar-network-house/blob/main/ar%20logo.jpg?raw=true" alt="AR Logo">
     <h1>AR NETWORK HOUSE</h1>
 </header>
 
@@ -232,6 +285,51 @@ footer{
 </footer>
 
 </div>
+
+<script>
+    // Toggle Menu Logic
+    function toggleMenu() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+    }
+
+    // Search Logic
+    function filterProjects() {
+        const input = document.getElementById('projectSearch').value.toLowerCase();
+        const cards = document.querySelectorAll('.card');
+        const sections = document.querySelectorAll('section');
+
+        cards.forEach(card => {
+            const title = card.innerText.toLowerCase();
+            if (title.includes(input)) {
+                card.style.display = "flex";
+            } else {
+                card.style.display = "none";
+            }
+        });
+
+        // Hide whole section if no cards match
+        sections.forEach(section => {
+            const visibleCards = section.querySelectorAll('.card[style="display: flex;"]');
+            // If search is active and no cards found, hide section header
+            if (input !== "" && visibleCards.length === 0) {
+                section.style.display = "none";
+            } else {
+                section.style.display = "block";
+            }
+        });
+    }
+
+    // Close on Escape Key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            document.getElementById('sidebar').classList.remove('active');
+            document.getElementById('overlay').classList.remove('active');
+        }
+    });
+</script>
 
 </body>
 </html>
