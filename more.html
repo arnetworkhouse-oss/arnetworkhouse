@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AR NETWORK HOUSE | ALL PROJECTS</title>
+
+<style>
+:root{
+    --primary:#2563eb;
+    --dark:#0f172a;
+    --light:#f1f5f9;
+    --card:#ffffff;
+    --radius:14px;
+    --transition:0.3s ease;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    display:flex;
+    background:linear-gradient(135deg,#e0f2fe,#f8fafc);
+    min-height:100vh;
+}
+
+/* SIDEBAR */
+.sidebar{
+    width:240px;
+    background:var(--dark);
+    color:white;
+    padding:2rem 1rem;
+    position:fixed;
+    height:100%;
+}
+
+.sidebar h2{
+    text-align:center;
+    margin-bottom:2rem;
+    font-size:1.2rem;
+    letter-spacing:2px;
+}
+
+.sidebar a{
+    display:block;
+    color:#cbd5e1;
+    text-decoration:none;
+    padding:12px;
+    border-radius:8px;
+    margin-bottom:10px;
+    transition:var(--transition);
+}
+
+.sidebar a:hover{
+    background:var(--primary);
+    color:white;
+    transform:translateX(5px);
+}
+
+/* STATIC HOME BUTTON */
+.home-btn{
+    position:fixed;
+    bottom:20px;
+    left:20px;
+    background:var(--primary);
+    color:white;
+    padding:12px 20px;
+    border-radius:50px;
+    text-decoration:none;
+    font-weight:bold;
+    box-shadow:0 8px 20px rgba(0,0,0,0.2);
+    transition:var(--transition);
+}
+
+.home-btn:hover{
+    background:#1d4ed8;
+    transform:scale(1.05);
+}
+
+/* MAIN CONTENT */
+.main{
+    margin-left:260px;
+    padding:2rem;
+    width:100%;
+}
+
+header{
+    text-align:center;
+    margin-bottom:2rem;
+}
+
+header img{
+    max-height:90px;
+    border-radius:10px;
+    margin-bottom:1rem;
+}
+
+header h1{
+    font-size:2rem;
+    color:#1e293b;
+}
+
+/* SECTION */
+section{
+    margin-bottom:3rem;
+}
+
+section h3{
+    margin-bottom:1rem;
+    border-left:5px solid var(--primary);
+    padding-left:10px;
+    color:#334155;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+/* GRID */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:1.5rem;
+}
+
+/* CARD */
+.card{
+    background:var(--card);
+    padding:1.5rem;
+    border-radius:var(--radius);
+    text-align:center;
+    font-weight:bold;
+    text-decoration:none;
+    color:#1e293b;
+    box-shadow:0 6px 15px rgba(0,0,0,0.08);
+    transition:var(--transition);
+}
+
+.card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 15px 25px rgba(0,0,0,0.15);
+    color:var(--primary);
+}
+
+footer{
+    text-align:center;
+    margin-top:3rem;
+    padding-top:2rem;
+    border-top:1px solid #cbd5e1;
+    color:#64748b;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+    .sidebar{
+        width:180px;
+    }
+    .main{
+        margin-left:190px;
+    }
+}
+
+@media(max-width:600px){
+    .sidebar{
+        position:relative;
+        width:100%;
+        height:auto;
+    }
+    .main{
+        margin-left:0;
+    }
+    .home-btn{
+        left:auto;
+        right:20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2>LIBRARY</h2>
+    <a href="#education">Education Sector</a>
+    <a href="#games">Games Sector</a>
+    <a href="#tools">Tools Sector</a>
+</div>
+
+<!-- HOME BUTTON -->
+<!-- <a href="home.html" class="home-btn">🏠 Home</a> -->
+
+<!-- MAIN -->
+<div class="main">
+
+<header>
+    <img src="https://github.com/arnetworkhouse-oss/ar-network-house/blob/main/ar%20logo.jpg?raw=true">
+    <h1>AR NETWORK HOUSE</h1>
+</header>
+
+<section id="education">
+    <h3>Education Sector</h3>
+    <div class="grid">
+        <a href="https://duyare-physics.github.io/turbo/home.html" target="_blank" class="card">DUYARE PHYSICS</a>
+        <a href="https://arnetworkhouse-oss.github.io/Solar-System/" target="_blank" class="card">SOLAR SYSTEM</a>
+    </div>
+</section>
+
+<section id="games">
+    <h3>Games Sector</h3>
+    <div class="grid">
+        <a href="https://arnetworkhouse-oss.github.io/aura/" target="_blank" class="card">AURA GAME</a>
+        <a href="https://arnetworkhouse-oss.github.io/snake-game/" target="_blank" class="card">SNAKE GAME</a>
+        <a href="https://arnetworkhouse-oss.github.io/tic_tac_toe/" target="_blank" class="card">TIC TAC TOE</a>
+        <a href="https://arnetworkhouse-oss.github.io/ar-network-house/poke_match.html" target="_blank" class="card">POKE MATCH</a>
+    </div>
+</section>
+
+<section id="tools">
+    <h3>Tools Sector</h3>
+    <div class="grid">
+        <a href="https://arnetworkhouse-oss.github.io/ar-network-house/weather.html" target="_blank" class="card">INDRODOOT (WEATHER TOOL)</a>
+    </div>
+</section>
+
+<footer>
+    © 2026 <a href="https://arnetworkhouse.in/"> AR NETWORK HOUSE</a>
+</footer>
+
+</div>
+
+</body>
+</html>
