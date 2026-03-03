@@ -574,10 +574,13 @@
                     </div>
                     <div class="project-card">
                         <div>
-                            <span>🎮 know more ...</span><a href="https://arnetworkhouse-oss.github.io/arnetworkhouse/more.html" class="project-link-btn" target="_blank">
-                                <span>Tap to play</span>
-                            </a>
+                            <h3 style="color: var(--primary);">Explore More</h3>
+                            <p>Discover more exciting educational projects and interactive experiences.</p>
                         </div>
+                        <a href="https://arnetworkhouse-oss.github.io/arnetworkhouse/more.html" class="project-link-btn"
+                            target="_blank">
+                            Know More <span>➔</span>
+                        </a>
                     </div>
                 </div>
 
@@ -636,12 +639,14 @@
                         </div>
                         <div class="project-card">
                             <div>
-                                <span>🎮 play more ...</span><a href="https://arnetworkhouse-oss.github.io/arnetworkhouse/more.html" class="project-link-btn" target="_blank">
-                                    <span>Tap to play</span>
-                                </a>
+                                <h3 style="color: var(--primary);">More Games</h3>
+                                <p>Play additional fun and engaging web-based games created by us.</p>
                             </div>
+                            <a href="https://arnetworkhouse-oss.github.io/arnetworkhouse/more.html"
+                                class="project-link-btn" target="_blank">
+                                Play More <span>🎮</span>
+                            </a>
                         </div>
-                    </div>
 
 
     </section>
@@ -652,8 +657,7 @@
                     Form</i>
             </h2>
             <center>Tap the button to give your work to us!
-                <a href="https://arnetworkhouse.in/work_submession_form.html"
-                    class="btn">Click Here</a>
+                <a href="https://arnetworkhouse.in/work_submession_form.html" class="btn">Click Here</a>
             </center>
         </div>
     </section>
@@ -754,27 +758,7 @@
             return card;
         }
 
-        async function loadServices() {
-            try {
-                const res = await fetch(WEBAPP_URL, { cache: "no-store" });
-                const json = await res.json();
-                if (!json.table || !Array.isArray(json.table)) return;
-                const rows = json.table.slice(1);
-                grid.innerHTML = "";
-                SERVICE_INFO.forEach(service => {
-                    const list = [];
-                    rows.forEach(r => {
-                        let a = r[service.c1] ?? "";
-                        let b = r[service.c2] ?? "";
-                        const skipCode = str => /^AR\d+/i.test(str.trim());
-                        if (a && !skipCode(a)) list.push(a);
-                        if (b && !skipCode(b)) list.push(b);
-                    });
-                    const card = makeServiceCard(service.title, service.desc, list);
-                    grid.appendChild(card);
-                });
-            } catch (err) { console.error("Error fetching services:", err); }
-        }
+
         loadServices();
         async function loadServices() {
             const loader = document.getElementById("services-loader");
