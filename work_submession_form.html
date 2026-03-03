@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AR Network House | Work Submission</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Segoe UI, sans-serif;
+  background: #eef2f7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 12px;
+}
+
+.card {
+  background: #ffffff;
+  max-width: 460px;
+  width: 100%;
+  padding: 26px;
+  border-radius: 16px;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+}
+
+.brand-logo {
+  width: 90px;
+  display: block;
+  margin: 0 auto 14px;
+  border-radius: 12px;
+}
+
+h2 {
+  text-align: center;
+  color: #1a365d;
+  margin: 6px 0;
+}
+
+p {
+  text-align: center;
+  color: #333;
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+label {
+  font-weight: 600;
+  margin-top: 14px;
+  display: block;
+}
+
+small {
+  display: block;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+input, textarea, select {
+  width: 95%;
+  padding: 14px;
+  margin-top: 6px;
+  border-radius: 10px;
+  border: 1px solid #dcdcdc;
+  font-size: 15px;
+}
+
+button {
+  width: 100%;
+  margin-top: 22px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  background: #1a365d;
+  color: white;
+  cursor: pointer;
+}
+
+/* ===== Success Modal Styles ===== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-card {
+  background: white;
+  max-width: 360px;
+  width: 90%;
+  padding: 24px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+  animation: popIn 0.3s ease;
+}
+
+.modal-card h3 {
+  color: #1a365d;
+  margin-bottom: 10px;
+}
+
+.modal-card p {
+  font-size: 14px;
+  color: #333;
+}
+
+.modal-card button {
+  margin-top: 18px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  background: #1a365d;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <img src="https://github.com/arnetworkhouse-oss/ar-network-house/blob/main/ar%20logo.jpg?raw=true" class="brand-logo">
+
+  <h2>Work Submission Form</h2>
+  <p>কাজের অনুরোধ পাঠানোর জন্য নিচের ফর্মটি পূরণ করুন</p>
+
+  <label>First Name *</label>
+  <small>প্রথম নাম *</small>
+  <input id="fname" placeholder="Enter your first name / আপনার নাম লিখুন">
+
+  <label>Type of Work Required *</label>
+  <small>আপনি কোন ধরনের কাজ করাতে চান *</small>
+  <select id="workType">
+    <option value="">Select / নির্বাচন করুন</option>
+    <option>Projects & Posters / প্রজেক্ট ও পোস্টার</option>
+    <option>Cards Design / কার্ড ডিজাইন</option>
+    <option>Corporate Creation / কর্পোরেট ক্রিয়েশন</option>
+    <option>Website Create & Design / ওয়েবসাইট তৈরি ও ডিজাইন</option>
+    <option>Official or Government Documents / অফিসিয়াল বা সরকারি ডকুমেন্ট</option>
+    <option>Data Recovery / ডাটা রিকভারি</option>
+  </select>
+
+  <label>WhatsApp Number *</label>
+  <small>হোয়াটসঅ্যাপ নম্বর *</small>
+  <input id="whatsapp" placeholder="Enter WhatsApp number">
+
+  <label>Email ID *</label>
+  <small>ইমেইল আইডি *</small>
+  <input id="email" type="email" placeholder="Enter your email address">
+
+  <label>Short Note About Your Project (Optional)</label>
+  <small>আপনার প্রজেক্ট সম্পর্কে সংক্ষিপ্ত বিবরণ (ঐচ্ছিক)</small>
+  <textarea id="note" rows="4"></textarea>
+
+  <label>Last Day of Project Submission (Optional)</label>
+  <small>কাজ শেষ করার শেষ তারিখ (ঐচ্ছিক)</small>
+  <input id="deadline" type="date">
+
+  <button onclick="submitForm()">Submit Request / অনুরোধ পাঠান</button>
+
+  <footer style="text-align:center;margin-top:20px;font-size:12px;opacity:.7;">
+    © <span id="year"></span> AR Network House
+  </footer>
+</div>
+
+<!-- ===== Success Modal ===== -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal-card">
+    <h3>Request Submitted</h3>
+    <p>
+      Your request has been successfully submitted.<br>
+      আপনার অনুরোধ সফলভাবে জমা হয়েছে।
+    </p>
+    <p>
+      <div style="margin-top:14px;font-size:13px;text-align:left;">
+        <strong>Submitted Details:</strong><br>
+        Name: <span id="confirmName"></span><br>
+        WhatsApp: <span id="confirmWhatsApp"></span><br>
+        Email: <span id="confirmEmail"></span>
+      </div>
+
+      Our team will contact you shortly.<br>
+      আমাদের টিম শীঘ্রই আপনার সাথে যোগাযোগ করবে।
+    </p>
+    <button onclick="closeModal()">OK</button>
+  </div>
+</div>
+
+<script>
+const API_URL_PRIMARY = "https://script.google.com/macros/s/AKfycbxbodbtwbtDVBA7tc1uA2b-o3evPLk5GTYAuHka-Mc8OC5u_vmOS1aVKfXd3q1KkSw2/exec";
+const API_URL_SECONDARY = "https://script.google.com/macros/s/AKfycbxz4MbhVxPDCUHaTLMilTlZKCnX411Y8iQkBHRI253Vf7Smf9kKMaJtBJa6sz9WJMnBag/exec";
+
+function submitForm() {
+  const fname = document.getElementById("fname").value.trim();
+  const workType = document.getElementById("workType").value;
+  const whatsapp = document.getElementById("whatsapp").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const note = document.getElementById("note").value;
+  const deadline = document.getElementById("deadline").value;
+
+  if (!fname || !workType || !whatsapp || !email) {
+    alert("Please complete all mandatory fields / অনুগ্রহ করে সব প্রয়োজনীয় তথ্য পূরণ করুন");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("firstName", fname);
+  formData.append("workType", workType);
+  formData.append("whatsapp", whatsapp);
+  formData.append("email", email);
+  formData.append("note", note);
+  formData.append("deadline", deadline);
+  formData.append("source", "Client Work Submission Page");
+
+  // ===== Send to BOTH Web Apps =====
+  fetch(API_URL_PRIMARY, {
+    method: "POST",
+    body: formData
+  }).catch(() => {});
+
+  fetch(API_URL_SECONDARY, {
+    method: "POST",
+    body: formData
+  }).catch(() => {});
+
+  // ===== Confirmation Data =====
+  document.getElementById("confirmName").textContent = fname;
+  document.getElementById("confirmWhatsApp").textContent = whatsapp;
+  document.getElementById("confirmEmail").textContent = email;
+
+  document.getElementById("successModal").style.display = "flex";
+}
+
+function closeModal() {
+  document.getElementById("successModal").style.display = "none";
+  location.reload();
+}
+
+document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
+
+</body>
+</html>
