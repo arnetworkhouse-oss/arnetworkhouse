@@ -1,815 +1,1171 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <!-- Google tag (gtag.js) -->
+<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CMG8ZZSW4T"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-CMG8ZZSW4T');
 </script>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="https://raw.githubusercontent.com/arnetworkhouse-oss/ar-network-house/main/ar%20logo.jpg"
-        type="image/png">
-    <title>AR Network House</title>
-    <style>
-        :root {
-            --primary: #4f46e5;
-            --light: #f8f9fa;
-            --dark: #111827;
-            --gray: #6b7280;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Poppins", sans-serif;
-        }
-
-        body {
-            background: var(--light);
-            color: var(--dark);
-            line-height: 1.6;
-        }
-
-        header {
-            background: white;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: auto;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-
-        .logo-circle {
-            background: var(--primary);
-            color: white;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: grid;
-            place-items: center;
-            font-weight: bold;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 25px;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--dark);
-            font-weight: 500;
-            transition: 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary);
-        }
-
-        /* Mobile Menu */
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-        }
-
-        .menu-toggle span {
-            background: var(--dark);
-            height: 3px;
-            width: 25px;
-            margin: 4px 0;
-            border-radius: 5px;
-        }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-                flex-direction: column;
-                background: white;
-                position: absolute;
-                top: 70px;
-                right: 0;
-                width: 200px;
-                padding: 15px;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            }
-
-            .nav-links.active {
-                display: flex;
-            }
-
-            .menu-toggle {
-                display: flex;
-            }
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #eef2ff, #ffffff);
-            padding: 100px 0;
-            text-align: center;
-        }
-
-        .hero h1 {
-            font-size: 2.5rem;
-            color: var(--primary);
-        }
-
-        .hero p {
-            margin-top: 15px;
-            color: var(--gray);
-        }
-
-        .btn {
-            display: inline-block;
-            margin-top: 25px;
-            padding: 12px 25px;
-            background: var(--primary);
-            color: white;
-            border-radius: 8px;
-            text-decoration: none;
-            transition: 0.3s;
-        }
-
-        .btn:hover {
-            opacity: 0.9;
-        }
-
-        section {
-            padding: 70px 0;
-        }
-
-        section h2 {
-            text-align: center;
-            color: var(--primary);
-            margin-bottom: 30px;
-            font-size: 2rem;
-        }
-
-        /* About Section */
-        .about p {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-            color: var(--gray);
-        }
-
-        /* Services Section */
-        .services .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .service-card {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-            text-align: center;
-            transition: all 0.5s cubic-bezier(0.25, 1, 0.3, 1);
-            overflow: hidden;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .service-card p {
-            color: var(--gray);
-        }
-
-        .service-card ul {
-            list-style: disc;
-            text-align: left;
-            margin-top: 15px;
-            opacity: 0;
-            max-height: 0;
-            overflow: hidden;
-            transform: translateY(30px);
-            transition: all 0.6s cubic-bezier(0.25, 1, 0.3, 1);
-            color: var(--gray);
-            padding-left: 25px;
-        }
-
-        .service-card:hover {
-            transform: translateY(-10px) scale(1.05);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        .service-card:hover ul {
-            opacity: 1;
-            max-height: 250px;
-            transform: translateY(0);
-        }
-
-        /* --- PROJECTS SECTION STYLES --- */
-        .project-category {
-            margin-bottom: 50px;
-        }
-
-        .category-title {
-            /* Semi-transparent grey background */
-            background: rgba(128, 128, 128, 0.15);
-
-            /* The "Glass" effect - blurs the background behind the card */
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            /* For Safari support */
-
-            /* Optional: A light border makes the edges pop */
-            border: 1px solid rgba(255, 255, 255, 0.2);
-
-            border-radius: 15px;
-            padding: 30px;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            font-size: 1.8rem;
-            color: var(--dark);
-            margin-bottom: 25px;
-            padding-left: 15px;
-            border-left: 5px solid var(--primary);
-            text-align: left;
-
-        }
-
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        .project-card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            border: 1px solid #eee;
-        }
-
-        .project-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 12px 30px rgba(79, 70, 229, 0.15);
-            border-color: var(--primary);
-        }
-
-        .project-card h3 {
-            color: var(--primary);
-            margin-bottom: 10px;
-            font-size: 1.4rem;
-        }
-
-        .project-card p {
-            color: var(--gray);
-            font-size: 0.95rem;
-            margin-bottom: 20px;
-        }
-
-        .project-link-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px 20px;
-            background: var(--primary);
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .project-link-btn:hover {
-            transform: scale(1.1);
-            background: #3730a3;
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
-        }
-
-        .project-link-btn span {
-            margin-left: 8px;
-        }
-
-        /* Contact Section */
-        .contact .contact-box {
-            background: white;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-            max-width: 600px;
-            margin: 0 auto;
-            transition: 0.3s;
-        }
-
-        .contact input,
-        .contact textarea {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-
-        .contact-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 25px;
-        }
-
-        .btn-contact {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #fff;
-            font-weight: 600;
-            text-decoration: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            transition: 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-contact img {
-            width: 20px;
-            height: 20px;
-        }
-
-        .btn-contact.mail {
-            background: #e63946;
-        }
-
-        .btn-contact.whatsapp {
-            background: #25d366;
-        }
-
-        .btn-contact.linkedin {
-            background: #0a66c2;
-        }
-
-        .btn-contact.facebook {
-            background: #1877f2;
-        }
-
-        .btn-contact.instagram {
-            background: linear-gradient(45deg, #fd1d1d, #e1306c, #c13584, #833ab4);
-        }
-
-        .btn-contact.threads {
-            background: black;
-        }
-
-        .btn-contact:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        @media (max-width: 600px) {
-            .btn-contact {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-
-        footer {
-            background: #f1f3f8;
-            text-align: center;
-            padding: 20px;
-            font-size: 0.9rem;
-            color: var(--gray);
-        }
-
-        img.logo {
-            height: 50px;
-            width: 50px;
-        }
-
-        div.notice {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-            transition: 0.3s;
-        }
-
-        div.notice:hover {
-            transform: translateY(-5px);
-        }
-
-        /* Floating Home Button */
-        #homeBtn {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            background: #4f46e5;
-            color: white;
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 26px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            z-index: 9999;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* Visible state */
-        #homeBtn.visible {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        /* Services Loader */
-        .loader-wrapper {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 40px 0;
-        }
-
-        .loader {
-            width: 45px;
-            height: 45px;
-            border: 5px solid #e5e7eb;
-            border-top: 5px solid var(--primary);
-            border-radius: 50%;
-            margin: 0 auto 15px;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" href="https://raw.githubusercontent.com/arnetworkhouse-oss/ar-network-house/main/ar%20logo.jpg" type="image/png">
+<title>AR Network House</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════
+   THEME — Glass + Bluish Purple
+═══════════════════════════════ */
+:root {
+  --bg:           #0a0e14;
+  --bg-secondary: #111420;
+  --text:         #E8EAFF;
+  --text-muted:   rgba(220,224,255,0.52);
+  --accent:       #1b71f1;
+  --accent2:      #5B8EF7;
+  --accent-dim:   rgba(124,110,250,0.18);
+  --accent-glow:  rgba(124,110,250,0.4);
+  --accent-border:rgba(124,110,250,0.32);
+  --glass:        rgba(255,255,255,0.045);
+  --glass-border: rgba(255,255,255,0.09);
+  --glass-hover:  rgba(255,255,255,0.08);
+  --blur:         blur(24px);
+  --radius:       16px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+html{scroll-behavior:smooth;}
+
+body{
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── ANIMATED GLASS BG ── */
+#bg-mesh{
+  position:fixed; top:0; left:0; width:100%; height:100%;
+  z-index:-2; pointer-events:none;
+  background: var(--bg);
+  overflow:hidden;
+}
+
+#bg-mesh::before{
+  content:'';
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 70% 55% at 15% 5%,  rgba(91,142,247,0.13) 0%, transparent 55%),
+    radial-gradient(ellipse 55% 45% at 85% 85%,  rgba(124,110,250,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 35% at 55% 45%,  rgba(91,142,247,0.07) 0%, transparent 50%);
+}
+
+#bg-mesh::after{
+  content:'';
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(124,110,250,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(91,142,247,0.025) 1px, transparent 1px);
+  background-size: 72px 72px;
+  animation: meshDrift 40s linear infinite;
+}
+
+/* Floating glass blobs */
+.blob{
+  position:fixed; border-radius:50%; pointer-events:none; z-index:-1;
+  filter:blur(80px); opacity:0.55;
+  animation: blobFloat 18s ease-in-out infinite;
+}
+.blob1{ width:520px; height:520px; background:radial-gradient(circle, rgba(91,142,247,0.22), rgba(124,110,250,0.10)); top:-120px; left:-80px; animation-duration:20s; }
+.blob2{ width:400px; height:400px; background:radial-gradient(circle, rgba(124,110,250,0.20), rgba(91,142,247,0.08)); bottom:-80px; right:-60px; animation-duration:24s; animation-delay:-8s; }
+.blob3{ width:260px; height:260px; background:radial-gradient(circle, rgba(120,80,255,0.18), transparent); top:45%; left:55%; animation-duration:16s; animation-delay:-4s; }
+
+@keyframes blobFloat{
+  0%,100%{ transform:translate(0,0) scale(1); }
+  33%    { transform:translate(30px,-40px) scale(1.05); }
+  66%    { transform:translate(-20px,30px) scale(0.97); }
+}
+
+@keyframes meshDrift{
+  0%  { background-position: 0 0,   0 0; }
+  100%{ background-position: 72px 72px, 72px 72px; }
+}
+
+/* ── CONTAINER ── */
+.container{width:90%;max-width:1200px;margin:auto;}
+
+/* ── HEADER ── */
+header{
+  background: rgba(18,18,18,0.6);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border-bottom: 1px solid var(--glass-border);
+  position: sticky; top:0; z-index:1000;
+}
+
+nav{display:flex;justify-content:space-between;align-items:center;padding:14px 0;}
+
+.logo{
+  display:flex; align-items:center; gap:10px;
+  font-family:'Syne',sans-serif; font-weight:700; font-size:1.15rem;
+  color:var(--text); text-decoration:none;
+}
+
+.logo-circle{
+  background: linear-gradient(135deg,#5B8EF7,var(--accent));
+  border-radius:50%; width:40px; height:40px;
+  display:grid; place-items:center;
+  box-shadow:0 0 18px var(--accent-glow); overflow:hidden;
+}
+.logo-circle img{height:40px;width:40px;border-radius:50%;}
+
+.nav-links{display:flex;gap:28px;}
+.nav-links a{
+  text-decoration:none; color:var(--text-muted);
+  font-weight:500; font-size:0.9rem; letter-spacing:0.02em;
+  transition:color 0.25s, text-shadow 0.25s;
+}
+.nav-links a:hover{color:#fff; text-shadow:0 0 14px var(--accent-glow);}
+
+/* Mobile Menu */
+.menu-toggle{
+  display:none; flex-direction:column; cursor:pointer; gap:5px;
+  width:28px; height:22px; position:relative; z-index:1100;
+}
+.menu-toggle span{
+  background:var(--text); height:2px; width:24px; border-radius:4px;
+  transition:transform 0.35s cubic-bezier(0.23,1,0.32,1), opacity 0.25s, top 0.35s cubic-bezier(0.23,1,0.32,1);
+  position:absolute; left:0; transform-origin:center;
+}
+.menu-toggle span:nth-child(1){top:0;}
+.menu-toggle span:nth-child(2){top:9px;}
+.menu-toggle span:nth-child(3){top:18px;}
+.menu-toggle.open span:nth-child(1){top:9px;transform:rotate(45deg);}
+.menu-toggle.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+.menu-toggle.open span:nth-child(3){top:9px;transform:rotate(-45deg);}
+
+@media(max-width:768px){
+  .nav-links{
+    display:none; flex-direction:column;
+    background:rgba(18,18,18,0.97);
+    backdrop-filter:var(--blur);
+    position:absolute; top:68px; right:0;
+    width:200px; padding:16px;
+    border:1px solid var(--glass-border);
+    border-radius:0 0 12px 12px;
+  }
+  .nav-links.active{display:flex;}
+  .menu-toggle{display:flex;}
+}
+
+/* ── HERO ── */
+.hero{
+  padding:110px 0; text-align:center;
+  position:relative;
+}
+
+.hero .container{
+  position:relative; z-index:2;
+  background: rgba(31,31,31,0.55);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border:1px solid var(--glass-border);
+  border-radius:24px;
+  padding:70px 48px;
+  box-shadow:0 8px 48px rgba(124,110,250,0.12), inset 0 1px 0 rgba(255,255,255,0.07);
+}
+
+/* Decorative accent line */
+.hero .container::before{
+  content:'';
+  position:absolute; top:0; left:50%; transform:translateX(-50%);
+  width:120px; height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  border-radius:2px;
+}
+
+.hero h1{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(2rem,5vw,3.4rem); font-weight:800;
+  background:linear-gradient(135deg,#fff 30%,var(--accent));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+  line-height:1.15; margin-bottom:14px; letter-spacing:-0.02em;
+}
+
+.hero p{color:var(--text-muted);font-size:1.05rem;margin-top:12px;}
+
+/* ── BUTTONS ── */
+.btn{
+  display:inline-block; margin:20px 8px 0;
+  padding:12px 28px;
+  background:var(--accent-dim);
+  color:#fff; border:1px solid var(--accent-border);
+  border-radius:10px; text-decoration:none;
+  font-weight:600; font-size:0.92rem; letter-spacing:0.03em;
+  transition:all 0.3s ease; backdrop-filter:blur(8px);
+}
+
+.btn:hover{
+  background:rgba(124,110,250,0.32);
+  border-color:var(--accent);
+  box-shadow:0 0 24px var(--accent-glow);
+  transform:translateY(-2px);
+}
+
+/* ── SECTIONS ── */
+section{padding:70px 0;}
+
+section h2{
+  text-align:center;
+  font-family:'Syne',sans-serif;
+  font-size:clamp(1.5rem,3vw,2rem); font-weight:700;
+  background:linear-gradient(135deg,#fff,var(--accent));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+  margin-bottom:32px; letter-spacing:-0.01em;
+}
+
+/* ── ABOUT ── */
+.about p{
+  max-width:780px; margin:0 auto; text-align:center;
+  color:var(--text-muted); font-size:1rem;
+}
+.about strong{color:var(--text);}
+
+/* ── SERVICE CARDS ── */
+.services .grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:18px; margin-top:28px;
+}
+
+.service-card{
+  background:var(--glass);
+  backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
+  border:1px solid var(--glass-border);
+  padding:26px; border-radius:var(--radius);
+  text-align:center;
+  transition:all 0.4s cubic-bezier(0.25,1,0.3,1);
+  cursor:pointer; overflow:hidden; position:relative;
+}
+
+.service-card::before{
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  opacity:0; transition:opacity 0.4s;
+}
+
+.service-card:hover::before{opacity:1;}
+
+.service-card h3{color:#fff;font-size:1.05rem;font-weight:600;}
+.service-card p{color:var(--text-muted);font-size:0.9rem;margin-top:6px;}
+
+.service-card ul{
+  list-style:disc; text-align:left; margin-top:14px;
+  opacity:0; max-height:0; overflow:hidden;
+  transform:translateY(20px);
+  transition:all 0.5s cubic-bezier(0.25,1,0.3,1);
+  color:var(--text-muted); padding-left:22px; font-size:0.88rem;
+}
+
+.service-card:hover{
+  transform:translateY(-8px) scale(1.03);
+  background:var(--glass-hover);
+  border-color:var(--accent-border);
+  box-shadow:0 12px 40px rgba(124,110,250,0.15);
+}
+.service-card:hover ul{opacity:1;max-height:220px;transform:translateY(0);}
+
+/* ── PROJECT CATEGORY ── */
+.project-category{margin-bottom:48px;}
+
+.category-title{
+  background:rgba(124,110,250,0.08);
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(124,110,250,0.2);
+  border-left:4px solid var(--accent);
+  border-radius:12px; padding:18px 22px;
+  font-family:'Syne',sans-serif;
+  font-size:1.5rem; font-weight:700; color:#fff;
+  margin-bottom:22px;
+}
+
+.projects-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:22px;
+}
+
+.project-card{
+  background:var(--glass);
+  backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius); padding:28px;
+  transition:all 0.3s ease;
+  display:flex; flex-direction:column; justify-content:space-between;
+}
+
+.project-card:hover{
+  transform:translateY(-8px);
+  border-color:var(--accent-border);
+  box-shadow:0 16px 48px rgba(124,110,250,0.15);
+  background:var(--glass-hover);
+}
+
+.project-card h3{color:#fff;font-size:1.2rem;margin-bottom:8px;font-weight:600;}
+.project-card p{color:var(--text-muted);font-size:0.9rem;margin-bottom:18px;}
+.project-card h3 font{color:inherit!important;}
+
+.project-link-btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:10px 20px;
+  background:var(--accent-dim);
+  color:#fff; text-decoration:none;
+  border-radius:10px; font-weight:600; font-size:0.88rem;
+  border:1px solid var(--accent-border);
+  transition:all 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
+  backdrop-filter:blur(8px);
+}
+
+.project-link-btn:hover{
+  transform:scale(1.07);
+  background:rgba(124,110,250,0.32);
+  box-shadow:0 4px 18px var(--accent-glow);
+  border-color:var(--accent);
+}
+.project-link-btn span{margin-left:6px;}
+
+/* ── CONTACT ── */
+.contact .contact-box{
+  background:var(--glass);
+  backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius); padding:32px;
+  max-width:600px; margin:0 auto;
+}
+
+.contact-buttons{
+  display:flex; flex-wrap:wrap; justify-content:center;
+  gap:14px; margin-top:28px;
+}
+
+.btn-contact{
+  display:flex; align-items:center; gap:8px;
+  color:#fff; font-weight:600; text-decoration:none;
+  padding:11px 20px; border-radius:10px;
+  transition:background-position 0.45s ease, box-shadow 0.3s, transform 0.3s, border-color 0.3s;
+  border:1px solid rgba(255,255,255,0.15);
+  backdrop-filter:blur(8px);
+  font-size:0.88rem;
+  background-size:200% 100%;
+  background-position:right center;
+}
+.btn-contact img{width:18px;height:18px;}
+.btn-contact.mail{background-image:linear-gradient(to right,#e63946 0%,#f1616b 50%,rgba(230,57,70,0.3) 50%,rgba(230,57,70,0.3) 100%);}
+.btn-contact.whatsapp{background-image:linear-gradient(to right,#25d366 0%,#128c4e 50%,rgba(37,211,102,0.25) 50%,rgba(37,211,102,0.25) 100%);}
+.btn-contact.linkedin{background-image:linear-gradient(to right,#0a66c2 0%,#004e96 50%,rgba(10,102,194,0.3) 50%,rgba(10,102,194,0.3) 100%);}
+.btn-contact.facebook{background-image:linear-gradient(to right,#1877f2 0%,#0c5db8 50%,rgba(24,119,242,0.3) 50%,rgba(24,119,242,0.3) 100%);}
+.btn-contact.instagram{background-image:linear-gradient(to right,#c13584 0%,#e1306c 25%,#f77737 50%,rgba(193,53,132,0.28) 50%,rgba(193,53,132,0.28) 100%);}
+.btn-contact.threads{background-image:linear-gradient(to right,#1a1a1a 0%,#3a3a3a 50%,rgba(255,255,255,0.1) 50%,rgba(255,255,255,0.1) 100%);}
+
+.btn-contact:hover{
+  background-position:left center;
+  transform:translateY(-3px);
+  box-shadow:0 6px 24px rgba(0,0,0,0.35);
+  border-color:rgba(255,255,255,0.4);
+}
+@media(max-width:600px){.btn-contact{width:100%;justify-content:center;}}
+
+/* ── NOTICE ── */
+.notice{background:transparent!important;}
+div.notice{
+  background:var(--glass)!important;
+  backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius); padding:24px; color:var(--text);
+}
+div.notice:hover{transform:translateY(-4px);}
+
+/* ── FOOTER ── */
+footer{
+  background:rgba(18,18,18,0.7)!important;
+  backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
+  border-top:1px solid var(--glass-border);
+  text-align:center; padding:24px;
+  font-size:0.88rem; color:var(--text-muted);
+}
+footer a{color:var(--accent);text-decoration:none;}
+footer a:hover{text-decoration:underline;}
+
+/* ── HOME BTN ── */
+#homeBtn{
+  position:fixed; bottom:24px; right:24px;
+  background:rgba(124,110,250,0.2);
+  backdrop-filter:blur(12px);
+  border:1px solid var(--accent-border);
+  color:#fff; width:52px; height:52px;
+  border-radius:50%; display:flex;
+  justify-content:center; align-items:center;
+  font-size:22px;
+  box-shadow:0 4px 20px var(--accent-glow);
+  cursor:pointer; transition:all 0.3s ease;
+  z-index:9999; opacity:0; pointer-events:none;
+}
+#homeBtn.visible{opacity:1;pointer-events:auto;}
+#homeBtn:hover{transform:scale(1.12);box-shadow:0 6px 28px var(--accent-glow);}
+
+/* ── LOADER ── */
+.loader-wrapper{grid-column:1/-1;text-align:center;padding:40px 0;}
+.loader{
+  width:42px;height:42px;
+  border:3px solid rgba(255,255,255,0.1);
+  border-top:3px solid var(--accent);
+  border-radius:50%;margin:0 auto 14px;
+  animation:spin 0.8s linear infinite;
+}
+@keyframes spin{100%{transform:rotate(360deg);}}
+
+@media(max-width:600px){
+  .hero{padding:70px 0;}
+  .hero .container{padding:40px 20px;}
+  .hero h1{font-size:clamp(1.7rem,7vw,2.5rem);}
+}
+
+/* ════════════════════════════════
+   AI CHAT WIDGET
+════════════════════════════════ */
+:root{
+  --chat-primary:#7C6EFA;
+  --chat-accent:#6B5CE7;
+  --chat-glow:rgba(124,110,250,0.45);
+  --chat-bg:rgba(14,14,14,0.98);
+  --chat-surface:rgba(255,255,255,0.06);
+  --chat-border:rgba(255,255,255,0.1);
+  --chat-text:rgba(255,255,255,0.92);
+  --chat-muted:rgba(255,255,255,0.45);
+  --chat-radius:20px;
+  --chat-bubble-size:64px;
+  --chat-width:380px;
+  --chat-height:560px;
+}
+
+#ar-chat-bubble{
+  position:fixed; bottom:88px; right:24px;
+  width:var(--chat-bubble-size); height:var(--chat-bubble-size);
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--chat-accent),var(--chat-primary));
+  border:none; cursor:pointer; z-index:99998;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+  box-shadow:0 0 0 0 var(--chat-glow), 0 8px 32px rgba(124,110,250,0.5);
+  animation:bubblePulse 3s ease-in-out infinite;
+  transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease;
+  overflow:hidden;
+}
+#ar-chat-bubble:hover{
+  transform:scale(1.1);
+  box-shadow:0 0 0 8px rgba(124,110,250,0.15), 0 12px 40px rgba(124,110,250,0.65);
+  animation:none;
+}
+#ar-chat-bubble .bubble-icon{font-size:22px;line-height:1;transition:all 0.25s;}
+#ar-chat-bubble .bubble-close{position:absolute;font-size:20px;color:#fff;font-weight:700;opacity:0;transform:scale(0);transition:all 0.25s;pointer-events:none;}
+#ar-chat-bubble .bubble-label{font-family:'DM Sans',sans-serif;font-size:9px;font-weight:800;color:#0d0a3c;letter-spacing:0.08em;text-transform:uppercase;opacity:1;line-height:1;}
+#ar-chat-bubble.open .bubble-icon{opacity:0;transform:scale(0);}
+#ar-chat-bubble.open .bubble-label{opacity:0;}
+#ar-chat-bubble.open .bubble-close{opacity:1;transform:scale(1);}
+
+@keyframes bubblePulse{
+  0%,100%{box-shadow:0 0 0 0 var(--chat-glow),0 8px 32px rgba(124,110,250,0.5);}
+  50%{box-shadow:0 0 0 14px rgba(124,110,250,0),0 8px 32px rgba(124,110,250,0.5);}
+}
+
+#ar-chat-tooltip{
+  position:fixed; bottom:100px; right:98px;
+  background:linear-gradient(135deg,var(--chat-accent),var(--chat-primary));
+  color:#fff; padding:10px 16px;
+  border-radius:14px 14px 4px 14px;
+  font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500;
+  white-space:nowrap; z-index:99997;
+  box-shadow:0 8px 24px var(--chat-glow);
+  animation:tooltipFloat 0.5s ease forwards, tooltipBounce 2s 0.5s ease-in-out infinite;
+  pointer-events:none; transition:opacity 0.3s;
+}
+#ar-chat-tooltip::after{
+  content:''; position:absolute; right:-8px; bottom:4px;
+  width:0;height:0; border:8px solid transparent;
+  border-left-color:var(--chat-primary); border-right:0;border-bottom:0;
+}
+#ar-chat-tooltip.hidden{opacity:0;pointer-events:none;}
+@keyframes tooltipFloat{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+@keyframes tooltipBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
+
+#ar-chat-panel{
+  position:fixed; bottom:164px; right:24px;
+  width:var(--chat-width); height:var(--chat-height);
+  background:var(--chat-bg);
+  border:1px solid var(--chat-border);
+  border-radius:var(--chat-radius);
+  display:flex; flex-direction:column; z-index:99999;
+  overflow:hidden;
+  box-shadow:0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(124,110,250,0.15);
+  transform:scale(0.85) translateY(30px); opacity:0; pointer-events:none;
+  transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease;
+  backdrop-filter:blur(28px); -webkit-backdrop-filter:blur(28px);
+}
+#ar-chat-panel.open{transform:scale(1) translateY(0);opacity:1;pointer-events:auto;}
+
+.ar-chat-header{
+  padding:16px 20px 14px;
+  background:linear-gradient(135deg,rgba(124,110,250,0.12),rgba(156,101,247,0.07));
+  border-bottom:1px solid var(--chat-border);
+  display:flex; align-items:center; gap:12px; flex-shrink:0;
+}
+.ar-chat-avatar{
+  width:40px;height:40px;border-radius:50%;
+  background:linear-gradient(135deg,var(--chat-accent),var(--chat-primary));
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;overflow:hidden;
+  box-shadow:0 0 18px var(--chat-glow);
+}
+.ar-avatar-fallback{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:18px;}
+.ar-chat-header-info{flex:1;}
+.ar-chat-header-name{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--chat-text);letter-spacing:0.03em;}
+.ar-chat-header-status{font-family:'DM Sans',sans-serif;font-size:11px;color:var(--chat-muted);margin-top:2px;display:flex;align-items:center;gap:5px;}
+.ar-chat-header-status::before{content:'';width:6px;height:6px;border-radius:50%;background:#34d399;box-shadow:0 0 6px #34d399;flex-shrink:0;animation:statusBlink 2s ease-in-out infinite;}
+@keyframes statusBlink{0%,100%{opacity:1;}50%{opacity:0.4;}}
+
+.ar-chat-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth;}
+.ar-chat-messages::-webkit-scrollbar{width:4px;}
+.ar-chat-messages::-webkit-scrollbar-track{background:transparent;}
+.ar-chat-messages::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:4px;}
+
+.ar-msg{display:flex;align-items:flex-end;gap:8px;animation:msgSlide 0.3s ease forwards;}
+.ar-msg.user{flex-direction:row-reverse;}
+@keyframes msgSlide{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+.ar-msg-bubble{
+  max-width:78%;padding:10px 14px;border-radius:16px;
+  font-family:'DM Sans',sans-serif;font-size:13.5px;line-height:1.55;color:var(--chat-text);
+}
+.ar-msg.bot .ar-msg-bubble{background:var(--chat-surface);border:1px solid var(--chat-border);border-bottom-left-radius:4px;}
+.ar-msg.user .ar-msg-bubble{
+  background:linear-gradient(135deg,rgba(156,101,247,0.5),rgba(124,110,250,0.35));
+  border:1px solid rgba(124,110,250,0.3);border-bottom-right-radius:4px;color:#fff;
+}
+.ar-msg-mini-avatar{
+  width:26px;height:26px;border-radius:50%;
+  background:linear-gradient(135deg,var(--chat-accent),var(--chat-primary));
+  display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;
+}
+
+.ar-typing{display:flex;gap:4px;padding:6px 2px;}
+.ar-typing span{width:7px;height:7px;border-radius:50%;background:var(--chat-primary);opacity:0.6;animation:typingDot 1.2s ease-in-out infinite;}
+.ar-typing span:nth-child(2){animation-delay:0.2s;}
+.ar-typing span:nth-child(3){animation-delay:0.4s;}
+@keyframes typingDot{0%,80%,100%{transform:scale(0.8);opacity:0.4;}40%{transform:scale(1.2);opacity:1;}}
+
+.ar-chat-input-row{
+  padding:12px 16px 14px;border-top:1px solid var(--chat-border);
+  display:flex;gap:8px;align-items:flex-end;background:rgba(255,255,255,0.02);flex-shrink:0;
+}
+#ar-chat-input{
+  flex:1;background:var(--chat-surface);border:1px solid var(--chat-border);
+  border-radius:12px;padding:10px 14px;font-family:'DM Sans',sans-serif;
+  font-size:13.5px;color:var(--chat-text);outline:none;resize:none;
+  min-height:42px;max-height:100px;transition:border-color 0.2s;line-height:1.5;
+}
+#ar-chat-input::placeholder{color:var(--chat-muted);}
+#ar-chat-input:focus{border-color:rgba(124,110,250,0.55);}
+
+#ar-chat-send{
+  width:42px;height:42px;border-radius:12px;border:none;
+  background:linear-gradient(135deg,var(--chat-accent),var(--chat-primary));
+  color:#fff;cursor:pointer;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+  transition:transform 0.2s, box-shadow 0.2s;
+  box-shadow:0 4px 14px var(--chat-glow);
+}
+#ar-chat-send:hover{transform:scale(1.08);box-shadow:0 6px 20px var(--chat-glow);}
+#ar-chat-send:active{transform:scale(0.94);}
+
+.ar-suggestions{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 10px;flex-shrink:0;}
+.ar-suggestion-chip{
+  font-family:'DM Sans',sans-serif;font-size:11.5px;color:var(--chat-primary);
+  background:rgba(124,110,250,0.08);border:1px solid rgba(124,110,250,0.25);
+  border-radius:20px;padding:5px 10px;cursor:pointer;transition:all 0.2s;white-space:nowrap;
+}
+.ar-suggestion-chip:hover{background:rgba(124,110,250,0.22);border-color:rgba(124,110,250,0.5);color:#fff;}
+
+/* Context loading badge */
+.ar-ctx-badge{
+  font-family:'DM Sans',sans-serif;font-size:10px;
+  color:rgba(124,110,250,0.7);background:rgba(124,110,250,0.07);
+  border:1px solid rgba(124,110,250,0.15);
+  border-radius:6px;padding:3px 8px;
+  flex-shrink:0;white-space:nowrap;
+}
+
+@media(max-width:440px){
+  #ar-chat-panel{width:calc(100vw - 16px);right:8px;bottom:100px;}
+  #ar-chat-bubble{bottom:16px;right:16px;}
+  #ar-chat-tooltip{right:88px;}
+}
+</style>
 </head>
 
 <body>
+<div id="bg-mesh"></div>
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+<div class="blob blob3"></div>
 
+<div id="homeBtn">⌂</div>
 
+<header>
+  <div class="container">
+    <nav>
+      <a class="logo" href="#home">
+        <div class="logo-circle">
+          <img src="https://raw.githubusercontent.com/arnetworkhouse-oss/ar-network-house/main/ar%20logo.jpg" alt="Logo">
+        </div>
+        <span>AR Network House</span>
+      </a>
+      <div class="menu-toggle" id="menu-toggle">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="nav-links" id="nav-links">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#projects">Projects</a>
+        <a href="#work-form">Work Form</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+  </div>
+</header>
 
-    <div id="homeBtn">
-        ⌂
+<section id="home" class="hero">
+  <div class="container">
+    <h1>Welcome to AR Network House</h1>
+    <p>Your trusted partner for educational excellence and modern digital solutions.</p>
+    <a href="#services" class="btn">Explore Services</a>
+    <a href="#projects" class="btn">Explore Projects</a>
+  </div>
+</section>
+
+<section id="about" class="about">
+  <div class="container">
+    <h2>About Us</h2>
+    <p>
+      <strong>AR Network House</strong> delivers end-to-end creative and digital solutions including
+      <strong>project development, poster design, professional web design, and official document services</strong>.
+      We combine innovation with precision to ensure every deliverable reflects quality, professionalism, and measurable impact.
+    </p>
+  </div>
+</section>
+
+<section id="services" class="services">
+  <div class="container">
+    <h2>Our Services</h2>
+    <div class="grid" id="services-grid">
+      <div class="loader-wrapper" id="services-loader">
+        <div class="loader"></div>
+        <p>Loading Services…</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects" class="projects">
+  <div class="container">
+    <h2>Our Projects</h2>
+    <div class="project-category">
+      <h3 class="category-title">Educational</h3>
+      <div class="projects-grid">
+        <div class="project-card">
+          <div>
+            <h3 style="color:#34d399;">দুয়ারে Physics</h3>
+            <p>An interactive platform designed to make physics learning accessible and engaging for everyone.</p>
+          </div>
+          <a href="https://duyare-physics.github.io/turbo/home.html" class="project-link-btn" target="_blank">View Project <span>➔</span></a>
+        </div>
+        <div class="project-card">
+          <div>
+            <h3 style="color:#fbbf24;">Solar System</h3>
+            <p>A clean 3D solar system where the sun leads, planets follow, and space keeps it simple.</p>
+          </div>
+          <a href="https://arnetworkhouse-oss.github.io/Solar-System/" class="project-link-btn" target="_blank">Play Now <span>🎮</span></a>
+        </div>
+        <div class="project-card">
+          <div>
+            <h3 style="color:var(--accent);">Explore More</h3>
+            <p>Discover more exciting educational projects and interactive experiences.</p>
+          </div>
+          <a href="https://arnetworkhouse-oss.github.io/arnetworkhouse/more.html" class="project-link-btn" target="_blank">Know More <span>➔</span></a>
+        </div>
+      </div>
     </div>
 
-    <header>
-        <div class="container">
-            <nav>
-                <div class="logo">
-                    <div class="logo-circle"><img class="logo"
-                            src="https://raw.githubusercontent.com/arnetworkhouse-oss/ar-network-house/main/ar%20logo.jpg"
-                            alt="Logo">
-                    </div>
-                    <span>AR Network House</span>
-                </div>
-                <div class="menu-toggle" id="menu-toggle">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-                <div class="nav-links" id="nav-links">
-                    <a href="#home">Home</a>
-                    <a href="#about">About</a>
-                    <a href="#services">Services</a>
-                    <a href="#projects">Projects</a>
-                    <a href="#work-form">Work Form</a>
-                    <a href="#contact">Contact</a>
-                </div>
-            </nav>
+    <div class="project-category">
+      <h3 class="category-title">Games</h3>
+      <div class="projects-grid">
+        <div class="project-card">
+          <div>
+            <h3 style="color:#c084fc;">AURA</h3>
+            <p>A Particle Engine developed with modern web technologies.</p>
+          </div>
+          <a href="https://arnetworkhouse-oss.github.io/aura/" class="project-link-btn" target="_blank">Play Now <span>🎮</span></a>
         </div>
-    </header>
-
-    <section id="home" class="hero">
-        <div class="container">
-            <h1>Welcome to AR Network House</h1>
-            <p>Your trusted partner for educational excellence and modern learning solutions.</p>
-            <a href="#services" class="btn">Explore Services</a>
-            <a href="#projects" class="btn">Explore Projects</a>
+        <div class="project-card">
+          <div>
+            <h3 style="color:#2dd4bf;">Snake Game</h3>
+            <p>A classic web snake game where the snake grows, the brain relaxes, and time quietly resigns.</p>
+          </div>
+          <a href="https://arnetworkhouse-oss.github.io/snake-game/" class="project-link-btn" target="_blank">Play Now <span>🎮</span></a>
         </div>
-    </section>
-
-    <section id="about" class="about">
-        <div class="container">
-            <h2>About Us</h2>
-            <p><strong>AR Network House</strong> delivers end-to-end creative and digital solutions including
-                <strong>project development, poster
-                    design, professional web design, and official document services</strong>. We combine innovation with
-                precision to
-                ensure every deliverable reflects quality, professionalism, and measurable impact.
-            </p>
+        <div class="project-card">
+          <div>
+            <h3 style="color:#818cf8;">Tic Tac Toe</h3>
+            <p>A 3×3 grid game where two players, X and O, race to align three symbols.</p>
+          </div>
+          <a href="https://arnetworkhouse-oss.github.io/tic_tac_toe/" class="project-link-btn" target="_blank">Play Now <span>🎮</span></a>
         </div>
-    </section>
-
-    <section id="services" class="services">
-        <div class="container">
-            <h2>Our Services</h2>
-            <div class="grid" id="services-grid">
-                <div class="loader-wrapper" id="services-loader">
-                    <div class="loader"></div>
-                    <p>Loading Services...</p>
-                </div>
-            </div>
+        <div class="project-card">
+          <div>
+            <h3 style="color:var(--accent);">More Games</h3>
+            <p>Play additional fun and engaging web-based games created by us.</p>
+          </div>
+          <a href="https://arnetworkhouse-oss.github.io/arnetworkhouse/more.html" class="project-link-btn" target="_blank">Play More <span>🎮</span></a>
         </div>
-    </section>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <section id="projects" class="projects">
-        <div class="container">
-            <h2>Our Projects</h2>
+<section class="notice" id="work-form">
+  <div class="container">
+    <div class="notice">
+      <h2 style="text-align:center;font-family:'Syne',sans-serif;font-size:28px;margin-bottom:20px;"><i>Work Submission Form</i></h2>
+      <center>Tap the button to give your work to us!
+        <a href="https://arnetworkhouse.in/work_submession_form.html" class="btn">Click Here</a>
+      </center>
+    </div>
+  </div>
+</section>
 
-            <div class="project-category">
-                <h3 class="category-title">Educational</h3>
-                <div class="projects-grid">
-                    <div class="project-card">
-                        <div>
-                            <h3>
-                                <font color="green">দুয়ারে Physics</font>
-                            </h3>
-                            <p>An interactive platform designed to make physics learning accessible and engaging for
-                                everyone.</p>
-                        </div>
-                        <a href="https://duyare-physics.github.io/turbo/home.html" class="project-link-btn"
-                            target="_blank">
-                            View Project <span>➔</span>
-                        </a>
-                    </div>
-                    <div class="project-card">
-                        <div>
-                            <h3>
-                                <font color="dark yellow">Solar System</font>
-                            </h3>
-                            <p>Solar System : A clean 3D solar system where the sun leads, planets follow, and space
-                                keeps it simple.</p>
-                        </div>
-                        <a href="https://arnetworkhouse-oss.github.io/Solar-System/" class="project-link-btn"
-                            target="_blank">
-                            Play Now <span>🎮</span>
-                        </a>
-                    </div>
-                    <div class="project-card">
-                        <div>
-                            <h3 style="color: var(--primary);">Explore More</h3>
-                            <p>Discover more exciting educational projects and interactive experiences.</p>
-                        </div>
-                        <a href="https://arnetworkhouse-oss.github.io/arnetworkhouse/more.html" class="project-link-btn"
-                            target="_blank">
-                            Know More <span>➔</span>
-                        </a>
-                    </div>
-                </div>
+<section id="contact" style="padding:60px 0;">
+  <div style="max-width:600px;margin:auto;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border:1px solid var(--glass-border);border-radius:var(--radius);padding:30px;">
+    <h2 style="text-align:center;font-family:'Syne',sans-serif;font-size:28px;margin-bottom:20px;">Contact Us</h2>
+    <p style="text-align:center;margin-top:10px;color:var(--text-muted);">Get in touch for project work, web design, or official document services.</p>
+    <div class="contact-buttons">
+      <a href="mailto:arnetworkhouse@gmail.com" class="btn-contact mail">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+        Email Us
+      </a>
+      <a href="https://wa.me/919477440204" class="btn-contact whatsapp">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.554 4.121 1.523 5.856L.057 23.882l6.196-1.447A11.935 11.935 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.792 9.792 0 01-4.988-1.365l-.358-.213-3.678.859.875-3.585-.233-.369A9.79 9.79 0 012.182 12C2.182 6.58 6.58 2.182 12 2.182S21.818 6.58 21.818 12 17.42 21.818 12 21.818z"/></svg>
+        WhatsApp
+      </a>
+      <a href="https://www.linkedin.com/in/ar-network-house-635784395/" class="btn-contact linkedin">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        LinkedIn
+      </a>
+    </div>
+  </div>
+</section>
 
-                <div class="project-category">
-                    <h3 class="category-title">Games</h3>
-                    <div class="projects-grid">
-                        <div class="project-card">
-                            <div>
-                                <h3>
-                                    <font color="purple">AURA</font>
-                                </h3>
-                                <p>Aura : A Particle Engine developed with modern web technologies.</p>
-                            </div>
-                            <a href="https://arnetworkhouse-oss.github.io/aura/" class="project-link-btn"
-                                target="_blank">
-                                Play Now <span>🎮</span>
-                            </a>
+<section id="social" style="padding:50px 0;">
+  <div style="max-width:600px;margin:auto;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border:1px solid var(--glass-border);border-radius:var(--radius);padding:30px;">
+    <h2 style="text-align:center;font-family:'Syne',sans-serif;font-size:26px;margin-bottom:15px;">Follow Us</h2>
+    <p style="text-align:center;color:var(--text-muted);margin-bottom:25px;">Stay connected with AR Network House on our social media platforms.</p>
+    <div class="contact-buttons">
+      <a href="https://www.facebook.com/share/17om73cZ5X/" class="btn-contact facebook">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        Facebook
+      </a>
+      <a href="https://www.instagram.com/ar_network_house?igsh=MWY0bDdiaXI2bjRvMQ==" class="btn-contact instagram">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        Instagram
+      </a>
+      <a href="https://www.threads.com/@ar_network_house" class="btn-contact threads">
+        <svg width="18" height="18" viewBox="0 0 192 192" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.724-10.548 21.348-10.548h.229c8.249.053 14.474 2.452 18.503 7.129 2.932 3.405 4.893 8.111 5.864 14.05-7.314-1.243-15.224-1.626-23.68-1.14-23.82 1.371-39.134 15.264-38.105 34.568.522 9.792 5.4 18.216 13.735 23.719 7.047 4.652 16.124 6.927 25.557 6.412 12.458-.683 22.231-5.436 29.049-14.127 5.178-6.6 8.453-15.153 9.899-25.93 5.937 3.583 10.337 8.298 12.767 13.966 4.132 9.635 4.373 25.468-8.546 38.376-11.319 11.308-24.925 16.2-45.488 16.351-22.809-.169-40.06-7.484-51.275-21.742C35.238 139.966 29.811 120.682 29.608 96c.203-24.682 5.63-43.966 16.133-57.317C56.957 24.425 74.207 17.11 97.016 16.94c22.975.17 40.526 7.52 52.171 21.847 5.715 7.026 9.988 15.792 12.737 26.049l16.296-4.35c-3.33-12.305-8.718-23.052-16.132-32.085C147.136 9.608 125.196.195 97.152 0h-.368C68.773.195 47.077 9.645 32.749 28.080 19.987 44.514 13.425 67.408 13.208 95.976v.048c.217 28.568 6.78 51.462 19.54 67.896 14.328 18.435 36.024 27.885 64.496 28.08h.368c25.306-.172 43.13-6.813 57.597-21.256 19.016-19.005 18.421-42.892 12.171-57.556-4.515-10.529-13.14-19.157-25.843-24.200zm-44.926 42.563c-10.433.571-21.267-4.097-21.82-14.189-.405-7.592 5.399-16.07 22.844-17.075 1.999-.115 3.955-.17 5.874-.17 6.262 0 12.138.606 17.495 1.765-1.99 24.979-14.381 29.083-24.393 29.669z"/></svg>
+        Threads
+      </a>
+    </div>
+  </div>
+</section>
 
-                        </div>
+<footer>
+  © <span id="year"></span> AR Network House | All rights reserved. |
+  <a href="https://arnetworkhouse-oss.github.io/arnetworkhouse/privacy_ar.html">Privacy Policy</a>
+</footer>
 
-                        <div class="project-card">
-                            <div>
-                                <h3>
-                                    <font color="teal">Snake Game</font>
-                                </h3>
-                                <p>Snake Game : A classic web snake game where the snake grows, the brain relaxes, and
-                                    time
-                                    quietly resigns.</p>
-                            </div>
-                            <a href="https://arnetworkhouse-oss.github.io/snake-game/" class="project-link-btn"
-                                target="_blank">
-                                Play Now <span>🎮</span>
-                            </a>
-                        </div>
-                        <!-- <div class="project-card">
-                        <div>
-                            <h3> <font color="orange">Callbreak Pro </font></h3>
-                            <p>Callbreak Pro :A call break game where confidence is high, logic is optional, and results are non-negotiable.</p>
-                        </div>
-                        <a href="https://arnetworkhouse-oss.github.io/Callbreak-Pro/" class="project-link-btn" target="_blank">
-                            Play Now <span>🎮</span>
-                        </a>
-                    </div> -->
-                        <div class="project-card">
-                            <div>
-                                <h3>
-                                    <font color="blueviolet">Tic Tac Toe </font>
-                                </h3>
-                                <p>Tic Tac Toe : A 3 x 3 grid game where two players, X and O, race to align three
-                                    symbols.</p>
-                            </div>
-                            <a href="https://arnetworkhouse-oss.github.io/tic_tac_toe/" class="project-link-btn"
-                                target="_blank">
-                                Play Now <span>🎮</span>
-                            </a>
-                        </div>
-                        <div class="project-card">
-                            <div>
-                                <h3 style="color: var(--primary);">More Games</h3>
-                                <p>Play additional fun and engaging web-based games created by us.</p>
-                            </div>
-                            <a href="https://arnetworkhouse-oss.github.io/arnetworkhouse/more.html"
-                                class="project-link-btn" target="_blank">
-                                Play More <span>🎮</span>
-                            </a>
-                        </div>
+<!-- ═══════════════════════════════════
+     ADMIN SETTINGS PANEL
+═══════════════════════════════════ -->
+<style>
+/* Settings trigger */
+</style>
 
+<!-- ═══════════════════════════════════
+     CHAT WIDGET
+═══════════════════════════════════ -->
+<div id="ar-chat-tooltip">May I help you? 👋</div>
 
-    </section>
+<button id="ar-chat-bubble" aria-label="Open AI chat" aria-expanded="false">
+  <span class="bubble-icon"><img id="ar-bubble-img" src="" alt="AI" style="width:38px;height:38px;object-fit:cover;border-radius:50%;display:none;"><svg id="ar-bubble-svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+  <span class="bubble-label">Ask AI</span>
+  <span class="bubble-close">✕</span>
+</button>
 
-    <section class="notice" id="work-form">
-        <div class="notice">
-            <h2 style="text-align:center; color:#3a3af5; font-size: 28px; margin-bottom: 20px;"><i> Work Submission
-                    Form</i>
-            </h2>
-            <center>Tap the button to give your work to us!
-                <a href="https://arnetworkhouse.in/work_submession_form.html" class="btn">Click Here</a>
-            </center>
-        </div>
-    </section>
+<div id="ar-chat-panel" role="dialog" aria-label="AR Network House AI Assistant">
+  <div class="ar-chat-header">
+    <div class="ar-chat-avatar">
+      <img id="ar-avatar-img" src="" alt="AI" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%;">
+      
+    </div>
+    <div class="ar-chat-header-info">
+      <div class="ar-chat-header-name">ARAN</div>
+      <div class="ar-chat-header-status">Online — AR Network House</div>
+    </div>
+    <span class="ar-ctx-badge" id="ar-ctx-status">Loading…</span>
+  </div>
+  <div class="ar-chat-messages" id="ar-chat-messages"></div>
+  <div class="ar-suggestions" id="ar-suggestions">
+    <span class="ar-suggestion-chip" onclick="arSuggest('What services do you offer?')">Services</span>
+    <span class="ar-suggestion-chip" onclick="arSuggest('What are your prices?')">Pricing</span>
+    <span class="ar-suggestion-chip" onclick="arSuggest('Tell me about your projects')">Projects</span>
+    <span class="ar-suggestion-chip" onclick="arSuggest('How can I contact you?')">Contact</span>
+  </div>
+  <div class="ar-chat-input-row">
+    <textarea id="ar-chat-input" placeholder="Ask me anything about AR Network House…" rows="1"></textarea>
+    <button id="ar-chat-send" aria-label="Send">➤</button>
+  </div>
+</div>
 
-    <section id="contact" style="background-color: #f9f9ff; padding: 60px 0;">
-        <div
-            style="max-width: 600px; margin: auto; background: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); padding: 30px;">
-            <h2 style="text-align:center; color:#3a3af5; font-size: 28px; margin-bottom: 20px;">Contact Us</h2>
+<!-- ═══════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════ -->
+<script>
+/* ── MISC ── */
+document.getElementById("year").textContent = new Date().getFullYear();
 
-            <p style="text-align:center; margin-top:10px; color:#555;">
-                Get in touch with us for project work, web design, or official document services.
-            </p>
+/* ── HOME BTN ── */
+const homeBtn = document.getElementById("homeBtn");
+window.addEventListener("scroll", () => {
+  homeBtn.classList.toggle("visible", window.scrollY > 300);
+}, { passive:true });
+homeBtn.addEventListener("click", () => window.scrollTo({ top:0, behavior:'smooth' }));
 
-            <div class="contact-buttons">
-                <a href="mailto:arnetworkhouse@gmail.com" class="btn-contact mail">
-                    <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Mail">
-                    Email Us
-                </a>
+/* ── MOBILE MENU ── */
+const toggle = document.getElementById("menu-toggle");
+const navLinks = document.getElementById("nav-links");
+function closeMenu(){ navLinks.classList.remove("active"); toggle.classList.remove("open"); }
+toggle.addEventListener("click", (e) => { e.stopPropagation(); navLinks.classList.toggle("active"); toggle.classList.toggle("open"); });
+navLinks.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
+document.addEventListener("click", (e) => { if(!toggle.contains(e.target) && !navLinks.contains(e.target)) closeMenu(); });
+window.addEventListener("scroll", closeMenu, { passive:true });
 
-                <a href="https://wa.me/919477440204" class="btn-contact whatsapp">
-                    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
-                    WhatsApp
-                </a>
+/* ═══════════════════════════════════════════════════
+   URL CONFIG — read from localStorage (set via ⚙ panel)
+   Falls back to hardcoded defaults if not set.
+═══════════════════════════════════════════════════ */
+const DEFAULT_SERVICES_URL  = "https://script.google.com/macros/s/AKfycbzcxPIZ7wZWaewCMKmDsLiIYVOHTG0KzcvO32LzyxLmkhZrESS2qWPjdNtynie7j9PBvA/exec";
+const DEFAULT_AI_CONFIG_URL = "https://script.google.com/macros/s/AKfycbwhwyqYMhucVgJlFIKexRUheLyNp1jhWalJKpaZPiXtcrluUMB2hv0y9Sy-ZUUvYHk5/exec";
 
-                <a href="https://www.linkedin.com/in/ar-network-house-635784395/" class="btn-contact linkedin">
-                    <img src="https://cdn-icons-png.flaticon.com/512/733/733561.png" alt="LinkedIn">
-                    LinkedIn
-                </a>
-            </div>
-        </div>
-    </section>
+const WEBAPP_URL      = DEFAULT_SERVICES_URL;
+const AI_CONFIG_URL   = DEFAULT_AI_CONFIG_URL;
 
-    <section id="social" style="background-color: #ffffff; padding: 50px 0;">
-        <div
-            style="max-width: 600px; margin: auto; background: #fefefe; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); padding: 30px;">
-            <h2 style="text-align:center; color:#3a3af5; font-size: 26px; margin-bottom: 15px;">Follow Us</h2>
+const SERVICE_INFO = [
+  { title:"Projects & Posters",       desc:"All types of school/college projects & creative poster solutions.",     c1:0,  c2:1  },
+  { title:"Cards Design",             desc:"Custom-designed digital cards.",                                         c1:3,  c2:4  },
+  { title:"Corporate Creation",       desc:"Professional corporate assets for branding & identity.",                c1:6,  c2:7  },
+  { title:"Website Create & Design",  desc:"Modern responsive websites with continuous support.",                   c1:9,  c2:10 },
+  { title:"Official Documents",       desc:"Various government and academic document services.",                    c1:12, c2:13 },
+  { title:"Data Recovery",            desc:"Recovery services for lost files, photos & essential data.",            c1:15, c2:16 }
+];
 
-            <p style="text-align:center; color:#555; margin-bottom:25px;">
-                Stay connected with AR Network House on our social media platforms.
-            </p>
+const grid = document.getElementById("services-grid");
 
-            <div class="contact-buttons">
-                <a href="https://www.facebook.com/share/17om73cZ5X/" class="btn-contact facebook">
-                    <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook">
-                    Facebook
-                </a>
+function makeServiceCard(serviceTitle, desc, items){
+  const card = document.createElement("div");
+  card.className = "service-card";
+  let html = `<h3>${serviceTitle}</h3><p>${desc}</p><ul>`;
+  items.forEach(item => { html += `<li>${item}</li>`; });
+  html += `</ul>`;
+  card.innerHTML = html;
+  return card;
+}
 
-                <a href="https://www.instagram.com/ar_network_house?igsh=MWY0bDdiaXI2bjRvMQ=="
-                    class="btn-contact instagram">
-                    <img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" alt="Instagram">
-                    Instagram
-                </a>
-
-                <a href="https://www.threads.com/@ar_network_house" class="btn-contact threads">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/db/Threads_%28app%29.png" alt="Threads">
-                    Threads
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        © <span id="year"></span> AR Network House | All rights reserved. | <a
-            href="https://arnetworkhouse-oss.github.io/arnetworkhouse/privacy_ar.html"><strong>
-                Privacy Policy
-            </strong></a>
-    </footer>
-
-    <script>
-        document.getElementById("year").textContent = new Date().getFullYear();
-        const toggle = document.getElementById("menu-toggle");
-        const links = document.getElementById("nav-links");
-        toggle.addEventListener("click", () => {
-            links.classList.toggle("active");
-        });
-
-        const WEBAPP_URL =
-            "https://script.google.com/macros/s/AKfycbzcxPIZ7wZWaewCMKmDsLiIYVOHTG0KzcvO32LzyxLmkhZrESS2qWPjdNtynie7j9PBvA/exec";
-
-        const SERVICE_INFO = [
-            { title: "Projects & Posters", desc: "All types of school/college projects & creative poster solutions.", c1: 0, c2: 1 },
-            { title: "Cards Design", desc: "Custom-designed digital cards.", c1: 3, c2: 4 },
-            { title: "Corporate Creation", desc: "Professional corporate assets for branding & identity.", c1: 6, c2: 7 },
-            { title: "Website Create & Design", desc: "Modern responsive websites with continuous support.", c1: 9, c2: 10 },
-            { title: "Official Documents", desc: "Various types of government and academic document services.", c1: 12, c2: 13 },
-            { title: "Data Recovery", desc: "Recovery services for lost files, photos & essential data.", c1: 15, c2: 16 }
-        ];
-
-        const grid = document.getElementById("services-grid");
-
-        function makeServiceCard(serviceTitle, desc, items) {
-            const card = document.createElement("div");
-            card.className = "service-card";
-            let html = `<h3>${serviceTitle}</h3><p style="color:#6b7280; margin-top:5px;">${desc}</p><ul>`;
-            items.forEach(item => { html += `<li>${item}</li>`; });
-            html += `</ul>`;
-            card.innerHTML = html;
-            return card;
-        }
+async function loadServices(){
+  try{
+    const res  = await fetch(WEBAPP_URL, { cache:"no-store" });
+    const json = await res.json();
+    if(!json.table || !Array.isArray(json.table)){ document.getElementById("services-loader").remove(); return; }
+    const rows = json.table.slice(1);
+    grid.innerHTML = "";
+    SERVICE_INFO.forEach(service => {
+      const list = [];
+      rows.forEach(r => {
+        let a = r[service.c1] ?? "";
+        let b = r[service.c2] ?? "";
+        const skipCode = str => /^AR\d+/i.test(str.trim());
+        if(a && !skipCode(a)) list.push(a);
+        if(b && !skipCode(b)) list.push(b);
+      });
+      grid.appendChild(makeServiceCard(service.title, service.desc, list));
+    });
+  } catch(err){
+    console.error("Services load error:", err);
+    document.getElementById("services-loader").innerHTML = "<p style='color:#f87171;'>Failed to load services.</p>";
+  }
+}
+loadServices();
 
 
-        loadServices();
-        async function loadServices() {
-            const loader = document.getElementById("services-loader");
+/* ═══════════════════════════════════════════════════════════════
+   AI CHAT — Groq API + context fetched from Google Sheet
+   
+   HOW IT WORKS:
+   1. On page load, fetch system context from your Google Sheet
+      via the same Apps Script web app (or a separate one).
+   2. The Apps Script should return: { context: "..." }
+      from a dedicated "AI_CONTEXT" sheet/range.
+   3. If fetch fails, fall back to the hardcoded default.
+   4. API key also read from sheet (optional — see SETUP below).
 
-            try {
-                const res = await fetch(WEBAPP_URL, { cache: "no-store" });
-                const json = await res.json();
+   SETUP in Google Apps Script:
+   ─────────────────────────────
+   Add this function to your Apps Script:
 
-                if (!json.table || !Array.isArray(json.table)) {
-                    loader.remove();
-                    return;
-                }
+   function doGet(e) {
+     if (e.parameter.action === 'ai_config') {
+       const ss = SpreadsheetApp.getActiveSpreadsheet();
+       const sheet = ss.getSheetByName('AI_CONFIG');  // create this sheet
+       const apiKey = sheet.getRange('B1').getValue(); // Groq API key in B1
+       const context = sheet.getRange('B2').getValue(); // system context in B2
+       return ContentService
+         .createTextOutput(JSON.stringify({ apiKey, context }))
+         .setMimeType(ContentService.MimeType.JSON);
+     }
+     // ... existing services code ...
+   }
 
-                const rows = json.table.slice(1);
-                grid.innerHTML = ""; // remove loader before adding cards
+   Sheet "AI_CONFIG":
+     Row 1: | Groq API Key    | gsk_xxxx... |
+     Row 2: | System Context  | You are ... |
 
-                SERVICE_INFO.forEach(service => {
-                    const list = [];
-                    rows.forEach(r => {
-                        let a = r[service.c1] ?? "";
-                        let b = r[service.c2] ?? "";
-                        const skipCode = str => /^AR\d+/i.test(str.trim());
+   This way your key + context live in the sheet, not in code.
+═══════════════════════════════════════════════════════════════ */
 
-                        if (a && !skipCode(a)) list.push(a);
-                        if (b && !skipCode(b)) list.push(b);
-                    });
+(function(){
+'use strict';
 
-                    const card = makeServiceCard(service.title, service.desc, list);
-                    grid.appendChild(card);
-                });
+/* ── CONFIG — all values come from AI Config Sheet only ── */
+const FALLBACK_API_KEY = ''; // key lives in sheet, not here
+const GROQ_MODEL       = 'llama-3.3-70b-versatile';
+const AI_AVATAR_URL    = 'https://raw.githubusercontent.com/arnetworkhouse-oss/arnetworkhouse/main/ai_logo.png'; // ← paste your AI image URL here e.g. 'https://i.imgur.com/yourimage.png'
+const API_URL          = 'https://api.groq.com/openai/v1/chat/completions';
+const FALLBACK_CONTEXT = ''; // context lives in sheet, not here
 
-            } catch (err) {
-                console.error("Error fetching services:", err);
-                loader.innerHTML = "<p style='color:red;'>Failed to load services.</p>";
-            }
-        }
+/* ── STATE ── */
+let GROQ_API_KEY   = FALLBACK_API_KEY;
+let SYSTEM_CONTEXT = FALLBACK_CONTEXT;
+let configLoaded   = false;
 
+const conversationHistory = [];
+let panelOpen   = false;
+let tooltipTimer;
 
-        // remove IT
+const bubble      = document.getElementById('ar-chat-bubble');
+const panel       = document.getElementById('ar-chat-panel');
+const messages    = document.getElementById('ar-chat-messages');
+const input       = document.getElementById('ar-chat-input');
+const sendBtn     = document.getElementById('ar-chat-send');
+const tooltip     = document.getElementById('ar-chat-tooltip');
+const suggestions = document.getElementById('ar-suggestions');
+const ctxStatus   = document.getElementById('ar-ctx-status');
 
+/* ── SET AVATAR IMAGE ── */
+if(AI_AVATAR_URL){
+  const img = document.getElementById('ar-avatar-img');
+  img.src = AI_AVATAR_URL;
+  img.style.display = 'block';
+  const bubbleImg = document.getElementById('ar-bubble-img');
+  const bubbleSvg = document.getElementById('ar-bubble-svg');
+  bubbleImg.src = AI_AVATAR_URL;
+  bubbleImg.style.display = 'block';
+  if(bubbleSvg) bubbleSvg.style.display = 'none';
+}
 
-    </script>
+/* ── FETCH CONFIG FROM SEPARATE AI SHEET ── */
+async function loadConfig(){
+  const cfgUrl = DEFAULT_AI_CONFIG_URL;
+  if(!cfgUrl){ ctxStatus.textContent='⚠ No URL'; ctxStatus.style.color='rgba(251,191,36,0.8)'; return; }
+  try{
+    const res  = await fetch(cfgUrl + '?action=ai_config', { cache:'no-store' });
+    const json = await res.json();
+
+    if(json.apiKey && json.apiKey.trim().startsWith('gsk_')){
+      GROQ_API_KEY = json.apiKey.trim();
+    }
+    if(json.context && json.context.trim().length > 40){
+      SYSTEM_CONTEXT = json.context.trim();
+    }
+    configLoaded = true;
+    ctxStatus.textContent = '✓ Live';
+    ctxStatus.style.color = 'rgba(52,211,153,0.8)';
+    ctxStatus.style.borderColor = 'rgba(52,211,153,0.25)';
+    ctxStatus.style.background  = 'rgba(52,211,153,0.07)';
+  } catch(err){
+    console.warn('AI config fetch failed, using fallback:', err);
+    configLoaded = true;
+    ctxStatus.textContent = '● Cached';
+    ctxStatus.style.color = 'rgba(251,191,36,0.8)';
+    ctxStatus.style.borderColor = 'rgba(251,191,36,0.25)';
+    ctxStatus.style.background  = 'rgba(251,191,36,0.07)';
+  }
+}
+loadConfig();
+
+/* ── TOOLTIP ── */
+tooltipTimer = setTimeout(() => tooltip.classList.add('hidden'), 6000);
+
+/* ── TOGGLE CHAT ── */
+function closeChat(){
+  panelOpen = false;
+  panel.classList.remove('open');
+  bubble.classList.remove('open');
+  bubble.setAttribute('aria-expanded', 'false');
+}
+
+bubble.addEventListener('click', () => {
+  panelOpen = !panelOpen;
+  panel.classList.toggle('open', panelOpen);
+  bubble.classList.toggle('open', panelOpen);
+  bubble.setAttribute('aria-expanded', panelOpen);
+  tooltip.classList.add('hidden');
+  clearTimeout(tooltipTimer);
+  if(panelOpen){
+    history.pushState({ chatOpen: true }, '');
+    if(messages.children.length === 0){
+      addMessage('bot', 'Hi there! 👋 I\'m ARAN the AI assistant of AR Network House. I can tell you about our services, pricing, projects, and more. How can I help you today?');
+    }
+    setTimeout(() => input.focus(), 350);
+  }
+});
+
+/* Android back button closes chat */
+window.addEventListener('popstate', (e) => {
+  if(panelOpen){ closeChat(); }
+});
+
+function makeMiniAvatar(){
+  const avatar = document.createElement('div');
+  avatar.className = 'ar-msg-mini-avatar';
+  if(AI_AVATAR_URL){
+    const img = document.createElement('img');
+    img.src = AI_AVATAR_URL;
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;';
+    avatar.appendChild(img);
+  } else {
+    avatar.textContent = '';
+  }
+  return avatar;
+}
+
+/* ── ADD MESSAGE ── */
+function addMessage(role, text){
+  const wrap = document.createElement('div');
+  wrap.className = `ar-msg ${role}`;
+  if(role === 'bot') wrap.appendChild(makeMiniAvatar());
+  const bub = document.createElement('div');
+  bub.className = 'ar-msg-bubble';
+  bub.innerHTML = text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+  wrap.appendChild(bub);
+  messages.appendChild(wrap);
+  scrollToBottom();
+  return bub;
+}
+
+/* ── TYPING ── */
+function showTyping(){
+  const wrap = document.createElement('div');
+  wrap.className = 'ar-msg bot'; wrap.id = 'ar-typing-row';
+  wrap.appendChild(makeMiniAvatar());
+  const bub = document.createElement('div');
+  bub.className = 'ar-msg-bubble';
+  bub.innerHTML = '<div class="ar-typing"><span></span><span></span><span></span></div>';
+  wrap.appendChild(bub);
+  messages.appendChild(wrap);
+  scrollToBottom();
+}
+function hideTyping(){ const el = document.getElementById('ar-typing-row'); if(el) el.remove(); }
+function scrollToBottom(){ messages.scrollTop = messages.scrollHeight; }
+
+/* ── SEND ── */
+async function sendMessage(text){
+  text = text.trim();
+  if(!text) return;
+  if(!configLoaded){
+    // wait up to 5s for config
+    for(let i=0;i<50;i++){
+      await new Promise(r=>setTimeout(r,100));
+      if(configLoaded) break;
+    }
+  }
+  if(!GROQ_API_KEY){ addMessage('bot','⚠️ AI config not loaded yet. Please wait a moment and try again.'); return; }
+  suggestions.style.display = 'none';
+  addMessage('user', text);
+  input.value = '';
+  input.style.height = 'auto';
+  sendBtn.disabled = true;
+  conversationHistory.push({ role:'user', content:text });
+  showTyping();
+  try{
+    const resp = await fetch(API_URL, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer ' + GROQ_API_KEY },
+      body: JSON.stringify({
+        model: GROQ_MODEL,
+        messages:[{ role:'system', content:SYSTEM_CONTEXT }, ...conversationHistory],
+        temperature:0.7, max_tokens:500
+      })
+    });
+    hideTyping();
+    if(!resp.ok){ const err = await resp.json().catch(()=>({})); throw new Error(err.error?.message || 'API error '+resp.status); }
+    const data  = await resp.json();
+    const reply = data.choices?.[0]?.message?.content || 'Sorry, I could not generate a response. Please try again.';
+    conversationHistory.push({ role:'assistant', content:reply });
+    addMessage('bot', reply);
+  } catch(err){
+    hideTyping();
+    console.error('Chat error:', err);
+    addMessage('bot', '⚠️ Could not reach the AI right now. Please try again or contact us via WhatsApp or email!');
+  } finally{
+    sendBtn.disabled = false;
+    input.focus();
+  }
+}
+
+window.arSuggest = (text) => sendMessage(text);
+sendBtn.addEventListener('click', () => sendMessage(input.value));
+input.addEventListener('keydown', (e) => { if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendMessage(input.value); } });
+input.addEventListener('input', () => { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 100)+'px'; });
+document.addEventListener('click', (e) => {
+  if(panelOpen && !panel.contains(e.target) && e.target !== bubble && !bubble.contains(e.target)){
+    closeChat();
+  }
+});
+
+})();
+</script>
+
 </body>
-
 </html>
