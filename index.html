@@ -877,7 +877,7 @@ window.addEventListener("scroll", closeMenu, { passive:true });
    Falls back to hardcoded defaults if not set.
 ═══════════════════════════════════════════════════ */
 const DEFAULT_SERVICES_URL  = "https://script.google.com/macros/s/AKfycbzcxPIZ7wZWaewCMKmDsLiIYVOHTG0KzcvO32LzyxLmkhZrESS2qWPjdNtynie7j9PBvA/exec";
-const DEFAULT_AI_CONFIG_URL = "https://script.google.com/macros/s/AKfycbwhwyqYMhucVgJlFIKexRUheLyNp1jhWalJKpaZPiXtcrluUMB2hv0y9Sy-ZUUvYHk5/exec";
+const DEFAULT_AI_CONFIG_URL = "https://script.google.com/macros/s/AKfycbxYPQndYSr4yzuUV7KTdU7eUcjFcc46DQhSskTOLHNHlnk5YVs3O7FA4xrbEVob4J_U/exec";
 
 const WEBAPP_URL      = DEFAULT_SERVICES_URL;
 const AI_CONFIG_URL   = DEFAULT_AI_CONFIG_URL;
@@ -968,14 +968,15 @@ loadServices();
 'use strict';
 
 /* ── CONFIG — all values come from AI Config Sheet only ── */
-const FALLBACK_API_KEY = ''; // key lives in sheet, not here
-const GROQ_MODEL       = 'llama-3.3-70b-versatile';
+const FALLBACK_API_KEY  = ''; // key lives in sheet, not here
+const FALLBACK_MODEL    = 'groq/compound'; // fallback if sheet B3 empty
 const AI_AVATAR_URL    = 'https://raw.githubusercontent.com/arnetworkhouse-oss/arnetworkhouse/main/ai_logo.png'; // ← paste your AI image URL here e.g. 'https://i.imgur.com/yourimage.png'
 const API_URL          = 'https://api.groq.com/openai/v1/chat/completions';
 const FALLBACK_CONTEXT = ''; // context lives in sheet, not here
 
 /* ── STATE ── */
 let GROQ_API_KEY   = FALLBACK_API_KEY;
+let GROQ_MODEL     = FALLBACK_MODEL;
 let SYSTEM_CONTEXT = FALLBACK_CONTEXT;
 let configLoaded   = false;
 
@@ -1014,6 +1015,9 @@ async function loadConfig(){
 
     if(json.apiKey && json.apiKey.trim().startsWith('gsk_')){
       GROQ_API_KEY = json.apiKey.trim();
+    }
+    if(json.model && json.model.trim().length > 2){
+      GROQ_MODEL = json.model.trim();
     }
     if(json.context && json.context.trim().length > 40){
       SYSTEM_CONTEXT = json.context.trim();
