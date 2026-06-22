@@ -1,334 +1,573 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="https://raw.githubusercontent.com/arnetworkhouse-oss/ar-network-house/main/ar%20logo.jpg"
-        type="image/png">
-    <title>AR NETWORK HOUSE | ALL PROJECTS</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>AR NETWORK HOUSE | All Projects</title>
+<style>
+:root{
+    --bg-0:#0a0e17;
+    --bg-1:#0f1524;
+    --panel:#121a2c;
+    --line:#1f2a44;
+    --ink:#e7ecf7;
+    --ink-dim:#8a96b3;
+    --accent:#3fd3ff;
+    --accent-2:#7c5cff;
+    --accent-soft:rgba(63,211,255,0.12);
+    --radius:16px;
+    --mono:'JetBrains Mono','Courier New',monospace;
+    --sans:'Inter','Segoe UI',sans-serif;
+}
 
-    <style>
-        :root {
-            --primary: #2563eb;
-            --dark: #0f172a;
-            --light: #f1f5f9;
-            --card: #ffffff;
-            --radius: 14px;
-            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
-        }
+body{
+    font-family:var(--sans);
+    background:var(--bg-0);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;
+    position:relative;
+}
 
-        body {
-            background: linear-gradient(135deg, #e0f2fe, #f8fafc);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+/* ============ SIDEBAR ============ */
+.sidebar{
+    width:248px;
+    flex-shrink:0;
+    background:var(--bg-1);
+    border-right:1px solid var(--line);
+    padding:1.75rem 1.1rem;
+    position:fixed;
+    height:100vh;
+    overflow-y:auto;
+    z-index:100;
+    transition:transform 0.3s ease;
+}
 
-        /* --- HAMBURGER MENU --- */
-        .hamburger {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 1001;
-            cursor: pointer;
-            background: var(--dark);
-            padding: 12px;
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
+.sidebar-brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:2rem;
+    padding:0 0.4rem;
+}
 
-        .hamburger div {
-            width: 25px;
-            height: 3px;
-            background: white;
-            transition: var(--transition);
-        }
+.node-dot{
+    width:10px; height:10px;
+    border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 12px var(--accent), 0 0 24px rgba(63,211,255,0.5);
+    flex-shrink:0;
+    animation:pulse 2.4s ease-in-out infinite;
+}
 
-        /* --- SIDEBAR --- */
-        .sidebar {
-            width: 280px;
-            background: var(--dark);
-            color: white;
-            padding: 2rem 1.5rem;
-            position: fixed;
-            height: 100%;
-            left: -280px; /* Hidden by default */
-            top: 0;
-            z-index: 1000;
-            transition: var(--transition);
-            box-shadow: 10px 0 30px rgba(0,0,0,0.1);
-        }
+@keyframes pulse{
+    0%,100%{ opacity:1; transform:scale(1); }
+    50%{ opacity:0.55; transform:scale(0.8); }
+}
 
-        .sidebar.active {
-            left: 0;
-        }
+.sidebar-brand span{
+    font-family:var(--mono);
+    font-size:0.72rem;
+    letter-spacing:2px;
+    color:var(--ink-dim);
+    text-transform:uppercase;
+}
 
-        .sidebar h2 {
-            text-align: center;
-            margin-bottom: 1.5rem;
-            font-size: 1.2rem;
-            letter-spacing: 2px;
-            color: var(--primary);
-        }
+.nav-label{
+    font-family:var(--mono);
+    font-size:0.68rem;
+    letter-spacing:2px;
+    color:var(--ink-dim);
+    text-transform:uppercase;
+    margin:1.4rem 0 0.6rem 0.4rem;
+}
 
-        /* --- SEARCH BAR --- */
-        .search-container {
-            margin-bottom: 2rem;
-        }
+.nav-label:first-of-type{ margin-top:0; }
 
-        #projectSearch {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: none;
-            background: #1e293b;
-            color: white;
-            outline: none;
-            font-size: 0.9rem;
-        }
+#sectorNav a{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:#c4cce0;
+    text-decoration:none;
+    padding:10px 12px;
+    border-radius:10px;
+    margin-bottom:4px;
+    font-size:0.92rem;
+    font-weight:500;
+    border:1px solid transparent;
+    transition:all 0.2s ease;
+}
 
-        #projectSearch::placeholder {
-            color: #94a3b8;
-        }
+#sectorNav a::before{
+    content:"";
+    width:6px; height:6px;
+    border-radius:50%;
+    background:var(--ink-dim);
+    flex-shrink:0;
+    transition:all 0.2s ease;
+}
 
-        .sidebar a {
-            display: block;
-            color: #cbd5e1;
-            text-decoration: none;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            transition: var(--transition);
-        }
+#sectorNav a:hover,
+#sectorNav a.active{
+    background:var(--accent-soft);
+    color:var(--accent);
+    border-color:rgba(63,211,255,0.25);
+    transform:translateX(3px);
+}
 
-        .sidebar a:hover {
-            background: var(--primary);
-            color: white;
-            transform: translateX(5px);
-        }
+#sectorNav a:hover::before,
+#sectorNav a.active::before{
+    background:var(--accent);
+    box-shadow:0 0 8px var(--accent);
+}
 
-        /* BACK BUTTON STYLE */
-        .back-link {
-            margin-top: 2rem;
-            border: 1px solid var(--primary) !important;
-            text-align: center;
-            font-weight: bold;
-        }
+/* sidebar toggle (mobile) */
+.menu-toggle{
+    display:none;
+    position:fixed;
+    top:16px; left:16px;
+    z-index:200;
+    width:44px; height:44px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:12px;
+    color:var(--ink);
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+}
 
-        /* --- MAIN CONTENT --- */
-        .main {
-            padding: 2rem;
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            transition: var(--transition);
-            padding-top: 80px;
-        }
+.menu-toggle span,
+.menu-toggle span::before,
+.menu-toggle span::after{
+    content:"";
+    display:block;
+    width:18px; height:2px;
+    background:var(--ink);
+    position:relative;
+    transition:0.25s ease;
+}
+.menu-toggle span::before{ position:absolute; top:-6px; }
+.menu-toggle span::after{ position:absolute; top:6px; }
 
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(4px);
-            z-index: 999;
-        }
+.sidebar-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(5,8,15,0.6);
+    z-index:90;
+}
 
-        .overlay.active {
-            display: block;
-        }
+/* ============ MAIN ============ */
+.main{
+    margin-left:248px;
+    padding:2.6rem 2.4rem 4rem;
+    width:100%;
+    position:relative;
+    z-index:1;
+}
 
-        header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
+header.hero{
+    margin-bottom:2.6rem;
+    padding-bottom:1.8rem;
+    border-bottom:1px solid var(--line);
+}
 
-        header img {
-            max-height: 90px;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-        }
+.hero-top{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-bottom:0.6rem;
+}
 
-        header h1 {
-            font-size: 2.2rem;
-            color: #1e293b;
-        }
+header.hero img{
+    height:54px; width:54px;
+    object-fit:cover;
+    border-radius:12px;
+    border:1px solid var(--line);
+}
 
-        /* --- SECTION & GRIDS --- */
-        section {
-            margin-bottom: 3rem;
-        }
+header.hero h1{
+    font-size:1.9rem;
+    letter-spacing:0.5px;
+    font-weight:800;
+}
 
-        section h3 {
-            margin-bottom: 1.5rem;
-            border-left: 5px solid var(--primary);
-            padding-left: 15px;
-            color: #334155;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+header.hero h1 span{ color:var(--accent); }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 1.5rem;
-        }
+.hero-sub{
+    font-family:var(--mono);
+    font-size:0.82rem;
+    color:var(--ink-dim);
+    letter-spacing:0.5px;
+}
 
-        .card {
-            background: var(--card);
-            padding: 1.8rem;
-            border-radius: var(--radius);
-            text-align: center;
-            font-weight: bold;
-            text-decoration: none;
-            color: #1e293b;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+/* ============ SECTIONS / GRID ============ */
+section.sector-block{
+    margin-bottom:3rem;
+    scroll-margin-top:1.5rem;
+}
 
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            color: var(--primary);
-        }
+section.sector-block h3{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:1.3rem;
+    font-size:0.78rem;
+    font-family:var(--mono);
+    letter-spacing:2.5px;
+    color:var(--ink-dim);
+    text-transform:uppercase;
+}
 
-        footer {
-            text-align: center;
-            margin-top: 4rem;
-            padding: 2rem 0;
-            border-top: 1px solid #cbd5e1;
-            color: #64748b;
-        }
+section.sector-block h3::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:linear-gradient(90deg, var(--line), transparent);
+}
 
-        footer a {
-            color: var(--primary);
-            text-decoration: none;
-        }
-    </style>
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
+    gap:1.1rem;
+}
+
+.card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    text-decoration:none;
+    color:var(--ink);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    transition:transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    position:relative;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    border-color:rgba(63,211,255,0.4);
+    box-shadow:0 16px 32px rgba(0,0,0,0.35), 0 0 0 1px rgba(63,211,255,0.15);
+}
+
+.card-thumb{
+    width:100%;
+    aspect-ratio:1/1;
+    background:#0e1422;
+    overflow:hidden;
+    position:relative;
+}
+
+.card-thumb img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    transition:transform 0.4s ease;
+}
+
+.card:hover .card-thumb img{ transform:scale(1.07); }
+
+.card-thumb.no-image{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:var(--mono);
+    font-size:1.6rem;
+    color:var(--accent);
+    opacity:0.5;
+    letter-spacing:2px;
+}
+
+.card-body{
+    padding:0.85rem 1rem 0.95rem;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    flex:1;
+}
+
+.card-body-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+}
+
+.card-body span.name{
+    font-weight:700;
+    font-size:0.95rem;
+    line-height:1.3;
+}
+
+.card-body .arrow{
+    color:var(--accent);
+    font-size:1.1rem;
+    flex-shrink:0;
+    transition:transform 0.25s ease;
+}
+
+.card:hover .arrow{ transform:translateX(4px); }
+
+.card-desc{
+    font-size:0.76rem;
+    color:var(--ink-dim);
+    line-height:1.5;
+}
+
+/* ============ STATES ============ */
+.state-msg{
+    font-family:var(--mono);
+    font-size:0.85rem;
+    color:var(--ink-dim);
+    padding:2rem 0;
+    text-align:center;
+}
+.state-msg.error{ color:#ff7b7b; }
+
+.skeleton-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
+    gap:1.1rem;
+}
+
+.skeleton-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    height:170px;
+    position:relative;
+    overflow:hidden;
+}
+
+.skeleton-card::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(90deg, transparent, rgba(63,211,255,0.08), transparent);
+    animation:shimmer 1.5s infinite;
+}
+
+@keyframes shimmer{
+    0%{ transform:translateX(-100%); }
+    100%{ transform:translateX(100%); }
+}
+
+/* ============ FOOTER ============ */
+footer{
+    text-align:center;
+    margin-top:2rem;
+    padding-top:1.8rem;
+    border-top:1px solid var(--line);
+    color:var(--ink-dim);
+    font-family:var(--mono);
+    font-size:0.78rem;
+    letter-spacing:0.5px;
+}
+
+footer a{ color:var(--accent); text-decoration:none; }
+footer a:hover{ text-decoration:underline; }
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:900px){
+    .sidebar{
+        transform:translateX(-100%);
+        box-shadow:0 0 40px rgba(0,0,0,0.5);
+    }
+    .sidebar.open{ transform:translateX(0); }
+    .sidebar-overlay.show{ display:block; }
+    .menu-toggle{ display:flex; }
+    .main{
+        margin-left:0;
+        padding:5rem 1.2rem 3rem;
+    }
+    header.hero h1{ font-size:1.5rem; }
+    header.hero img{ height:44px; width:44px; }
+}
+
+@media(max-width:480px){
+    .grid, .skeleton-grid{
+        grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+        gap:0.8rem;
+    }
+    .card-body span.name{ font-size:0.85rem; }
+    .main{ padding:5rem 0.9rem 3rem; }
+}
+</style>
 </head>
 
 <body>
 
-<div class="hamburger" onclick="toggleMenu()">
-    <div></div>
-    <div></div>
-    <div></div>
-</div>
+<button class="menu-toggle" id="menuToggle" aria-label="Toggle menu"><span></span></button>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 <div class="sidebar" id="sidebar">
-    <h2>LIBRARY</h2>
-    
-    <div class="search-container">
-        <input type="text" id="projectSearch" placeholder="Search projects..." onkeyup="filterProjects()">
+    <div class="sidebar-brand">
+        <div class="node-dot"></div>
+        <span>AR Network House</span>
     </div>
-
-    <a href="#education" onclick="toggleMenu()">Education Sector</a>
-    <a href="#games" onclick="toggleMenu()">Games Sector</a>
-    <a href="#tools" onclick="toggleMenu()">Tools Sector</a>
-    
-    <a href="javascript:history.back()" class="back-link">← Go Back</a>
+    <p class="nav-label">Sectors</p>
+    <nav id="sectorNav"></nav>
 </div>
 
-<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
-
 <div class="main">
+    <header class="hero">
+        <div class="hero-top">
+            <img src="https://github.com/arnetworkhouse-oss/ar-network-house/blob/main/ar%20logo.jpg?raw=true" alt="AR Network House logo">
+            <h1>AR <span>NETWORK</span> HOUSE</h1>
+        </div>
+        <p class="hero-sub">AR Network House Project Hub — All Live Projects in One Place — synced from DATABASE</p>
+    </header>
 
-<header>
-    <img src="https://github.com/arnetworkhouse-oss/ar-network-house/blob/main/ar%20logo.jpg?raw=true" alt="AR Logo">
-    <h1>AR NETWORK HOUSE</h1>
-</header>
-
-<section id="education">
-    <h3>Education Sector</h3>
-    <div class="grid">
-        <a href="https://duyare-physics.github.io/turbo/home.html" target="_blank" class="card">DUYARE PHYSICS</a>
-        <a href="https://arnetworkhouse-oss.github.io/Solar-System/" target="_blank" class="card">SOLAR SYSTEM</a>
+    <div id="content">
+        <div class="state-msg" id="loadingMsg">Loading projects…</div>
+        <div class="skeleton-grid">
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+        </div>
     </div>
-</section>
 
-<section id="games">
-    <h3>Games Sector</h3>
-    <div class="grid">
-        <a href="https://arnetworkhouse-oss.github.io/aura/" target="_blank" class="card">AURA GAME</a>
-        <a href="https://arnetworkhouse-oss.github.io/snake-game/" target="_blank" class="card">SNAKE GAME</a>
-        <a href="https://arnetworkhouse-oss.github.io/tic_tac_toe/" target="_blank" class="card">TIC TAC TOE</a>
-        <a href="https://arnetworkhouse-oss.github.io/ar-network-house/poke_match.html" target="_blank" class="card">POKE MATCH</a>
-    </div>
-</section>
-
-<section id="tools">
-    <h3>Tools Sector</h3>
-    <div class="grid">
-        <a href="https://arnetworkhouse-oss.github.io/ar-network-house/weather.html" target="_blank" class="card">INDRODOOT (WEATHER TOOL)</a>
-        <a href="https://arnetworkhouse-oss.github.io/ar-network-house/QR_code_generetor.html" target="_blank" class="card">QR CODE GENERATOR </a>
-        <a href="https://arnetworkhouse-oss.github.io/ar-network-house/code_compiler.html" target="_blank" class="card">CODE COMPILER</a>
-    </div>
-</section>
-
-<footer>
-    © 2026 <a href="https://arnetworkhouse.in/"> AR NETWORK HOUSE</a>
-</footer>
-
+    <footer>
+        © 2026 <a href="https://arnetworkhouse.in/" target="_blank">AR NETWORK HOUSE</a>
+    </footer>
 </div>
 
 <script>
-    // Toggle Menu Logic
-    function toggleMenu() {
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
-        sidebar.classList.toggle('active');
-        overlay.classList.toggle('active');
+const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbxzXdL2EjNgZq1dxNxO92FIXpeiYg2n0GbHmJJW5vi6hLqMfOOkJ9AzrpyBcET22_G2cQ/exec";
+
+const contentEl   = document.getElementById('content');
+const sectorNavEl = document.getElementById('sectorNav');
+
+function slugify(text){
+    return text.toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+}
+
+function escapeHtml(str){
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
+function cardThumb(project){
+    if(project.image){
+        return `<div class="card-thumb"><img src="${escapeHtml(project.image)}" alt="${escapeHtml(project.name)}" loading="lazy" onerror="this.parentElement.classList.add('no-image'); this.remove();"></div>`;
     }
+    const initial = project.name ? project.name.charAt(0).toUpperCase() : '?';
+    return `<div class="card-thumb no-image">${escapeHtml(initial)}</div>`;
+}
 
-    // Search Logic
-    function filterProjects() {
-        const input = document.getElementById('projectSearch').value.toLowerCase();
-        const cards = document.querySelectorAll('.card');
-        const sections = document.querySelectorAll('section');
+function renderProjects(projects){
+    const sectors = [];
+    const grouped = {};
 
-        cards.forEach(card => {
-            const title = card.innerText.toLowerCase();
-            if (title.includes(input)) {
-                card.style.display = "flex";
-            } else {
-                card.style.display = "none";
-            }
-        });
-
-        // Hide whole section if no cards match
-        sections.forEach(section => {
-            const visibleCards = section.querySelectorAll('.card[style="display: flex;"]');
-            // If search is active and no cards found, hide section header
-            if (input !== "" && visibleCards.length === 0) {
-                section.style.display = "none";
-            } else {
-                section.style.display = "block";
-            }
-        });
-    }
-
-    // Close on Escape Key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            document.getElementById('sidebar').classList.remove('active');
-            document.getElementById('overlay').classList.remove('active');
+    projects.forEach(p => {
+        const sectorName = p.sector && p.sector.trim() ? p.sector.trim() : "Others";
+        if(!grouped[sectorName]){
+            grouped[sectorName] = [];
+            sectors.push(sectorName);
         }
+        grouped[sectorName].push(p);
     });
+
+    if(sectors.length === 0){
+        contentEl.innerHTML = `<p class="state-msg">No projects found in the sheet yet.</p>`;
+        sectorNavEl.innerHTML = '';
+        return;
+    }
+
+    sectorNavEl.innerHTML = sectors.map(s =>
+        `<a href="#${slugify(s)}" data-sector="${slugify(s)}">${escapeHtml(s)}</a>`
+    ).join('');
+
+    contentEl.innerHTML = sectors.map(sectorName => {
+        const cards = grouped[sectorName].map(p => `
+            <a href="${escapeHtml(p.link)}" target="_blank" rel="noopener" class="card">
+                ${cardThumb(p)}
+                <div class="card-body">
+                    <div class="card-body-top">
+                        <span class="name">${escapeHtml(p.name)}</span>
+                        <span class="arrow">→</span>
+                    </div>
+                    ${p.description ? `<div class="card-desc">${escapeHtml(p.description)}</div>` : ''}
+                </div>
+            </a>
+        `).join('');
+
+        return `
+            <section class="sector-block" id="${slugify(sectorName)}">
+                <h3>${escapeHtml(sectorName)}</h3>
+                <div class="grid">${cards}</div>
+            </section>
+        `;
+    }).join('');
+
+    setupScrollSpy(sectors);
+    setupMobileNavClose();
+}
+
+function setupScrollSpy(sectors){
+    const links = document.querySelectorAll('#sectorNav a');
+    const sections = sectors.map(s => document.getElementById(slugify(s))).filter(Boolean);
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if(entry.isIntersecting){
+                links.forEach(l => l.classList.remove('active'));
+                const activeLink = document.querySelector(`#sectorNav a[data-sector="${entry.target.id}"]`);
+                if(activeLink) activeLink.classList.add('active');
+            }
+        });
+    }, { rootMargin:'-15% 0px -70% 0px' });
+
+    sections.forEach(s => observer.observe(s));
+}
+
+function setupMobileNavClose(){
+    document.querySelectorAll('#sectorNav a').forEach(link => {
+        link.addEventListener('click', () => closeSidebar());
+    });
+}
+
+function showError(message){
+    contentEl.innerHTML = `<p class="state-msg error">⚠ ${escapeHtml(message)}</p>`;
+}
+
+async function loadProjects(){
+    if(!SHEET_API_URL || SHEET_API_URL.indexOf('PASTE_YOUR') === 0){
+        showError('Backend URL not configured. Paste your Google Apps Script Web App URL in SHEET_API_URL.');
+        return;
+    }
+    try{
+        const res = await fetch(SHEET_API_URL);
+        const data = await res.json();
+        if(!data.success){
+            showError(data.error || 'Failed to load data from sheet.');
+            return;
+        }
+        renderProjects(data.projects || []);
+    }catch(err){
+        showError('Could not reach the project sheet. Check the backend URL or your connection.');
+    }
+}
+
+const sidebar  = document.getElementById('sidebar');
+const overlay  = document.getElementById('sidebarOverlay');
+const toggleBtn = document.getElementById('menuToggle');
+
+function openSidebar(){ sidebar.classList.add('open'); overlay.classList.add('show'); }
+function closeSidebar(){ sidebar.classList.remove('open'); overlay.classList.remove('show'); }
+toggleBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
+overlay.addEventListener('click', closeSidebar);
+
+loadProjects();
 </script>
 
 </body>
