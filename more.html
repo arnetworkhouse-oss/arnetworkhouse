@@ -470,7 +470,24 @@ function renderProjects(projects){
     const grouped = {};
 
     projects.forEach(p => {
-        const sectorName = p.sector && p.sector.trim() ? p.sector.trim() : "Others";
+        const rawSector = p.sector && p.sector.trim() ? p.sector.trim() : "Others";
+
+        // Game sector: split into Multiplayer / Single Player based on F column (gameMode)
+        let sectorName;
+        if(rawSector.toLowerCase() === "game"){
+            const mode = p.gameMode ? p.gameMode.trim() : "";
+            if(mode.toLowerCase() === "multiplayer"){
+                sectorName = "Multiplayer";
+            } else if(mode.toLowerCase().replace(/[\s-]/g,"") === "singleplayer"){
+                sectorName = "Single Player";
+            } else {
+                // gameMode is blank or unrecognised — keep under "Game"
+                sectorName = "Game";
+            }
+        } else {
+            sectorName = rawSector;
+        }
+
         if(!grouped[sectorName]){
             grouped[sectorName] = [];
             sectors.push(sectorName);
