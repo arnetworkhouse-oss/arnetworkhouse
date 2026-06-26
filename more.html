@@ -232,29 +232,6 @@ section.sector-block h3::after{
     background:linear-gradient(90deg, var(--line), transparent);
 }
 
-/* Sub-sector (inside Game) */
-.sub-sector{
-    margin-bottom:2rem;
-}
-
-.sub-sector:last-child{
-    margin-bottom:0;
-}
-
-.sub-sector h4{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    margin-bottom:1rem;
-    font-size:0.72rem;
-    font-family:var(--mono);
-    letter-spacing:2px;
-    color:var(--accent-2);
-    text-transform:uppercase;
-    padding-left:0.5rem;
-    border-left:2px solid var(--accent-2);
-}
-
 .grid{
     display:grid;
     grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
@@ -307,6 +284,36 @@ section.sector-block h3::after{
     color:var(--accent);
     opacity:0.5;
     letter-spacing:2px;
+}
+
+/* ============ GAME MODE BADGE ============ */
+.game-badge{
+    position:absolute;
+    top:8px;
+    left:8px;
+    font-family:var(--mono);
+    font-size:0.62rem;
+    font-weight:700;
+    letter-spacing:1.2px;
+    text-transform:uppercase;
+    padding:3px 8px;
+    border-radius:6px;
+    z-index:2;
+    pointer-events:none;
+}
+
+.game-badge.multiplayer{
+    background:rgba(124,92,255,0.85);
+    color:#fff;
+    border:1px solid rgba(124,92,255,0.6);
+    box-shadow:0 0 10px rgba(124,92,255,0.5);
+}
+
+.game-badge.singleplayer{
+    background:rgba(63,211,255,0.18);
+    color:var(--accent);
+    border:1px solid rgba(63,211,255,0.4);
+    box-shadow:0 0 10px rgba(63,211,255,0.3);
 }
 
 .card-body{
@@ -480,18 +487,31 @@ function escapeHtml(str){
     return div.innerHTML;
 }
 
-function cardThumb(project){
-    if(project.image){
-        return `<div class="card-thumb"><img src="${escapeHtml(project.image)}" alt="${escapeHtml(project.name)}" loading="lazy" onerror="this.parentElement.classList.add('no-image'); this.remove();"></div>`;
+function getGameBadge(gameMode){
+    if(!gameMode) return '';
+    const mode = gameMode.trim().toLowerCase().replace(/[\s-]/g,'');
+    if(mode === 'multiplayer'){
+        return `<span class="game-badge multiplayer">Multiplayer</span>`;
     }
-    const initial = project.name ? project.name.charAt(0).toUpperCase() : '?';
-    return `<div class="card-thumb no-image">${escapeHtml(initial)}</div>`;
+    if(mode === 'singleplayer'){
+        return `<span class="game-badge singleplayer">Single Player</span>`;
+    }
+    return '';
 }
 
-function makeCard(p){
+function cardThumb(project, isGame){
+    const badge = isGame ? getGameBadge(project.gameMode) : '';
+    if(project.image){
+        return `<div class="card-thumb">${badge}<img src="${escapeHtml(project.image)}" alt="${escapeHtml(project.name)}" loading="lazy" onerror="this.parentElement.classList.add('no-image'); this.remove();"></div>`;
+    }
+    const initial = project.name ? project.name.charAt(0).toUpperCase() : '?';
+    return `<div class="card-thumb no-image">${badge}${escapeHtml(initial)}</div>`;
+}
+
+function makeCard(p, isGame){
     return `
         <a href="${escapeHtml(p.link)}" target="_blank" rel="noopener" class="card">
-            ${cardThumb(p)}
+            ${cardThumb(p, isGame)}
             <div class="card-body">
                 <div class="card-body-top">
                     <span class="name">${escapeHtml(p.name)}</span>
@@ -509,7 +529,6 @@ function renderProjects(projects){
 
     projects.forEach(p => {
         const sectorName = p.sector && p.sector.trim() ? p.sector.trim() : "Others";
-
         if(!grouped[sectorName]){
             grouped[sectorName] = [];
             sectors.push(sectorName);
@@ -529,54 +548,12 @@ function renderProjects(projects){
 
     contentEl.innerHTML = sectors.map(sectorName => {
         const isGame = sectorName.toLowerCase() === "game sector";
-
-        let innerHtml;
-        if(isGame){
-            // Split Game projects into sub-sectors by gameMode (F column)
-            const multiplayer = [];
-            const singlePlayer = [];
-            const other = [];
-
-            grouped[sectorName].forEach(p => {
-                const mode = (p.gameMode || "").trim().toLowerCase().replace(/[\s-]/g,"");
-                if(mode === "multiplayer")         multiplayer.push(p);
-                else if(mode === "singleplayer")   singlePlayer.push(p);
-                else                               other.push(p);
-            });
-
-            const subSections = [];
-            if(multiplayer.length){
-                subSections.push(`
-                    <div class="sub-sector">
-                        <h4>Multiplayer</h4>
-                        <div class="grid">${multiplayer.map(makeCard).join('')}</div>
-                    </div>
-                `);
-            }
-            if(singlePlayer.length){
-                subSections.push(`
-                    <div class="sub-sector">
-                        <h4>Single Player</h4>
-                        <div class="grid">${singlePlayer.map(makeCard).join('')}</div>
-                    </div>
-                `);
-            }
-            if(other.length){
-                subSections.push(`
-                    <div class="sub-sector">
-                        <div class="grid">${other.map(makeCard).join('')}</div>
-                    </div>
-                `);
-            }
-            innerHtml = subSections.join('');
-        } else {
-            innerHtml = `<div class="grid">${grouped[sectorName].map(makeCard).join('')}</div>`;
-        }
+        const gridHtml = `<div class="grid">${grouped[sectorName].map(p => makeCard(p, isGame)).join('')}</div>`;
 
         return `
             <section class="sector-block" id="${slugify(sectorName)}">
                 <h3>${escapeHtml(sectorName)}</h3>
-                ${innerHtml}
+                ${gridHtml}
             </section>
         `;
     }).join('');
@@ -630,8 +607,8 @@ async function loadProjects(){
     }
 }
 
-const sidebar  = document.getElementById('sidebar');
-const overlay  = document.getElementById('sidebarOverlay');
+const sidebar   = document.getElementById('sidebar');
+const overlay   = document.getElementById('sidebarOverlay');
 const toggleBtn = document.getElementById('menuToggle');
 
 function openSidebar(){ sidebar.classList.add('open'); overlay.classList.add('show'); }
