@@ -232,6 +232,29 @@ section.sector-block h3::after{
     background:linear-gradient(90deg, var(--line), transparent);
 }
 
+/* Sub-sector (inside Game) */
+.sub-sector{
+    margin-bottom:2rem;
+}
+
+.sub-sector:last-child{
+    margin-bottom:0;
+}
+
+.sub-sector h4{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:1rem;
+    font-size:0.72rem;
+    font-family:var(--mono);
+    letter-spacing:2px;
+    color:var(--accent-2);
+    text-transform:uppercase;
+    padding-left:0.5rem;
+    border-left:2px solid var(--accent-2);
+}
+
 .grid{
     display:grid;
     grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
@@ -465,28 +488,27 @@ function cardThumb(project){
     return `<div class="card-thumb no-image">${escapeHtml(initial)}</div>`;
 }
 
+function makeCard(p){
+    return `
+        <a href="${escapeHtml(p.link)}" target="_blank" rel="noopener" class="card">
+            ${cardThumb(p)}
+            <div class="card-body">
+                <div class="card-body-top">
+                    <span class="name">${escapeHtml(p.name)}</span>
+                    <span class="arrow">→</span>
+                </div>
+                ${p.description ? `<div class="card-desc">${escapeHtml(p.description)}</div>` : ''}
+            </div>
+        </a>
+    `;
+}
+
 function renderProjects(projects){
     const sectors = [];
     const grouped = {};
 
     projects.forEach(p => {
-        const rawSector = p.sector && p.sector.trim() ? p.sector.trim() : "Others";
-
-        // Game sector: split into Multiplayer / Single Player based on F column (gameMode)
-        let sectorName;
-        if(rawSector.toLowerCase() === "game"){
-            const mode = p.gameMode ? p.gameMode.trim() : "";
-            if(mode.toLowerCase() === "multiplayer"){
-                sectorName = "Multiplayer";
-            } else if(mode.toLowerCase().replace(/[\s-]/g,"") === "singleplayer"){
-                sectorName = "Single Player";
-            } else {
-                // gameMode is blank or unrecognised — keep under "Game"
-                sectorName = "Game";
-            }
-        } else {
-            sectorName = rawSector;
-        }
+        const sectorName = p.sector && p.sector.trim() ? p.sector.trim() : "Others";
 
         if(!grouped[sectorName]){
             grouped[sectorName] = [];
@@ -506,23 +528,55 @@ function renderProjects(projects){
     ).join('');
 
     contentEl.innerHTML = sectors.map(sectorName => {
-        const cards = grouped[sectorName].map(p => `
-            <a href="${escapeHtml(p.link)}" target="_blank" rel="noopener" class="card">
-                ${cardThumb(p)}
-                <div class="card-body">
-                    <div class="card-body-top">
-                        <span class="name">${escapeHtml(p.name)}</span>
-                        <span class="arrow">→</span>
+        const isGame = sectorName.toLowerCase() === "game sector";
+
+        let innerHtml;
+        if(isGame){
+            // Split Game projects into sub-sectors by gameMode (F column)
+            const multiplayer = [];
+            const singlePlayer = [];
+            const other = [];
+
+            grouped[sectorName].forEach(p => {
+                const mode = (p.gameMode || "").trim().toLowerCase().replace(/[\s-]/g,"");
+                if(mode === "multiplayer")         multiplayer.push(p);
+                else if(mode === "singleplayer")   singlePlayer.push(p);
+                else                               other.push(p);
+            });
+
+            const subSections = [];
+            if(multiplayer.length){
+                subSections.push(`
+                    <div class="sub-sector">
+                        <h4>Multiplayer</h4>
+                        <div class="grid">${multiplayer.map(makeCard).join('')}</div>
                     </div>
-                    ${p.description ? `<div class="card-desc">${escapeHtml(p.description)}</div>` : ''}
-                </div>
-            </a>
-        `).join('');
+                `);
+            }
+            if(singlePlayer.length){
+                subSections.push(`
+                    <div class="sub-sector">
+                        <h4>Single Player</h4>
+                        <div class="grid">${singlePlayer.map(makeCard).join('')}</div>
+                    </div>
+                `);
+            }
+            if(other.length){
+                subSections.push(`
+                    <div class="sub-sector">
+                        <div class="grid">${other.map(makeCard).join('')}</div>
+                    </div>
+                `);
+            }
+            innerHtml = subSections.join('');
+        } else {
+            innerHtml = `<div class="grid">${grouped[sectorName].map(makeCard).join('')}</div>`;
+        }
 
         return `
             <section class="sector-block" id="${slugify(sectorName)}">
                 <h3>${escapeHtml(sectorName)}</h3>
-                <div class="grid">${cards}</div>
+                ${innerHtml}
             </section>
         `;
     }).join('');
