@@ -288,9 +288,8 @@ section.sector-block h3::after{
 
 /* ============ GAME MODE BADGE ============ */
 .game-badge{
-    position:absolute;
-    top:8px;
-    left:8px;
+    display:inline-block;
+    align-self:flex-start;
     font-family:var(--mono);
     font-size:0.62rem;
     font-weight:700;
@@ -298,22 +297,21 @@ section.sector-block h3::after{
     text-transform:uppercase;
     padding:3px 8px;
     border-radius:6px;
-    z-index:2;
-    pointer-events:none;
+    margin-top:2px;
 }
 
 .game-badge.multiplayer{
-    background:rgba(124,92,255,0.85);
-    color:#fff;
-    border:1px solid rgba(124,92,255,0.6);
-    box-shadow:0 0 10px rgba(124,92,255,0.5);
+    background:rgba(124,92,255,0.18);
+    color:#b09eff;
+    border:1px solid rgba(124,92,255,0.5);
+    box-shadow:0 0 8px rgba(124,92,255,0.3);
 }
 
 .game-badge.singleplayer{
-    background:rgba(63,211,255,0.18);
+    background:rgba(63,211,255,0.10);
     color:var(--accent);
-    border:1px solid rgba(63,211,255,0.4);
-    box-shadow:0 0 10px rgba(63,211,255,0.3);
+    border:1px solid rgba(63,211,255,0.35);
+    box-shadow:0 0 8px rgba(63,211,255,0.2);
 }
 
 .card-body{
@@ -499,25 +497,26 @@ function getGameBadge(gameMode){
     return '';
 }
 
-function cardThumb(project, isGame){
-    const badge = isGame ? getGameBadge(project.gameMode) : '';
+function cardThumb(project){
     if(project.image){
-        return `<div class="card-thumb">${badge}<img src="${escapeHtml(project.image)}" alt="${escapeHtml(project.name)}" loading="lazy" onerror="this.parentElement.classList.add('no-image'); this.remove();"></div>`;
+        return `<div class="card-thumb"><img src="${escapeHtml(project.image)}" alt="${escapeHtml(project.name)}" loading="lazy" onerror="this.parentElement.classList.add('no-image'); this.remove();"></div>`;
     }
     const initial = project.name ? project.name.charAt(0).toUpperCase() : '?';
-    return `<div class="card-thumb no-image">${badge}${escapeHtml(initial)}</div>`;
+    return `<div class="card-thumb no-image">${escapeHtml(initial)}</div>`;
 }
 
 function makeCard(p, isGame){
+    const badge = isGame ? getGameBadge(p.gameMode) : '';
     return `
         <a href="${escapeHtml(p.link)}" target="_blank" rel="noopener" class="card">
-            ${cardThumb(p, isGame)}
+            ${cardThumb(p)}
             <div class="card-body">
                 <div class="card-body-top">
                     <span class="name">${escapeHtml(p.name)}</span>
                     <span class="arrow">→</span>
                 </div>
                 ${p.description ? `<div class="card-desc">${escapeHtml(p.description)}</div>` : ''}
+                ${badge}
             </div>
         </a>
     `;
