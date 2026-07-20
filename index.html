@@ -11,6 +11,17 @@
 </script>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<script>
+(function(){
+  var reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var lowCores = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+  var lowMem   = navigator.deviceMemory && navigator.deviceMemory <= 4;
+  var isMobile = /Android|iPhone|iPad|Mobile/i.test(navigator.userAgent);
+  if(reduceMotion || lowMem || (isMobile && lowCores)){
+    document.documentElement.classList.add('low-power');
+  }
+})();
+</script>
 <link rel="icon" href="https://raw.githubusercontent.com/arnetworkhouse-oss/ar-network-house/main/ar%20logo.jpg" type="image/png">
 <title>AR Network House</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,6 +47,19 @@
   --glass-hover:  rgba(255,255,255,0.08);
   --blur:         blur(24px);
   --radius:       16px;
+}
+
+/* ── PERF: low-power devices get cheaper blur + no decorative animation ──
+   .low-power class set by JS below (old/slow device or reduced-motion) */
+.low-power{
+  --blur: blur(6px);
+}
+.low-power .blob,
+.low-power #bg-mesh::after{ animation:none !important; }
+.low-power #ar-chat-bubble{ animation:none !important; }
+@media (prefers-reduced-motion: reduce){
+  .blob, #bg-mesh::after, #ar-chat-bubble{ animation:none !important; }
+  html{ scroll-behavior:auto; }
 }
 
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -103,11 +127,12 @@ body{
 
 /* ── HEADER ── */
 header{
-  background: rgba(18,18,18,0.6);
-  backdrop-filter: var(--blur);
-  -webkit-backdrop-filter: var(--blur);
+  background: rgba(18,18,18,0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--glass-border);
   position: sticky; top:0; z-index:1000;
+  will-change: transform; /* own compositor layer, cheaper while scrolling */
 }
 
 nav{display:flex;justify-content:space-between;align-items:center;padding:14px 0;}
@@ -221,7 +246,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:14px 0
 }
 
 /* ── SECTIONS ── */
-section{padding:70px 0;}
+section{padding:70px 0; content-visibility:auto; contain-intrinsic-size:1px 600px;}
 
 section h2{
   text-align:center;
@@ -877,7 +902,7 @@ window.addEventListener("scroll", closeMenu, { passive:true });
    Falls back to hardcoded defaults if not set.
 ═══════════════════════════════════════════════════ */
 const DEFAULT_SERVICES_URL  = "https://script.google.com/macros/s/AKfycbzcxPIZ7wZWaewCMKmDsLiIYVOHTG0KzcvO32LzyxLmkhZrESS2qWPjdNtynie7j9PBvA/exec";
-const DEFAULT_AI_CONFIG_URL = "https://script.google.com/macros/s/AKfycbxYPQndYSr4yzuUV7KTdU7eUcjFcc46DQhSskTOLHNHlnk5YVs3O7FA4xrbEVob4J_U/exec";
+const DEFAULT_AI_CONFIG_URL = "https://script.google.com/macros/s/AKfycbyEIsczlx_XckweHHpqi4Sx3GtwrM8mhjluI1MCk742nxtlM39GAZqo7trhfNN2gWuo/exec";
 
 const WEBAPP_URL      = DEFAULT_SERVICES_URL;
 const AI_CONFIG_URL   = DEFAULT_AI_CONFIG_URL;
@@ -930,53 +955,77 @@ loadServices();
 
 
 /* ═══════════════════════════════════════════════════════════════
-   AI CHAT — Groq API + context fetched from Google Sheet
-   
-   HOW IT WORKS:
-   1. On page load, fetch system context from your Google Sheet
-      via the same Apps Script web app (or a separate one).
-   2. The Apps Script should return: { context: "..." }
-      from a dedicated "AI_CONTEXT" sheet/range.
-   3. If fetch fails, fall back to the hardcoded default.
-   4. API key also read from sheet (optional — see SETUP below).
+   AI CHAT — NVIDIA NIM (build.nvidia.com) via Apps Script proxy
 
-   SETUP in Google Apps Script:
+   WHY A PROXY (read this before changing anything):
+   NVIDIA's integrate.api.nvidia.com endpoint does NOT send CORS
+   headers, so a direct browser fetch (the old Groq way) will fail
+   with a CORS error. The chat call must be made server-side —
+   your Apps Script (Google's server) is not subject to CORS —
+   and the browser only ever talks to your Apps Script.
+   This is also more secure: the NVIDIA key never reaches the client.
+
+   SETUP in Google Apps Script (AI_CONFIG project):
    ─────────────────────────────
-   Add this function to your Apps Script:
-
    function doGet(e) {
      if (e.parameter.action === 'ai_config') {
        const ss = SpreadsheetApp.getActiveSpreadsheet();
-       const sheet = ss.getSheetByName('AI_CONFIG');  // create this sheet
-       const apiKey = sheet.getRange('B1').getValue(); // Groq API key in B1
-       const context = sheet.getRange('B2').getValue(); // system context in B2
+       const sheet = ss.getSheetByName('AI_CONFIG');
+       const model   = sheet.getRange('B2').getValue(); // e.g. meta/llama-3.1-8b-instruct
+       const context = sheet.getRange('B3').getValue(); // system prompt
        return ContentService
-         .createTextOutput(JSON.stringify({ apiKey, context }))
+         .createTextOutput(JSON.stringify({ model, context }))
          .setMimeType(ContentService.MimeType.JSON);
      }
      // ... existing services code ...
    }
 
-   Sheet "AI_CONFIG":
-     Row 1: | Groq API Key    | gsk_xxxx... |
-     Row 2: | System Context  | You are ... |
+   function doPost(e) {
+     const body = JSON.parse(e.postData.contents);
+     if (body.action !== 'chat') return errJson_('unknown action');
 
-   This way your key + context live in the sheet, not in code.
+     const ss    = SpreadsheetApp.getActiveSpreadsheet();
+     const sheet = ss.getSheetByName('AI_CONFIG');
+     const apiKey = sheet.getRange('B1').getValue(); // NVIDIA key, nvapi-xxxx
+     const model  = sheet.getRange('B2').getValue();
+
+     const payload = {
+       model: model,
+       messages: [{ role:'system', content: body.context || '' }, ...body.messages],
+       temperature: 0.7,
+       max_tokens: 500
+     };
+     const res = UrlFetchApp.fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
+       method: 'post',
+       contentType: 'application/json',
+       headers: { Authorization: 'Bearer ' + apiKey },
+       payload: JSON.stringify(payload),
+       muteHttpExceptions: true
+     });
+     return ContentService
+       .createTextOutput(res.getContentText())
+       .setMimeType(ContentService.MimeType.JSON);
+   }
+
+   Sheet "AI_CONFIG":
+     Row 1: | NVIDIA API Key  | nvapi-xxxx...            |
+     Row 2: | model           | meta/llama-3.1-8b-instruct |
+     Row 3: | System Context  | You are ...              |
+
+   Re-deploy the Apps Script (Deploy → Manage deployments → Edit →
+   New version) after adding doPost, or POST requests will 404.
 ═══════════════════════════════════════════════════════════════ */
 
 (function(){
 'use strict';
 
-/* ── CONFIG — all values come from AI Config Sheet only ── */
-const FALLBACK_API_KEY  = ''; // key lives in sheet, not here
-const FALLBACK_MODEL    = 'groq/compound'; // fallback if sheet B3 empty
+/* ── CONFIG ── */
+const FALLBACK_MODEL   = 'meta/llama-3.1-8b-instruct'; // used only if sheet B2 empty
 const AI_AVATAR_URL    = 'https://raw.githubusercontent.com/arnetworkhouse-oss/arnetworkhouse/main/ai_logo.png'; // ← paste your AI image URL here e.g. 'https://i.imgur.com/yourimage.png'
-const API_URL          = 'https://api.groq.com/openai/v1/chat/completions';
 const FALLBACK_CONTEXT = ''; // context lives in sheet, not here
 
 /* ── STATE ── */
-let GROQ_API_KEY   = FALLBACK_API_KEY;
-let GROQ_MODEL     = FALLBACK_MODEL;
+let AI_MODEL       = FALLBACK_MODEL;
 let SYSTEM_CONTEXT = FALLBACK_CONTEXT;
 let configLoaded   = false;
 
@@ -1013,11 +1062,8 @@ async function loadConfig(){
     const res  = await fetch(cfgUrl + '?action=ai_config', { cache:'no-store' });
     const json = await res.json();
 
-    if(json.apiKey && json.apiKey.trim().startsWith('gsk_')){
-      GROQ_API_KEY = json.apiKey.trim();
-    }
     if(json.model && json.model.trim().length > 2){
-      GROQ_MODEL = json.model.trim();
+      AI_MODEL = json.model.trim();
     }
     if(json.context && json.context.trim().length > 40){
       SYSTEM_CONTEXT = json.context.trim();
@@ -1124,7 +1170,6 @@ async function sendMessage(text){
       if(configLoaded) break;
     }
   }
-  if(!GROQ_API_KEY){ addMessage('bot','⚠️ AI config not loaded yet. Please wait a moment and try again.'); return; }
   suggestions.style.display = 'none';
   addMessage('user', text);
   input.value = '';
@@ -1133,18 +1178,18 @@ async function sendMessage(text){
   conversationHistory.push({ role:'user', content:text });
   showTyping();
   try{
-    const resp = await fetch(API_URL, {
+    const resp = await fetch(DEFAULT_AI_CONFIG_URL, {
       method:'POST',
-      headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer ' + GROQ_API_KEY },
+      headers:{ 'Content-Type':'text/plain;charset=utf-8' }, // avoids Apps Script CORS preflight
       body: JSON.stringify({
-        model: GROQ_MODEL,
-        messages:[{ role:'system', content:SYSTEM_CONTEXT }, ...conversationHistory],
-        temperature:0.7, max_tokens:500
+        action: 'chat',
+        context: SYSTEM_CONTEXT,
+        messages: conversationHistory
       })
     });
     hideTyping();
-    if(!resp.ok){ const err = await resp.json().catch(()=>({})); throw new Error(err.error?.message || 'API error '+resp.status); }
     const data  = await resp.json();
+    if(data.error){ throw new Error(data.error.message || data.error); }
     const reply = data.choices?.[0]?.message?.content || 'Sorry, I could not generate a response. Please try again.';
     conversationHistory.push({ role:'assistant', content:reply });
     addMessage('bot', reply);
