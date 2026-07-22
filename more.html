@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <link rel="icon" href="https://raw.githubusercontent.com/arnetworkhouse-oss/ar-network-house/main/ar%20logo.jpg" type="image/png">
 <title>AR NETWORK HOUSE | All Projects</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
 :root{
     --bg-0:#0a0e17;
@@ -314,6 +315,65 @@ section.sector-block h3::after{
     box-shadow:0 0 8px rgba(63,211,255,0.2);
 }
 
+/* ============ GAME ACTION BUTTONS ============ */
+.card-actions{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    margin-top:auto;
+    padding-top:10px;
+}
+
+.game-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:8px 10px;
+    border-radius:9px;
+    font-size:0.76rem;
+    font-weight:600;
+    letter-spacing:0.3px;
+    text-decoration:none;
+    border:1px solid transparent;
+    cursor:pointer;
+    transition:transform 0.18s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.game-btn i{ font-size:0.92rem; }
+
+.game-btn:hover{ transform:translateY(-1px); }
+
+.game-btn.online{
+    background:linear-gradient(135deg, rgba(63,211,255,0.16), rgba(124,92,255,0.16));
+    color:var(--accent);
+    border-color:rgba(63,211,255,0.4);
+}
+.game-btn.online:hover{
+    background:linear-gradient(135deg, rgba(63,211,255,0.3), rgba(124,92,255,0.3));
+    box-shadow:0 0 14px rgba(63,211,255,0.3);
+}
+
+.game-btn.apk{
+    background:rgba(61,220,132,0.10);
+    color:#5ee89a;
+    border-color:rgba(61,220,132,0.35);
+}
+.game-btn.apk:hover{
+    background:rgba(61,220,132,0.2);
+    box-shadow:0 0 14px rgba(61,220,132,0.25);
+}
+
+.game-btn.windows{
+    background:rgba(124,92,255,0.10);
+    color:#b09eff;
+    border-color:rgba(124,92,255,0.35);
+}
+.game-btn.windows:hover{
+    background:rgba(124,92,255,0.2);
+    box-shadow:0 0 14px rgba(124,92,255,0.25);
+}
+
 .card-body{
     padding:0.85rem 1rem 0.95rem;
     display:flex;
@@ -470,7 +530,7 @@ footer a:hover{ text-decoration:underline; }
 </div>
 
 <script>
-const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbxzXdL2EjNgZq1dxNxO92FIXpeiYg2n0GbHmJJW5vi6hLqMfOOkJ9AzrpyBcET22_G2cQ/exec";
+const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbw1yLJjbgyZCTdPDNtISIy-KGNLqLXlVvwxV4MwPqlHvjwnWUqLQhOw7LcG_06u4tVnmg/exec";
 
 const contentEl   = document.getElementById('content');
 const sectorNavEl = document.getElementById('sectorNav');
@@ -505,8 +565,54 @@ function cardThumb(project){
     return `<div class="card-thumb no-image">${escapeHtml(initial)}</div>`;
 }
 
+// Returns the first non-empty value among the given field-name aliases.
+function firstLink(p, keys){
+    for(const k of keys){
+        if(p[k] && String(p[k]).trim()) return String(p[k]).trim();
+    }
+    return '';
+}
+
+function gameButtons(p){
+    const online  = firstLink(p, ['onlinePlay','online','playOnline','link']);
+    const apk     = firstLink(p, ['apk','apkLink','downloadApk','android']);
+    const windows = firstLink(p, ['windows','windowsLink','downloadWindows','exe','pc']);
+
+    let btns = '';
+    if(online){
+        btns += `<a href="${escapeHtml(online)}" target="_blank" rel="noopener" class="game-btn online"><i class="fa-solid fa-gamepad"></i> Play Online</a>`;
+    }
+    if(apk){
+        btns += `<a href="${escapeHtml(apk)}" target="_blank" rel="noopener" class="game-btn apk"><i class="fa-brands fa-android"></i> Download APK</a>`;
+    }
+    if(windows){
+        btns += `<a href="${escapeHtml(windows)}" target="_blank" rel="noopener" class="game-btn windows"><i class="fa-brands fa-windows"></i> Download for Windows</a>`;
+    }
+    return btns ? `<div class="card-actions">${btns}</div>` : '';
+}
+
 function makeCard(p, isGame){
-    const badge = isGame ? getGameBadge(p.gameMode) : '';
+    // Game cards contain action buttons, so they can't be a single wrapping <a>.
+    if(isGame){
+        const badge  = getGameBadge(p.gameMode);
+        const online = firstLink(p, ['onlinePlay','online','playOnline','link']);
+        const thumb  = online
+            ? `<a href="${escapeHtml(online)}" target="_blank" rel="noopener">${cardThumb(p)}</a>`
+            : cardThumb(p);
+        return `
+            <div class="card game-card">
+                ${thumb}
+                <div class="card-body">
+                    <div class="card-body-top">
+                        <span class="name">${escapeHtml(p.name)}</span>
+                    </div>
+                    ${p.description ? `<div class="card-desc">${escapeHtml(p.description)}</div>` : ''}
+                    ${badge}
+                    ${gameButtons(p)}
+                </div>
+            </div>
+        `;
+    }
     return `
         <a href="${escapeHtml(p.link)}" target="_blank" rel="noopener" class="card">
             ${cardThumb(p)}
@@ -516,7 +622,6 @@ function makeCard(p, isGame){
                     <span class="arrow">→</span>
                 </div>
                 ${p.description ? `<div class="card-desc">${escapeHtml(p.description)}</div>` : ''}
-                ${badge}
             </div>
         </a>
     `;
