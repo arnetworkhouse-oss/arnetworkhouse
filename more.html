@@ -78,6 +78,37 @@ body{
     text-transform:uppercase;
 }
 
+.sidebar-search{
+    position:relative;
+    margin-bottom:1.4rem;
+}
+
+.sidebar-search i{
+    position:absolute;
+    left:12px;
+    top:50%;
+    transform:translateY(-50%);
+    color:var(--ink-dim);
+    font-size:0.78rem;
+    pointer-events:none;
+}
+
+.sidebar-search input{
+    width:100%;
+    background:var(--bg-0);
+    border:1px solid var(--line);
+    border-radius:9px;
+    padding:9px 12px 9px 34px;
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:0.85rem;
+    outline:none;
+    transition:border-color 0.2s ease;
+}
+
+.sidebar-search input::placeholder{ color:var(--ink-dim); }
+.sidebar-search input:focus{ border-color:rgba(63,211,255,0.45); }
+
 .nav-label{
     font-family:var(--mono);
     font-size:0.68rem;
@@ -302,26 +333,24 @@ section.sector-block h3::after{
 }
 
 .game-badge.multiplayer{
-    background:rgba(124,92,255,0.18);
+    background:rgba(124,92,255,0.12);
     color:#b09eff;
-    border:1px solid rgba(124,92,255,0.5);
-    box-shadow:0 0 8px rgba(124,92,255,0.3);
+    border:1px solid rgba(124,92,255,0.3);
 }
 
 .game-badge.singleplayer{
-    background:rgba(63,211,255,0.10);
+    background:rgba(63,211,255,0.08);
     color:var(--accent);
-    border:1px solid rgba(63,211,255,0.35);
-    box-shadow:0 0 8px rgba(63,211,255,0.2);
+    border:1px solid rgba(63,211,255,0.25);
 }
 
-/* ============ GAME ACTION BUTTONS ============ */
+/* ============ ACTION BUTTONS (clean store-style) ============ */
 .card-actions{
     display:flex;
     flex-direction:column;
-    gap:6px;
+    gap:8px;
     margin-top:auto;
-    padding-top:10px;
+    padding-top:12px;
 }
 
 .game-btn{
@@ -329,50 +358,44 @@ section.sector-block h3::after{
     align-items:center;
     justify-content:center;
     gap:8px;
-    padding:8px 10px;
-    border-radius:9px;
-    font-size:0.76rem;
+    padding:9px 12px;
+    border-radius:8px;
+    font-family:var(--sans);
+    font-size:0.82rem;
     font-weight:600;
-    letter-spacing:0.3px;
+    letter-spacing:0.1px;
     text-decoration:none;
-    border:1px solid transparent;
     cursor:pointer;
-    transition:transform 0.18s ease, background 0.2s ease, box-shadow 0.2s ease;
+    transition:background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
 }
 
-.game-btn i{ font-size:0.92rem; }
+.game-btn i{ font-size:0.85rem; width:16px; text-align:center; flex-shrink:0; }
 
-.game-btn:hover{ transform:translateY(-1px); }
-
+/* Primary action (Open in Browser / Play Online) — solid, most prominent */
 .game-btn.online{
-    background:linear-gradient(135deg, rgba(63,211,255,0.16), rgba(124,92,255,0.16));
-    color:var(--accent);
-    border-color:rgba(63,211,255,0.4);
+    background:var(--ink);
+    color:var(--bg-0);
+    border:1px solid var(--ink);
 }
-.game-btn.online:hover{
-    background:linear-gradient(135deg, rgba(63,211,255,0.3), rgba(124,92,255,0.3));
-    box-shadow:0 0 14px rgba(63,211,255,0.3);
-}
+.game-btn.online:hover{ background:#c9d1e6; }
+.game-btn.online:active{ opacity:0.85; }
 
+/* Secondary actions (APK / Windows) — filled, quieter than primary */
 .game-btn.apk{
-    background:rgba(61,220,132,0.10);
-    color:#5ee89a;
-    border-color:rgba(61,220,132,0.35);
+    background:#1f7a4d;
+    color:#eafff2;
+    border:1px solid #1f7a4d;
 }
-.game-btn.apk:hover{
-    background:rgba(61,220,132,0.2);
-    box-shadow:0 0 14px rgba(61,220,132,0.25);
-}
+.game-btn.apk:hover{ background:#25925c; }
+.game-btn.apk:active{ opacity:0.85; }
 
 .game-btn.windows{
-    background:rgba(124,92,255,0.10);
-    color:#b09eff;
-    border-color:rgba(124,92,255,0.35);
+    background:#1e3a6e;
+    color:#e9eefc;
+    border:1px solid #1e3a6e;
 }
-.game-btn.windows:hover{
-    background:rgba(124,92,255,0.2);
-    box-shadow:0 0 14px rgba(124,92,255,0.25);
-}
+.game-btn.windows:hover{ background:#25467f; }
+.game-btn.windows:active{ opacity:0.85; }
 
 .card-body{
     padding:0.85rem 1rem 0.95rem;
@@ -501,6 +524,10 @@ footer a:hover{ text-decoration:underline; }
         <div class="node-dot"></div>
         <span>AR Network House</span>
     </div>
+    <div class="sidebar-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="Search projects…" autocomplete="off">
+    </div>
     <p class="nav-label">Sectors</p>
     <nav id="sectorNav"></nav>
 </div>
@@ -565,22 +592,38 @@ function cardThumb(project){
     return `<div class="card-thumb no-image">${escapeHtml(initial)}</div>`;
 }
 
+// Normalizes a key for loose matching: lowercase, strip spaces/underscores/dashes.
+function normKey(k){
+    return String(k).toLowerCase().replace(/[\s_-]+/g,'');
+}
+
 // Returns the first non-empty value among the given field-name aliases.
+// Matches case-insensitively and ignores spaces/underscores/dashes in the
+// sheet's actual column names, so "APK Link", "apk_link", "Apk-Link" etc. all work.
 function firstLink(p, keys){
+    const normalized = {};
+    for(const rawKey in p){
+        normalized[normKey(rawKey)] = p[rawKey];
+    }
     for(const k of keys){
-        if(p[k] && String(p[k]).trim()) return String(p[k]).trim();
+        const v = normalized[normKey(k)];
+        if(v && String(v).trim()) return String(v).trim();
     }
     return '';
 }
 
-function gameButtons(p){
-    const online  = firstLink(p, ['onlinePlay','online','playOnline','link']);
-    const apk     = firstLink(p, ['apk','apkLink','downloadApk','android']);
-    const windows = firstLink(p, ['windows','windowsLink','downloadWindows','exe','pc']);
+function gameButtons(p, isGame){
+    const online  = firstLink(p, ['onlinePlay','online','playOnline','link','url','website','liveLink','demo','demoLink','openLink','openInBrowser','browser']);
+    const apk     = firstLink(p, ['apk','apkLink','downloadApk','android','androidLink','androidApk']);
+    const windows = firstLink(p, ['windows','windowsLink','downloadWindows','exe','exeLink','pc','pcLink','downloadExe','downloadPc']);
 
     let btns = '';
     if(online){
-        btns += `<a href="${escapeHtml(online)}" target="_blank" rel="noopener" class="game-btn online"><i class="fa-solid fa-gamepad"></i> Play Online</a>`;
+        if(isGame){
+            btns += `<a href="${escapeHtml(online)}" target="_blank" rel="noopener" class="game-btn online"><i class="fa-solid fa-gamepad"></i> Play Online</a>`;
+        } else {
+            btns += `<a href="${escapeHtml(online)}" target="_blank" rel="noopener" class="game-btn online"><i class="fa-solid fa-globe"></i> Open in Browser</a>`;
+        }
     }
     if(apk){
         btns += `<a href="${escapeHtml(apk)}" target="_blank" rel="noopener" class="game-btn apk"><i class="fa-brands fa-android"></i> Download APK</a>`;
@@ -592,38 +635,26 @@ function gameButtons(p){
 }
 
 function makeCard(p, isGame){
-    // Game cards contain action buttons, so they can't be a single wrapping <a>.
-    if(isGame){
-        const badge  = getGameBadge(p.gameMode);
-        const online = firstLink(p, ['onlinePlay','online','playOnline','link']);
-        const thumb  = online
-            ? `<a href="${escapeHtml(online)}" target="_blank" rel="noopener">${cardThumb(p)}</a>`
-            : cardThumb(p);
-        return `
-            <div class="card game-card">
-                ${thumb}
-                <div class="card-body">
-                    <div class="card-body-top">
-                        <span class="name">${escapeHtml(p.name)}</span>
-                    </div>
-                    ${p.description ? `<div class="card-desc">${escapeHtml(p.description)}</div>` : ''}
-                    ${badge}
-                    ${gameButtons(p)}
-                </div>
-            </div>
-        `;
-    }
+    const badge  = getGameBadge(p.gameMode);
+    const online = firstLink(p, ['onlinePlay','online','playOnline','link']);
+    const thumb  = online
+        ? `<a href="${escapeHtml(online)}" target="_blank" rel="noopener">${cardThumb(p)}</a>`
+        : cardThumb(p);
+
+    const searchText = escapeHtml(`${p.name || ''} ${p.description || ''}`.toLowerCase());
+
     return `
-        <a href="${escapeHtml(p.link)}" target="_blank" rel="noopener" class="card">
-            ${cardThumb(p)}
+        <div class="card game-card" data-search="${searchText}">
+            ${thumb}
             <div class="card-body">
                 <div class="card-body-top">
                     <span class="name">${escapeHtml(p.name)}</span>
-                    <span class="arrow">→</span>
                 </div>
                 ${p.description ? `<div class="card-desc">${escapeHtml(p.description)}</div>` : ''}
+                ${badge}
+                ${gameButtons(p, isGame)}
             </div>
-        </a>
+        </div>
     `;
 }
 
@@ -664,6 +695,7 @@ function renderProjects(projects){
 
     setupScrollSpy(sectors);
     setupMobileNavClose();
+    setupSearch();
 }
 
 function setupScrollSpy(sectors){
@@ -687,6 +719,40 @@ function setupMobileNavClose(){
     document.querySelectorAll('#sectorNav a').forEach(link => {
         link.addEventListener('click', () => closeSidebar());
     });
+}
+
+function filterProjects(query){
+    const q = query.trim().toLowerCase();
+    document.querySelectorAll('section.sector-block').forEach(section => {
+        let visibleCount = 0;
+        section.querySelectorAll('.card').forEach(card => {
+            const match = !q || (card.dataset.search || '').includes(q);
+            card.style.display = match ? '' : 'none';
+            if(match) visibleCount++;
+        });
+        section.style.display = visibleCount > 0 ? '' : 'none';
+    });
+
+    const anyVisible = Array.from(document.querySelectorAll('section.sector-block'))
+        .some(s => s.style.display !== 'none');
+    let noResultsMsg = document.getElementById('noResultsMsg');
+    if(!anyVisible && q){
+        if(!noResultsMsg){
+            noResultsMsg = document.createElement('p');
+            noResultsMsg.id = 'noResultsMsg';
+            noResultsMsg.className = 'state-msg';
+            contentEl.appendChild(noResultsMsg);
+        }
+        noResultsMsg.textContent = `No projects match "${query.trim()}".`;
+    } else if(noResultsMsg){
+        noResultsMsg.remove();
+    }
+}
+
+function setupSearch(){
+    const input = document.getElementById('searchInput');
+    if(!input) return;
+    input.addEventListener('input', () => filterProjects(input.value));
 }
 
 function showError(message){
