@@ -2,12 +2,20 @@
 <html lang="en">
 <head>
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CMG8ZZSW4T"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-CMG8ZZSW4T');
+  /* PERF: load analytics after page is ready, not during first paint */
+  window.addEventListener('load', function(){
+    setTimeout(function(){
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-CMG8ZZSW4T';
+      document.head.appendChild(s);
+    }, 1200);
+  });
 </script>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -17,8 +25,11 @@
   var lowCores = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
   var lowMem   = navigator.deviceMemory && navigator.deviceMemory <= 4;
   var isMobile = /Android|iPhone|iPad|Mobile/i.test(navigator.userAgent);
-  if(reduceMotion || lowMem || (isMobile && lowCores)){
+  var c = navigator.connection; var slowNet = c && (c.saveData || /2g/.test(c.effectiveType||''));
+  if(reduceMotion || lowMem || slowNet || (isMobile && lowCores)){
     document.documentElement.classList.add('low-power');
+  } else if('IntersectionObserver' in window){
+    document.documentElement.classList.add('anim');
   }
 })();
 </script>
@@ -26,7 +37,7 @@
 <title>AR Network House</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 
 <style>
 /* ═══════════════════════════════
@@ -51,14 +62,10 @@
 
 /* ── PERF: low-power devices get cheaper blur + no decorative animation ──
    .low-power class set by JS below (old/slow device or reduced-motion) */
-.low-power{
-  --blur: blur(6px);
-}
-.low-power .blob,
-.low-power #bg-mesh::after{ animation:none !important; }
-.low-power #ar-chat-bubble{ animation:none !important; }
+.low-power *{ animation:none !important; transition-duration:0.01s !important; }
+.low-power html, html.low-power{ scroll-behavior:auto; }
 @media (prefers-reduced-motion: reduce){
-  .blob, #bg-mesh::after, #ar-chat-bubble{ animation:none !important; }
+  *{ animation:none !important; }
   html{ scroll-behavior:auto; }
 }
 
@@ -82,10 +89,14 @@ body{
   overflow:hidden;
 }
 
+/* PERF: blobs + drifting grid merged into ONE static layer (no blur filter, no repaint animation) */
 #bg-mesh::before{
   content:'';
-  position:absolute; inset:0;
+  position:absolute; top:0; left:0; right:0; bottom:0;
   background:
+    radial-gradient(circle 300px at 8% 4%,   rgba(91,142,247,0.16), transparent 100%),
+    radial-gradient(circle 240px at 94% 94%, rgba(124,110,250,0.14), transparent 100%),
+    radial-gradient(circle 150px at 60% 50%, rgba(120,80,255,0.08), transparent 100%),
     radial-gradient(ellipse 70% 55% at 15% 5%,  rgba(91,142,247,0.13) 0%, transparent 55%),
     radial-gradient(ellipse 55% 45% at 85% 85%,  rgba(124,110,250,0.12) 0%, transparent 55%),
     radial-gradient(ellipse 40% 35% at 55% 45%,  rgba(91,142,247,0.07) 0%, transparent 50%);
@@ -93,33 +104,11 @@ body{
 
 #bg-mesh::after{
   content:'';
-  position:absolute; inset:0;
+  position:absolute; top:0; left:0; right:0; bottom:0;
   background-image:
     linear-gradient(rgba(124,110,250,0.025) 1px, transparent 1px),
     linear-gradient(90deg, rgba(91,142,247,0.025) 1px, transparent 1px);
   background-size: 72px 72px;
-  animation: meshDrift 40s linear infinite;
-}
-
-/* Floating glass blobs */
-.blob{
-  position:fixed; border-radius:50%; pointer-events:none; z-index:-1;
-  filter:blur(80px); opacity:0.55;
-  animation: blobFloat 18s ease-in-out infinite;
-}
-.blob1{ width:520px; height:520px; background:radial-gradient(circle, rgba(91,142,247,0.22), rgba(124,110,250,0.10)); top:-120px; left:-80px; animation-duration:20s; }
-.blob2{ width:400px; height:400px; background:radial-gradient(circle, rgba(124,110,250,0.20), rgba(91,142,247,0.08)); bottom:-80px; right:-60px; animation-duration:24s; animation-delay:-8s; }
-.blob3{ width:260px; height:260px; background:radial-gradient(circle, rgba(120,80,255,0.18), transparent); top:45%; left:55%; animation-duration:16s; animation-delay:-4s; }
-
-@keyframes blobFloat{
-  0%,100%{ transform:translate(0,0) scale(1); }
-  33%    { transform:translate(30px,-40px) scale(1.05); }
-  66%    { transform:translate(-20px,30px) scale(0.97); }
-}
-
-@keyframes meshDrift{
-  0%  { background-position: 0 0,   0 0; }
-  100%{ background-position: 72px 72px, 72px 72px; }
 }
 
 /* ── CONTAINER ── */
@@ -127,12 +116,9 @@ body{
 
 /* ── HEADER ── */
 header{
-  background: rgba(18,18,18,0.82);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(18,18,18,0.96);
   border-bottom: 1px solid var(--glass-border);
-  position: sticky; top:0; z-index:1000;
-  will-change: transform; /* own compositor layer, cheaper while scrolling */
+  position: -webkit-sticky; position: sticky; top:0; z-index:1000;
 }
 
 nav{display:flex;justify-content:space-between;align-items:center;padding:14px 0;}
@@ -179,8 +165,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:14px 0
 @media(max-width:768px){
   .nav-links{
     display:none; flex-direction:column;
-    background:rgba(18,18,18,0.97);
-    backdrop-filter:var(--blur);
+    background:rgba(18,18,18,0.98);
     position:absolute; top:68px; right:0;
     width:200px; padding:16px;
     border:1px solid var(--glass-border);
@@ -198,9 +183,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:14px 0
 
 .hero .container{
   position:relative; z-index:2;
-  background: rgba(31,31,31,0.55);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
+  background: rgba(30,31,40,0.78);
   border:1px solid var(--glass-border);
   border-radius:24px;
   padding:70px 48px;
@@ -218,11 +201,16 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:14px 0
 
 .hero h1{
   font-family:'Syne',sans-serif;
-  font-size:clamp(2rem,5vw,3.4rem); font-weight:800;
-  background:linear-gradient(135deg,#fff 30%,var(--accent));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  background-clip:text;
+  font-size:2.4rem; font-size:clamp(2rem,5vw,3.4rem); font-weight:800;
+  color:#fff;
   line-height:1.15; margin-bottom:14px; letter-spacing:-0.02em;
+}
+@supports ((-webkit-background-clip:text) or (background-clip:text)){
+  .hero h1, section h2{
+    background:linear-gradient(135deg,#fff 30%,#1b71f1);
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
 }
 
 .hero p{color:var(--text-muted);font-size:1.05rem;margin-top:12px;}
@@ -235,7 +223,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:14px 0
   color:#fff; border:1px solid var(--accent-border);
   border-radius:10px; text-decoration:none;
   font-weight:600; font-size:0.92rem; letter-spacing:0.03em;
-  transition:all 0.3s ease; backdrop-filter:blur(8px);
+  transition:background-color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s;
 }
 
 .btn:hover{
@@ -251,10 +239,8 @@ section{padding:70px 0; content-visibility:auto; contain-intrinsic-size:1px 600p
 section h2{
   text-align:center;
   font-family:'Syne',sans-serif;
-  font-size:clamp(1.5rem,3vw,2rem); font-weight:700;
-  background:linear-gradient(135deg,#fff,var(--accent));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  background-clip:text;
+  font-size:1.75rem; font-size:clamp(1.5rem,3vw,2rem); font-weight:700;
+  color:#fff;
   margin-bottom:32px; letter-spacing:-0.01em;
 }
 
@@ -272,12 +258,11 @@ section h2{
 }
 
 .service-card{
-  background:var(--glass);
-  backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
+  background:rgba(255,255,255,0.06);
   border:1px solid var(--glass-border);
   padding:26px; border-radius:var(--radius);
   text-align:center;
-  transition:all 0.4s cubic-bezier(0.25,1,0.3,1);
+  transition:transform 0.4s cubic-bezier(0.25,1,0.3,1), background-color 0.4s, border-color 0.4s, box-shadow 0.4s;
   cursor:pointer; overflow:hidden; position:relative;
 }
 
@@ -296,7 +281,7 @@ section h2{
   list-style:disc; text-align:left; margin-top:14px;
   opacity:0; max-height:0; overflow:hidden;
   transform:translateY(20px);
-  transition:all 0.5s cubic-bezier(0.25,1,0.3,1);
+  transition:opacity 0.5s, max-height 0.5s, transform 0.5s;
   color:var(--text-muted); padding-left:22px; font-size:0.88rem;
 }
 
@@ -312,8 +297,7 @@ section h2{
 .project-category{margin-bottom:48px;}
 
 .category-title{
-  background:rgba(124,110,250,0.08);
-  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  background:rgba(124,110,250,0.1);
   border:1px solid rgba(124,110,250,0.2);
   border-left:4px solid var(--accent);
   border-radius:12px; padding:18px 22px;
@@ -328,11 +312,10 @@ section h2{
 }
 
 .project-card{
-  background:var(--glass);
-  backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
+  background:rgba(255,255,255,0.06);
   border:1px solid var(--glass-border);
   border-radius:var(--radius); padding:28px;
-  transition:all 0.3s ease;
+  transition:transform 0.3s, background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
   display:flex; flex-direction:column; justify-content:space-between;
 }
 
@@ -354,8 +337,7 @@ section h2{
   color:#fff; text-decoration:none;
   border-radius:10px; font-weight:600; font-size:0.88rem;
   border:1px solid var(--accent-border);
-  transition:all 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
-  backdrop-filter:blur(8px);
+  transition:transform 0.3s, background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
 
 .project-link-btn:hover{
@@ -368,8 +350,7 @@ section h2{
 
 /* ── CONTACT ── */
 .contact .contact-box{
-  background:var(--glass);
-  backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
+  background:rgba(255,255,255,0.06);
   border:1px solid var(--glass-border);
   border-radius:var(--radius); padding:32px;
   max-width:600px; margin:0 auto;
@@ -386,7 +367,6 @@ section h2{
   padding:11px 20px; border-radius:10px;
   transition:background-position 0.45s ease, box-shadow 0.3s, transform 0.3s, border-color 0.3s;
   border:1px solid rgba(255,255,255,0.15);
-  backdrop-filter:blur(8px);
   font-size:0.88rem;
   background-size:200% 100%;
   background-position:right center;
@@ -410,8 +390,7 @@ section h2{
 /* ── NOTICE ── */
 .notice{background:transparent!important;}
 div.notice{
-  background:var(--glass)!important;
-  backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
+  background:rgba(255,255,255,0.06)!important;
   border:1px solid var(--glass-border);
   border-radius:var(--radius); padding:24px; color:var(--text);
 }
@@ -419,8 +398,7 @@ div.notice:hover{transform:translateY(-4px);}
 
 /* ── FOOTER ── */
 footer{
-  background:rgba(18,18,18,0.7)!important;
-  backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
+  background:rgba(18,18,18,0.9)!important;
   border-top:1px solid var(--glass-border);
   text-align:center; padding:24px;
   font-size:0.88rem; color:var(--text-muted);
@@ -431,15 +409,14 @@ footer a:hover{text-decoration:underline;}
 /* ── HOME BTN ── */
 #homeBtn{
   position:fixed; bottom:24px; right:24px;
-  background:rgba(124,110,250,0.2);
-  backdrop-filter:blur(12px);
+  background:rgba(60,56,130,0.9);
   border:1px solid var(--accent-border);
   color:#fff; width:52px; height:52px;
   border-radius:50%; display:flex;
   justify-content:center; align-items:center;
   font-size:22px;
   box-shadow:0 4px 20px var(--accent-glow);
-  cursor:pointer; transition:all 0.3s ease;
+  cursor:pointer; transition:opacity 0.3s, transform 0.3s;
   z-index:9999; opacity:0; pointer-events:none;
 }
 #homeBtn.visible{opacity:1;pointer-events:auto;}
@@ -459,7 +436,7 @@ footer a:hover{text-decoration:underline;}
 @media(max-width:600px){
   .hero{padding:70px 0;}
   .hero .container{padding:40px 20px;}
-  .hero h1{font-size:clamp(1.7rem,7vw,2.5rem);}
+  .hero h1{font-size:2rem; font-size:clamp(1.7rem,7vw,2.5rem);}
 }
 
 /* ════════════════════════════════
@@ -469,7 +446,7 @@ footer a:hover{text-decoration:underline;}
   --chat-primary:#7C6EFA;
   --chat-accent:#6B5CE7;
   --chat-glow:rgba(124,110,250,0.45);
-  --chat-bg:rgba(14,14,14,0.98);
+  --chat-bg:#0e0e0e;
   --chat-surface:rgba(255,255,255,0.06);
   --chat-border:rgba(255,255,255,0.1);
   --chat-text:rgba(255,255,255,0.92);
@@ -488,14 +465,12 @@ footer a:hover{text-decoration:underline;}
   border:none; cursor:pointer; z-index:99998;
   display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
   box-shadow:0 0 0 0 var(--chat-glow), 0 8px 32px rgba(124,110,250,0.5);
-  animation:bubblePulse 3s ease-in-out infinite;
   transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease;
   overflow:hidden;
 }
 #ar-chat-bubble:hover{
   transform:scale(1.1);
   box-shadow:0 0 0 8px rgba(124,110,250,0.15), 0 12px 40px rgba(124,110,250,0.65);
-  animation:none;
 }
 #ar-chat-bubble .bubble-icon{font-size:22px;line-height:1;transition:all 0.25s;}
 #ar-chat-bubble .bubble-close{position:absolute;font-size:20px;color:#fff;font-weight:700;opacity:0;transform:scale(0);transition:all 0.25s;pointer-events:none;}
@@ -504,30 +479,45 @@ footer a:hover{text-decoration:underline;}
 #ar-chat-bubble.open .bubble-label{opacity:0;}
 #ar-chat-bubble.open .bubble-close{opacity:1;transform:scale(1);}
 
-@keyframes bubblePulse{
-  0%,100%{box-shadow:0 0 0 0 var(--chat-glow),0 8px 32px rgba(124,110,250,0.5);}
-  50%{box-shadow:0 0 0 14px rgba(124,110,250,0),0 8px 32px rgba(124,110,250,0.5);}
-}
-
 #ar-chat-tooltip{
   position:fixed; bottom:100px; right:98px;
   background:linear-gradient(135deg,var(--chat-accent),var(--chat-primary));
   color:#fff; padding:10px 16px;
   border-radius:14px 14px 4px 14px;
-  font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500;
+  font-family:'DM Sans',Arial,sans-serif; font-size:13px; font-weight:500;
   white-space:nowrap; z-index:99997;
   box-shadow:0 8px 24px var(--chat-glow);
-  animation:tooltipFloat 0.5s ease forwards, tooltipBounce 2s 0.5s ease-in-out infinite;
-  pointer-events:none; transition:opacity 0.3s;
+  opacity:0; transform:translateY(10px) scale(0.96);
+  transition:opacity 0.4s ease, transform 0.4s ease;
+  pointer-events:none;
 }
 #ar-chat-tooltip::after{
   content:''; position:absolute; right:-8px; bottom:4px;
   width:0;height:0; border:8px solid transparent;
   border-left-color:var(--chat-primary); border-right:0;border-bottom:0;
 }
-#ar-chat-tooltip.hidden{opacity:0;pointer-events:none;}
-@keyframes tooltipFloat{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+#ar-chat-tooltip.show{opacity:1; transform:translateY(0) scale(1); animation:tooltipBounce 2.4s 0.5s ease-in-out 3;}
+#ar-chat-tooltip.hidden{opacity:0!important; animation:none;}
 @keyframes tooltipBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
+
+/* light entrance + pulse animations (transform/opacity only = GPU cheap) */
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+@keyframes revealUp{from{opacity:0;transform:translateY(26px);}to{opacity:1;transform:translateY(0);}}
+@keyframes bubbleBeat{0%,100%{transform:scale(1);}50%{transform:scale(1.08);}}
+.hero h1{animation:fadeUp 0.7s ease both;}
+.hero p{animation:fadeUp 0.7s 0.12s ease both;}
+.hero .btn{animation:fadeUp 0.7s 0.24s ease both;}
+.hero .btn + .btn{animation-delay:0.34s;}
+#ar-chat-bubble{animation:bubbleBeat 2.6s 2s ease-in-out 4;}
+#ar-chat-bubble:hover,#ar-chat-bubble.open{animation:none;}
+.anim .reveal{opacity:0;}
+.anim .reveal.in{opacity:1;animation:revealUp 0.6s ease backwards;}
+.logo-circle{transition:transform 0.4s;}
+.logo:hover .logo-circle{transform:rotate(-8deg) scale(1.06);}
+.btn-contact svg{transition:transform 0.3s;}
+.btn-contact:hover svg{transform:scale(1.18) rotate(-6deg);}
+.project-link-btn span{display:inline-block;transition:transform 0.3s;}
+.project-link-btn:hover span{transform:translateX(4px);}
 
 #ar-chat-panel{
   position:fixed; bottom:164px; right:24px;
@@ -540,7 +530,6 @@ footer a:hover{text-decoration:underline;}
   box-shadow:0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(124,110,250,0.15);
   transform:scale(0.85) translateY(30px); opacity:0; pointer-events:none;
   transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease;
-  backdrop-filter:blur(28px); -webkit-backdrop-filter:blur(28px);
 }
 #ar-chat-panel.open{transform:scale(1) translateY(0);opacity:1;pointer-events:auto;}
 
@@ -561,7 +550,7 @@ footer a:hover{text-decoration:underline;}
 .ar-chat-header-info{flex:1;}
 .ar-chat-header-name{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--chat-text);letter-spacing:0.03em;}
 .ar-chat-header-status{font-family:'DM Sans',sans-serif;font-size:11px;color:var(--chat-muted);margin-top:2px;display:flex;align-items:center;gap:5px;}
-.ar-chat-header-status::before{content:'';width:6px;height:6px;border-radius:50%;background:#34d399;box-shadow:0 0 6px #34d399;flex-shrink:0;animation:statusBlink 2s ease-in-out infinite;}
+.ar-chat-header-status::before{content:'';width:6px;height:6px;border-radius:50%;background:#34d399;box-shadow:0 0 6px #34d399;flex-shrink:0;animation:statusBlink 2s ease-in-out 5;}
 @keyframes statusBlink{0%,100%{opacity:1;}50%{opacity:0.4;}}
 
 .ar-chat-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth;}
@@ -665,9 +654,6 @@ footer a:hover{text-decoration:underline;}
 
 <body>
 <div id="bg-mesh"></div>
-<div class="blob blob1"></div>
-<div class="blob blob2"></div>
-<div class="blob blob3"></div>
 
 <div id="homeBtn">⌂</div>
 
@@ -676,7 +662,7 @@ footer a:hover{text-decoration:underline;}
     <nav>
       <a class="logo" href="#home">
         <div class="logo-circle">
-          <img src="https://raw.githubusercontent.com/arnetworkhouse-oss/ar-network-house/main/ar%20logo.jpg" alt="Logo">
+          <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCABQAFADASIAAhEBAxEB/8QAHAAAAwACAwEAAAAAAAAAAAAAAAYHBAUBAgMI/8QAORAAAQMDAgQDBQUIAwEAAAAAAQIDBAUGEQASByExQRMiURQVYXGRIzJDgbEzQlJigpKhwQglY/D/xAAZAQEBAQEBAQAAAAAAAAAAAAAAAQQFAwL/xAAoEQACAgAEBAYDAAAAAAAAAAAAAQIDBBEhQQUiUYESEzEyQmFxocH/2gAMAwEAAhEDEQA/APqnRo0aANYVWq9Oo0UyatPiwY4/FkupbT9SRpBqF3Vq7qnJpHDkMIix1lqZcMhG9hlQ6oYT+Ksdz90fHWXSeFttwZAqNeS5cNW6rn1lfjqz/Kk+RA9ABqkOr3GaxELUhmuCWoHB9jivPj6oQRoY4y2G44lt2upiLVyAmRno4+q0Af509RhFZjARvBbYTyAbwEj6ctdJJgyWi1JMZ5s9UObVA/kdTQanFLqkCrRRJpc2NNjno7HdS4k/mCdZmp7VeFluyZKqjbSnrbq/VM2jueCCf52x5Fj1BGsamXlWLVqsai8SEMBuSsNQq/GTsjSFHoh1P4Lh/tPbQFL0aNGhQ1NeIU2Zc9xMWHQ5DkZLrQk1qY0cKjxCcBpJ7OOHI+CcnVFlyG4kV6Q+oIZaQXFqPZIGSfoNT/gjFck25KumcnFRuWSqouE9UMnysN/JLYT/AHHQg80emQqLS41OpcZuLCjIDbTLYwlCR/8Ade+on/yNroffh0JpQLTCfapI6gqOQgH5DcfzGrlOlMwob8qSsIYYbU44o/upSMk/Qa+YqY41dXESNKrb7MZiVKMyQZDgQlLaMFLeSfQIRj5638PgvFK6XpBZ99jm8TtajGiHum8u27O3A6XGq7VwWPUVAQ6xGU9HyPuupGFED1xtV/Rrzj8F7waI3xaYvHUiUOf1TrR8S5LVncWxW7fkx5LHtCak17O6lafMT4rZ2nlk7xj0WNXm8OLNLtlNJdXT50yJU4olRpDBRsUk45eZQ5gFJ/PXvK+2FinQvft97nysPVOvwX/HTP6JUaLX7ImxjLQ7TXXSfBkxXQUqI5lORyJxz2qGCM9eerbQXoV/2MuPXYjEht4LizGCPIpSTgkemeSh3GR6ah/EXiim8Uwo8aEqFBjOl/Lywpxxe0pHTkAApXckkjpjnauEFKl0uzGTUW1sypbq5SmljCmwrASCOx2pSSOxONXHZyojO5JTz/Rm4fW6sXOFMm6st9pZ7djVcO6hOtu4ZFhXBJckrYa9po0505VKiA4KFHu42cA+owdUvU443xlw7ehXXCSfeFtSkT0lPVbGQl9v5Fsk/wBI1Q4r7cmM0+woLadQFoUO6SMg/TXJO6J/GiYuDwoux9o7VimvIBHbcnb/AL0xWxERAtylQ2gA3HiNNJA7BKAB+mtLxapy6rwyuiEyMuu05/YPVQQSB9RrMs+sM1CxaPV0q3MvU9qQdvP8MEj9dQCxxtq/s1vs0po/a1Bf2gHZlGCr6nan5E6mlA4X1O7aOmpMzokWO4taW0vNKWpQSdpVyIGMg4+WnuqXNYN0U6HX5caTNbcpkqYlSN6VNtRikutqSFjCwXBy7+uMa26b4p1v2lGmJtqvRKWwpMZDaYyCW04SEqIDh8pKgkHOc5z6631YyVFPl1aNvNv+HMt4esRiXdfrFLJLXuyF8RuDFVti15lbNRiS2ou1TrTLCkKCSoAqySemcn4Z018AW6LxAsI25c8RMx2gSCqOFOKQpLTgJTgpIOAd6cdOSdUy5L8t9ig1hFyQZ8eOzAakSoclgb1svqU0EhIUcncCCM8sjWkortg2XWJptihSBUypqCEwGlOKlKcbD+xGVYO1AStROAkEc+evKeJnZHnevU2Qw8K3yrToRm5abN4S8S4zzbKZUNpz2mGXkhQeZJwUEkclpzjPUHarvr6ut6sQ6/RYdUpjvixJTYcbV3+II7EHII7EHU8u24bQummUxqsW9U6u+qY9HRATGIkx320bnEqG9OPKQeRIIIIzy1625ddlWxTokK24spLNQYYqESLHQpapBfUpCQhKlZ3fZqKhyCQCSeul96ujFyXMtM+oqq8ptR9GO94RET7TrUN0AtyITzSgfRTahrTcHZa53Cu033TlxVMYBPrhAH+tZ/EGpopFh1+ounYI8B9zn67DgfXA148L6cuk8ObZgOgh1inMIWD2VsBP+SdZT3GZaQtBSoApIwQe41LuFifdQuHh5MWUOUtxbkFR6uQXyVNqHrtKlIPpgaqWkbiRbM+a7AuO1y23dFI3FhKzhEtk/fjOH0V2PZWDoDSK4Q0uHGU41Un4/wD0DlHkqS2NrhLSG/aNucBza2AcdcDPTXlT6LQk2I7QF3BT24lRjprDL8anNw0CM2ppSnSkYSeiMqVg4V8NN9qXTAvi3ZLlPKo8xKVR5cOQNr0R7BBQ4nqMHv0I6aSYvBzw6UxCNRUjfb66VJcLzr325UyoONpWSEoy0coGAQQNX8jLoZFckWPdtZg3I7XEpYoLZclsLaWhL7Sz9mVpUkKKAvmlQBBOsIW1blpUREJm6X4laoc0SfblM+M7vkpLaGlNYPiBTaQgJTz8gIxjW1q1h166EVR+5ahTI816lqpkb3eysoTucQ4XF7zk+ZtGEjkBnmSdcS7ErdTi16ZV/ccmrVN+IsMAyEMMpYBCShxJDiXCVKIUOnIYOhBbrFGsebBpTdw3DMnuT3ZVScWIbgclLcQGCsJQjLQbwgAY5bRnPPTY/wALGH3adMVVHG6vTafHhwprMdDamFMrUrxAkHGFhW1SPukZ6Z5ap3h7dKXrelmrR6hOp8J2M+5Imy2FLKnw4nztEKWEhIR5yd2MkZ083xd8G0aUh+WlcmfIV4UKBH8z0t49EIT169T0A0KkK/FhZuCoUGw46t7lUeTLqW3kG4LKgpZPpvWEoH56pqQAAAMAdtJHDe2J1NM+v3Mtt66KwUrlFByiM2PuR2z/AAoHU9zk6d9QBo0aNCiTeFhNVaqIrtBnO0K52k7Uz46QpLyR0Q+2eTifnzHY61KL5uO2h4N92vKW0jl71oaDKjrH8Sm/2jf0OqZo0IIkLi7YUv7t0U1lXdEpZYUPgUrAI1xN4vWFF5G56e+vsiKoyFH4AIBJ03zaVT5yszYMWQfV1lK/1GuYVLgQTmFCixz/AOTKUfoNUak/Xe1z3MPBsa15MdlfL3tXkGMykfxIZ/aOfDoNbizrDYotScrlZnP1y53k7HKjKAHhpP7jKByaR8BzPc6dNGoMg0aNGhT/2Q==" alt="Logo" width="40" height="40">
         </div>
         <span>AR Network House</span>
       </a>
@@ -805,7 +791,7 @@ footer a:hover{text-decoration:underline;}
 </section>
 
 <section id="contact" style="padding:60px 0;">
-  <div style="max-width:600px;margin:auto;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border:1px solid var(--glass-border);border-radius:var(--radius);padding:30px;">
+  <div style="max-width:600px;margin:auto;background:rgba(255,255,255,0.06);border:1px solid var(--glass-border);border-radius:var(--radius);padding:30px;">
     <h2 style="text-align:center;font-family:'Syne',sans-serif;font-size:28px;margin-bottom:20px;">Contact Us</h2>
     <p style="text-align:center;margin-top:10px;color:var(--text-muted);">Get in touch for project work, web design, or official document services.</p>
     <div class="contact-buttons">
@@ -826,7 +812,7 @@ footer a:hover{text-decoration:underline;}
 </section>
 
 <section id="social" style="padding:50px 0;">
-  <div style="max-width:600px;margin:auto;background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border:1px solid var(--glass-border);border-radius:var(--radius);padding:30px;">
+  <div style="max-width:600px;margin:auto;background:rgba(255,255,255,0.06);border:1px solid var(--glass-border);border-radius:var(--radius);padding:30px;">
     <h2 style="text-align:center;font-family:'Syne',sans-serif;font-size:26px;margin-bottom:15px;">Follow Us</h2>
     <p style="text-align:center;color:var(--text-muted);margin-bottom:25px;">Stay connected with AR Network House on our social media platforms.</p>
     <div class="contact-buttons">
@@ -872,7 +858,7 @@ footer a:hover{text-decoration:underline;}
 <div id="ar-chat-panel" role="dialog" aria-label="AR Network House AI Assistant">
   <div class="ar-chat-header">
     <div class="ar-chat-avatar">
-      <img id="ar-avatar-img" src="" alt="AI" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%;">
+      <img id="ar-avatar-img" src="" alt="AI" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%;">
       
     </div>
     <div class="ar-chat-header-info">
@@ -901,10 +887,40 @@ footer a:hover{text-decoration:underline;}
 /* ── MISC ── */
 document.getElementById("year").textContent = new Date().getFullYear();
 
+/* ── SCROLL REVEAL (only runs when .anim set: capable device) ── */
+var revealIO = null;
+if(document.documentElement.classList.contains('anim')){
+  revealIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); revealIO.unobserve(e.target); }
+    });
+  }, { threshold:0.1 });
+}
+function addReveal(el, i){
+  if(!revealIO) return;
+  el.classList.add('reveal');
+  el.style.animationDelay = Math.min(i||0, 5) * 0.08 + 's';
+  revealIO.observe(el);
+}
+function revealGroup(sel){
+  var els = document.querySelectorAll(sel);
+  for(var k=0;k<els.length;k++){
+    var sib = els[k].parentNode ? Array.prototype.indexOf.call(els[k].parentNode.children, els[k]) : 0;
+    addReveal(els[k], sib);
+  }
+}
+revealGroup('.about .container, .services h2, .projects h2, .category-title, .project-card, div.notice, #contact > div, #social > div');
+
 /* ── HOME BTN ── */
 const homeBtn = document.getElementById("homeBtn");
+var scrollTick = false;
 window.addEventListener("scroll", () => {
-  homeBtn.classList.toggle("visible", window.scrollY > 300);
+  if(scrollTick) return;
+  scrollTick = true;
+  requestAnimationFrame(() => {
+    homeBtn.classList.toggle("visible", (window.pageYOffset || 0) > 300);
+    scrollTick = false;
+  });
 }, { passive:true });
 homeBtn.addEventListener("click", () => window.scrollTo({ top:0, behavior:'smooth' }));
 
@@ -959,13 +975,15 @@ async function loadServices(){
     SERVICE_INFO.forEach(service => {
       const list = [];
       rows.forEach(r => {
-        let a = r[service.c1] ?? "";
-        let b = r[service.c2] ?? "";
+        let a = (r[service.c1] == null ? "" : String(r[service.c1]));
+        let b = (r[service.c2] == null ? "" : String(r[service.c2]));
         const skipCode = str => /^AR\d+/i.test(str.trim());
         if(a && !skipCode(a)) list.push(a);
         if(b && !skipCode(b)) list.push(b);
       });
-      grid.appendChild(makeServiceCard(service.title, service.desc, list));
+      var card = makeServiceCard(service.title, service.desc, list);
+      grid.appendChild(card);
+      addReveal(card, SERVICE_INFO.indexOf(service));
     });
   } catch(err){
     console.error("Services load error:", err);
@@ -975,74 +993,14 @@ async function loadServices(){
 loadServices();
 
 
-/* ═══════════════════════════════════════════════════════════════
-   AI CHAT — NVIDIA NIM (build.nvidia.com) via Apps Script proxy
 
-   WHY A PROXY (read this before changing anything):
-   NVIDIA's integrate.api.nvidia.com endpoint does NOT send CORS
-   headers, so a direct browser fetch (the old Groq way) will fail
-   with a CORS error. The chat call must be made server-side —
-   your Apps Script (Google's server) is not subject to CORS —
-   and the browser only ever talks to your Apps Script.
-   This is also more secure: the NVIDIA key never reaches the client.
-
-   SETUP in Google Apps Script (AI_CONFIG project):
-   ─────────────────────────────
-   function doGet(e) {
-     if (e.parameter.action === 'ai_config') {
-       const ss = SpreadsheetApp.getActiveSpreadsheet();
-       const sheet = ss.getSheetByName('AI_CONFIG');
-       const model   = sheet.getRange('B2').getValue(); // e.g. meta/llama-3.1-8b-instruct
-       const context = sheet.getRange('B3').getValue(); // system prompt
-       return ContentService
-         .createTextOutput(JSON.stringify({ model, context }))
-         .setMimeType(ContentService.MimeType.JSON);
-     }
-     // ... existing services code ...
-   }
-
-   function doPost(e) {
-     const body = JSON.parse(e.postData.contents);
-     if (body.action !== 'chat') return errJson_('unknown action');
-
-     const ss    = SpreadsheetApp.getActiveSpreadsheet();
-     const sheet = ss.getSheetByName('AI_CONFIG');
-     const apiKey = sheet.getRange('B1').getValue(); // NVIDIA key, nvapi-xxxx
-     const model  = sheet.getRange('B2').getValue();
-
-     const payload = {
-       model: model,
-       messages: [{ role:'system', content: body.context || '' }, ...body.messages],
-       temperature: 0.7,
-       max_tokens: 500
-     };
-     const res = UrlFetchApp.fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
-       method: 'post',
-       contentType: 'application/json',
-       headers: { Authorization: 'Bearer ' + apiKey },
-       payload: JSON.stringify(payload),
-       muteHttpExceptions: true
-     });
-     return ContentService
-       .createTextOutput(res.getContentText())
-       .setMimeType(ContentService.MimeType.JSON);
-   }
-
-   Sheet "AI_CONFIG":
-     Row 1: | NVIDIA API Key  | nvapi-xxxx...            |
-     Row 2: | model           | meta/llama-3.1-8b-instruct |
-     Row 3: | System Context  | You are ...              |
-
-   Re-deploy the Apps Script (Deploy → Manage deployments → Edit →
-   New version) after adding doPost, or POST requests will 404.
-═══════════════════════════════════════════════════════════════ */
 
 (function(){
 'use strict';
 
 /* ── CONFIG ── */
 const FALLBACK_MODEL   = 'meta/llama-3.1-8b-instruct'; // used only if sheet B2 empty
-const AI_AVATAR_URL    = 'https://raw.githubusercontent.com/arnetworkhouse-oss/arnetworkhouse/main/ai_logo.png'; // ← paste your AI image URL here e.g. 'https://i.imgur.com/yourimage.png'
+const AI_AVATAR_URL    = 'data:image/png;base64,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'; // ← paste your AI image URL here e.g. 'https://i.imgur.com/yourimage.png'
 const FALLBACK_CONTEXT = ''; // context lives in sheet, not here
 
 /* ── STATE ── */
@@ -1114,10 +1072,25 @@ async function loadConfig(){
     ctxStatus.style.background  = 'rgba(251,191,36,0.07)';
   }
 }
-loadConfig();
+var configStarted = false;
+function ensureConfig(){
+  if(configStarted) return;
+  configStarted = true;
+  loadConfig();
+  /* PERF: chat-only fonts load when chat is first opened */
+  var l = document.createElement('link');
+  l.rel = 'stylesheet';
+  l.href = 'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;800&family=Space+Mono:wght@700&display=swap';
+  document.head.appendChild(l);
+}
 
 /* ── TOOLTIP ── */
-tooltipTimer = setTimeout(() => tooltip.classList.add('hidden'), 6000);
+function tipShow(){
+  tooltip.classList.add('show');
+  tooltipTimer = setTimeout(function(){ tooltip.classList.remove('show'); }, 9000);
+}
+if(document.readyState === 'complete'){ setTimeout(tipShow, 1200); }
+else { window.addEventListener('load', function(){ setTimeout(tipShow, 1200); }); }
 
 /* ── TOGGLE CHAT ── */
 function closeChat(){
@@ -1135,6 +1108,7 @@ bubble.addEventListener('click', () => {
   tooltip.classList.add('hidden');
   clearTimeout(tooltipTimer);
   if(panelOpen){
+    ensureConfig();
     history.pushState({ chatOpen: true }, '');
     if(messages.children.length === 0){
       addMessage('bot', 'Hi there! 👋 I\'m ARAN the AI assistant of AR Network House. I can tell you about our services, pricing, projects, and more. How can I help you today?');
@@ -1243,6 +1217,7 @@ function replyMentionsContact(text){
 async function sendMessage(text){
   text = text.trim();
   if(!text) return;
+  ensureConfig();
   if(!configLoaded){
     // wait up to 5s for config
     for(let i=0;i<50;i++){
@@ -1281,7 +1256,7 @@ async function sendMessage(text){
     hideTyping();
     const data  = await resp.json();
     if(data.error){ throw new Error(data.error.message || data.error); }
-    const reply = data.choices?.[0]?.message?.content || 'Sorry, I could not generate a response. Please try again.';
+    const reply = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || 'Sorry, I could not generate a response. Please try again.';
     conversationHistory.push({ role:'assistant', content:reply });
     const bub = addMessage('bot', reply);
     /* If the AI mentions contact details, append tap-to-contact buttons */
