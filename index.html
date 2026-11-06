@@ -38,6 +38,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
 /* ═══════════════════════════════
@@ -217,8 +218,9 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:14px 0
 
 /* ── BUTTONS ── */
 .btn{
-  display:inline-block; margin:20px 8px 0;
-  padding:12px 28px;
+  display:inline-flex; align-items:center; justify-content:center;
+  margin:20px 8px 0;
+  padding:12px 28px; gap:8px;
   background:var(--accent-dim);
   color:#fff; border:1px solid var(--accent-border);
   border-radius:10px; text-decoration:none;
@@ -332,7 +334,7 @@ section h2{
 
 .project-link-btn{
   display:inline-flex; align-items:center; justify-content:center;
-  padding:10px 20px;
+  padding:12px 24px; gap:8px;
   background:var(--accent-dim);
   color:#fff; text-decoration:none;
   border-radius:10px; font-weight:600; font-size:0.88rem;
@@ -346,7 +348,6 @@ section h2{
   box-shadow:0 4px 18px var(--accent-glow);
   border-color:var(--accent);
 }
-.project-link-btn span{margin-left:6px;}
 
 /* ── CONTACT ── */
 .contact .contact-box{
@@ -392,7 +393,7 @@ section h2{
 div.notice{
   background:rgba(255,255,255,0.06)!important;
   border:1px solid var(--glass-border);
-  border-radius:var(--radius); padding:24px; color:var(--text);
+  border-radius:var(--radius); padding:28px 32px; color:var(--text);
 }
 div.notice:hover{transform:translateY(-4px);}
 
@@ -516,8 +517,8 @@ footer a:hover{text-decoration:underline;}
 .logo:hover .logo-circle{transform:rotate(-8deg) scale(1.06);}
 .btn-contact svg{transition:transform 0.3s;}
 .btn-contact:hover svg{transform:scale(1.18) rotate(-6deg);}
-.project-link-btn span{display:inline-block;transition:transform 0.3s;}
-.project-link-btn:hover span{transform:translateX(4px);}
+.project-link-btn i{display:inline-block;transition:transform 0.3s;}
+.project-link-btn:hover i{transform:translateX(4px);}
 
 #ar-chat-panel{
   position:fixed; bottom:164px; right:24px;
@@ -655,7 +656,7 @@ footer a:hover{text-decoration:underline;}
 <body>
 <div id="bg-mesh"></div>
 
-<div id="homeBtn">⌂</div>
+<div id="homeBtn"><i class="fas fa-home"></i></div>
 
 <header>
   <div class="container">
@@ -675,6 +676,7 @@ footer a:hover{text-decoration:underline;}
         <a href="#services">Services</a>
         <a href="#projects">Projects</a>
         <a href="#work-form">Work Form</a>
+        <a href="#feedback">Feedback</a>
         <a href="#contact">Contact</a>
       </div>
     </nav>
@@ -724,21 +726,21 @@ footer a:hover{text-decoration:underline;}
             <h3 style="color:#34d399;">দুয়ারে Physics</h3>
             <p>An interactive platform designed to make physics learning accessible and engaging for everyone.</p>
           </div>
-          <a href="https://duyare-physics.github.io/turbo/home.html" class="project-link-btn" target="_blank">View Project <span>➔</span></a>
+          <a href="https://duyare-physics.github.io/turbo/home.html" class="project-link-btn" target="_blank">View Project <i class="fas fa-long-arrow-alt-right"></i></a>
         </div>
         <div class="project-card">
           <div>
             <h3 style="color:#fbbf24;">Solar System</h3>
             <p>A clean 3D solar system where the sun leads, planets follow, and space keeps it simple.</p>
           </div>
-          <a href="https://arnetworkhouse-oss.github.io/Solar-System/" class="project-link-btn" target="_blank">Play Now <span>🎮</span></a>
+          <a href="https://arnetworkhouse-oss.github.io/Solar-System/" class="project-link-btn" target="_blank">Play Now <i class="fas fa-gamepad"></i></a>
         </div>
         <div class="project-card">
           <div>
             <h3 style="color:var(--accent);">Explore More</h3>
             <p>Discover more exciting educational projects and interactive experiences.</p>
           </div>
-          <a href="https://arnetworkhouse-oss.github.io/arnetworkhouse/more.html" class="project-link-btn" target="_blank">Know More <span>➔</span></a>
+          <a href="https://arnetworkhouse-oss.github.io/arnetworkhouse/more.html" class="project-link-btn" target="_blank">Know More <i class="fas fa-arrow-right"></i></a>
         </div>
       </div>
     </div>
@@ -751,28 +753,28 @@ footer a:hover{text-decoration:underline;}
             <h3 style="color:#c084fc;">AURA</h3>
             <p>A Particle Engine developed with modern web technologies.</p>
           </div>
-          <a href="https://arnetworkhouse-oss.github.io/aura/" class="project-link-btn" target="_blank">Play Now <span>🎮</span></a>
+          <a href="https://arnetworkhouse-oss.github.io/aura/" class="project-link-btn" target="_blank">Play Now <i class="fas fa-gamepad"></i></a>
         </div>
         <div class="project-card">
           <div>
             <h3 style="color:#2dd4bf;">Snake Game</h3>
             <p>A classic web snake game where the snake grows, the brain relaxes, and time quietly resigns.</p>
           </div>
-          <a href="https://arnetworkhouse-oss.github.io/snake-game/" class="project-link-btn" target="_blank">Play Now <span>🎮</span></a>
+          <a href="https://arnetworkhouse-oss.github.io/snake-game/" class="project-link-btn" target="_blank">Play Now <i class="fas fa-gamepad"></i></a>
         </div>
         <div class="project-card">
           <div>
             <h3 style="color:#818cf8;">Tic Tac Toe</h3>
             <p>A 3×3 grid game where two players, X and O, race to align three symbols.</p>
           </div>
-          <a href="https://arnetworkhouse-oss.github.io/tic_tac_toe/" class="project-link-btn" target="_blank">Play Now <span>🎮</span></a>
+          <a href="https://arnetworkhouse-oss.github.io/tic_tac_toe/" class="project-link-btn" target="_blank">Play Now <i class="fas fa-gamepad"></i></a>
         </div>
         <div class="project-card">
           <div>
             <h3 style="color:var(--accent);">More Games</h3>
             <p>Play additional fun and engaging web-based games created by us.</p>
           </div>
-          <a href="https://arnetworkhouse-oss.github.io/arnetworkhouse/more.html" class="project-link-btn" target="_blank">Play More <span>🎮</span></a>
+          <a href="https://arnetworkhouse-oss.github.io/arnetworkhouse/more.html" class="project-link-btn" target="_blank">Play More <i class="fas fa-gamepad"></i></a>
         </div>
       </div>
     </div>
@@ -783,15 +785,28 @@ footer a:hover{text-decoration:underline;}
   <div class="container">
     <div class="notice">
       <h2 style="text-align:center;font-family:'Syne',sans-serif;font-size:28px;margin-bottom:20px;"><i>Work Submission Form</i></h2>
-      <center>Tap the button to give your work to us!
+      <p style="text-align:center;color:var(--text-muted);margin-bottom:20px;">Tap the button to give your work to us!</p>
+      <div style="text-align:center;">
         <a href="https://arnetworkhouse.in/work_submession_form/" class="btn">Click Here</a>
-      </center>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="notice" id="feedback">
+  <div class="container">
+    <div class="notice">
+      <h2 style="text-align:center;font-family:'Syne',sans-serif;font-size:28px;margin-bottom:20px;"><i>Feedback</i></h2>
+      <p style="text-align:center;color:var(--text-muted);margin-bottom:20px;">Your feedback helps us improve!</p>
+      <div style="text-align:center;">
+        <a href="feedback.arnetworkhouse.in" class="btn">Give Feedback</a>
+      </div>
     </div>
   </div>
 </section>
 
 <section id="contact" style="padding:60px 0;">
-  <div style="max-width:600px;margin:auto;background:rgba(255,255,255,0.06);border:1px solid var(--glass-border);border-radius:var(--radius);padding:30px;">
+  <div style="max-width:600px;margin:auto;background:rgba(255,255,255,0.06);border:1px solid var(--glass-border);border-radius:var(--radius);padding:32px;">
     <h2 style="text-align:center;font-family:'Syne',sans-serif;font-size:28px;margin-bottom:20px;">Contact Us</h2>
     <p style="text-align:center;margin-top:10px;color:var(--text-muted);">Get in touch for project work, web design, or official document services.</p>
     <div class="contact-buttons">
@@ -812,7 +827,7 @@ footer a:hover{text-decoration:underline;}
 </section>
 
 <section id="social" style="padding:50px 0;">
-  <div style="max-width:600px;margin:auto;background:rgba(255,255,255,0.06);border:1px solid var(--glass-border);border-radius:var(--radius);padding:30px;">
+  <div style="max-width:600px;margin:auto;background:rgba(255,255,255,0.06);border:1px solid var(--glass-border);border-radius:var(--radius);padding:32px;">
     <h2 style="text-align:center;font-family:'Syne',sans-serif;font-size:26px;margin-bottom:15px;">Follow Us</h2>
     <p style="text-align:center;color:var(--text-muted);margin-bottom:25px;">Stay connected with AR Network House on our social media platforms.</p>
     <div class="contact-buttons">
@@ -847,12 +862,12 @@ footer a:hover{text-decoration:underline;}
 <!-- ═══════════════════════════════════
      CHAT WIDGET
 ═══════════════════════════════════ -->
-<div id="ar-chat-tooltip">May I help you? 👋</div>
+<div id="ar-chat-tooltip">May I help you? <i class="fas fa-hand-wave"></i></div>
 
 <button id="ar-chat-bubble" aria-label="Open AI chat" aria-expanded="false">
   <span class="bubble-icon"><img id="ar-bubble-img" src="" alt="AI" style="width:38px;height:38px;object-fit:cover;border-radius:50%;display:none;"><svg id="ar-bubble-svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
   <span class="bubble-label">Ask AI</span>
-  <span class="bubble-close">✕</span>
+  <span class="bubble-close"><i class="fas fa-times"></i></span>
 </button>
 
 <div id="ar-chat-panel" role="dialog" aria-label="AR Network House AI Assistant">
@@ -876,7 +891,7 @@ footer a:hover{text-decoration:underline;}
   </div>
   <div class="ar-chat-input-row">
     <textarea id="ar-chat-input" placeholder="Ask me anything about AR Network House…" rows="1"></textarea>
-    <button id="ar-chat-send" aria-label="Send">➤</button>
+    <button id="ar-chat-send" aria-label="Send"><i class="fas fa-paper-plane"></i></button>
   </div>
 </div>
 
@@ -1111,7 +1126,7 @@ bubble.addEventListener('click', () => {
     ensureConfig();
     history.pushState({ chatOpen: true }, '');
     if(messages.children.length === 0){
-      addMessage('bot', 'Hi there! 👋 I\'m ARAN the AI assistant of AR Network House. I can tell you about our services, pricing, projects, and more. How can I help you today?');
+      addMessage('bot', 'Hi there! <i class="fas fa-hand-wave"></i> I\'m ARAN the AI assistant of AR Network House. I can tell you about our services, pricing, projects, and more. How can I help you today?');
     }
     setTimeout(() => input.focus(), 350);
   }
